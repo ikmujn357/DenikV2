@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:id="@+id/nameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Jméno cesty"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+
+            <EditText
+                android:id="@+id/nameEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:layout_gravity="center"
+                android:hint="Jméno cesty"
+                android:layout_below="@id/opinionTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:padding="16dp" />
+            <TextView
+                android:id="@+id/styleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Styl přelezu"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+            <Spinner
+                android:id="@+id/styleSpinner"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:id="@+id/fallsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Počet pádů"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+            <EditText
+                android:id="@+id/fallEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_gravity="center"
+                android:hint="Počet pádů"
+                android:layout_below="@id/opinionTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:padding="16dp" />
+
+
+
+            <TextView
+                android:id="@+id/difficultyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Obtížnost"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+
+
+            <LinearLayout
+                android:id="@+id/topPanel"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/difficultySpinner"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp" />
+
+                <ImageButton
+                    android:id="@+id/button_plus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/icon_selection_background"
+                    android:src="@drawable/plus" />
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/button_nula"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/icon_selection_background"
+                    android:src="@drawable/nothing" />
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/button_minus"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/icon_selection_background"
+                    android:src="@drawable/minus" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/characterText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Charakter cesty"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+            <LinearLayout
+                android:id="@+id/topPanel2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/button_sila"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/sila"
+                        android:scaleType="fitCenter" />
+
+
+                    <TextView
+                        android:id="@+id/text_sila"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Silová"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/button_technika"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/technika"
+                        android:scaleType="fitCenter" />
+
+                    <TextView
+                        android:id="@+id/text_technika"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Technická"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/button_kombinace"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/kombinace"
+                        android:scaleType="fitCenter" />
+
+                    <TextView
+                        android:id="@+id/text_Kombinace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Kombinace"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Čas"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/minutesEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Minut"
+                    android:inputType="number" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text=":"
+                    android:textStyle="bold"
+                    android:textColor="#000000"/>
+
+                <EditText
+                    android:id="@+id/secondsEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Sekund"
+                    android:inputType="number" />
+
+
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/descriptionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Popište cestu"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+            <!-- Velké textové pole pro popis cesty -->
+            <EditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:layout_gravity="center"
+                android:hint="Napište popis cesty"
+                android:layout_below="@id/descriptionTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:padding="16dp" />
+
+            <!-- Text "Popište, proč se vám cesta líbila/nelíbila" -->
+            <TextView
+                android:id="@+id/opinionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Popište, proč se vám cesta líbila/nelíbila"
+                android:layout_below="@id/descriptionEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+            <!-- Textové pole pro popis názoru na cestu -->
+            <EditText
+                android:id="@+id/opinionEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:layout_gravity="center"
+                android:hint="Napište svůj názor"
+                android:layout_below="@id/opinionTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:padding="16dp" />
+
+            <!-- Tlačítko "Uložit" -->
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Uložit"
+                android:drawableTop="@drawable/save"
+                android:background="@android:color/transparent"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</ScrollView>

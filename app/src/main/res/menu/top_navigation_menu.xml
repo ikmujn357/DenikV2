@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dailyStatitics"
+        android:icon="@android:drawable/ic_menu_day"
+        android:title="Denní statistika" />
+    <item
+        android:id="@+id/allStatitics"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Celková statistika" />
+</menu>
