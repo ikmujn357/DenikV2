@@ -172,8 +172,8 @@ class AddActivity : AppCompatActivity() {
 
 
     private fun setupSpinner() {
-        val roadGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
-        val roadStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
+        val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
+        val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
 
         val difficultyLevels = resources.getStringArray(R.array.Grade)
         val styleLevels = resources.getStringArray(R.array.Style)
@@ -183,15 +183,15 @@ class AddActivity : AppCompatActivity() {
         val adapterStyle = CustomArrayAdapter(this, R.layout.item_spinner, styleLevels.toList())
         val adapterCharacter = CustomArrayAdapter(this, R.layout.item_spinner, characterLevels.toList())
 
-        roadGradeSpinner.adapter = adapterDif
-        roadStyleSpinner.adapter = adapterStyle
+        routeGradeSpinner.adapter = adapterDif
+        routeStyleSpinner.adapter = adapterStyle
 
         adapterDif.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         adapterStyle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         adapterCharacter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        roadGradeSpinner.adapter = adapterDif
-        roadStyleSpinner.adapter = adapterStyle
+        routeGradeSpinner.adapter = adapterDif
+        routeStyleSpinner.adapter = adapterStyle
     }
 
     private fun updateGradeModifier(value: String, button: ImageButton) {
@@ -214,55 +214,43 @@ class AddActivity : AppCompatActivity() {
 
 
     private fun newCesta() {
-        val roadNameEditText: EditText = findViewById(R.id.nameEditText)
+        val routeNameEditText: EditText = findViewById(R.id.nameEditText)
         val fallEditText: EditText = findViewById(R.id.fallEditText)
-        val roadStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
-        val roadGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
-        val signImage = when {
-            selectedButtonTag == "plus" -> "+"
-            selectedButtonTag == "nula" -> ""
-            selectedButtonTag == "minus" -> "-"
-            else -> ""
-        }
-        val charImage = when {
-            selectedButtonTag2 == "Síla" -> "Silová"
-            selectedButtonTag2 == "Technika" -> "Technická"
-            selectedButtonTag2 == "Kombinace" -> "Kombinace"
-            else -> ""
-        }
+        val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
+        val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
         val minuteEditText: EditText = findViewById(R.id.minutesEditText)
         val secondEditText: EditText = findViewById(R.id.secondsEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
         val opinionEditText: EditText = findViewById(R.id.opinionEditText)
 
-        val cestaName = roadNameEditText.text.toString()
+        val cestaName = routeNameEditText.text.toString()
         val fallCountString = fallEditText.text.toString()
-        val styleSpinner = roadStyleSpinner.selectedItem.toString()
-        val gradeSpinner = roadGradeSpinner.selectedItem.toString()
+        val styleSpinner = routeStyleSpinner.selectedItem.toString()
+        val gradeSpinner = routeGradeSpinner.selectedItem.toString()
 
+        // Zde přidáme kontrolu prázdných hodnot a převedeme na nuly, pokud jsou prázdné
+        val minuteString = if (minuteEditText.text.isNotBlank()) minuteEditText.text.toString() else "0"
+        val secondString = if (secondEditText.text.isNotBlank()) secondEditText.text.toString() else "0"
 
-
-        val minuteString = minuteEditText.text.toString()
-        val secondString = secondEditText.text.toString()
-        val descriptionRoad = descriptionEditText.text.toString()
-        val opinionRoad = opinionEditText.text.toString()
+        val descriptionroute = descriptionEditText.text.toString()
+        val opinionroute = opinionEditText.text.toString()
 
         val currentDate = if (selectedDate == 0L) System.currentTimeMillis() else selectedDate
 
-        if (cestaName.isNotBlank() && fallCountString.isNotBlank() && minuteString.isNotBlank() && secondString.isNotBlank()
-            && styleSpinner.isNotBlank() && gradeSpinner.isNotBlank() && charImage.isNotBlank()) {
+        if (cestaName.isNotBlank() && fallCountString.isNotBlank()
+            && styleSpinner.isNotBlank() && gradeSpinner.isNotBlank() && charModifier.isNotBlank()) {
 
             val newCesta = CestaEntity(
-                roadName = cestaName,
+                routeName = cestaName,
                 fallCount = fallCountString.toInt(),
                 climbStyle = styleSpinner,
                 gradeNum = gradeSpinner,
-                gradeSign = signImage,
-                roadChar = charImage,
+                gradeSign = gradeModifier,
+                routeChar = charModifier,
                 timeMinute = minuteString.toInt(),
                 timeSecond = secondString.toInt(),
-                description = descriptionRoad,
-                opinion = opinionRoad,
+                description = descriptionroute,
+                opinion = opinionroute,
                 date = currentDate
             )
 
@@ -270,16 +258,16 @@ class AddActivity : AppCompatActivity() {
                 if (cestaId != 0L) {
                     val existingCesta = cestaModel.getCestaById(cestaId)
                     existingCesta.apply {
-                        this.roadName = cestaName
+                        this.routeName = cestaName
                         this.fallCount = fallCountString.toInt()
                         this.climbStyle = styleSpinner
                         this.gradeNum = gradeSpinner
-                        this.gradeSign = signImage
-                        this.roadChar = charImage
+                        this.gradeSign = gradeModifier
+                        this.routeChar = charModifier
                         this.timeMinute = minuteString.toInt()
                         this.timeSecond = secondString.toInt()
-                        this.description = descriptionRoad
-                        this.opinion = opinionRoad
+                        this.description = descriptionroute
+                        this.opinion = opinionroute
                         this.date = currentDate
                     }
 
@@ -306,24 +294,16 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun populateUI(cesta: CestaEntity) {
-        val roadNameEditText: EditText = findViewById(R.id.nameEditText)
+        val routeNameEditText: EditText = findViewById(R.id.nameEditText)
         val fallEditText: EditText = findViewById(R.id.fallEditText)
-        val roadStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
-        val roadGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
-        /*        val charImage = when {
-                    cesta.roadChar == "Síla" -> "Silová"
-                    cesta.roadChar == "Technika" -> "Technická"
-                    cesta.roadChar == "Kombinace" -> "Kombinace"
-                    else -> ""
-                }
-
-         */
+        val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
+        val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
         val minuteEditText: EditText = findViewById(R.id.minutesEditText)
         val secondEditText: EditText = findViewById(R.id.secondsEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
         val opinionEditText: EditText = findViewById(R.id.opinionEditText)
 
-        roadNameEditText.setText(cesta.roadName)
+        routeNameEditText.setText(cesta.routeName)
         fallEditText.setText(cesta.fallCount.toString())
         minuteEditText.setText(cesta.timeMinute.toString())
         secondEditText.setText(cesta.timeSecond.toString())
@@ -337,7 +317,7 @@ class AddActivity : AppCompatActivity() {
             else -> "nula"
         }
 
-        selectedButtonTag2 = when (cesta.roadChar) {
+        selectedButtonTag2 = when (cesta.routeChar) {
             "Silová" -> "Síla"
             "Technická" -> "Technika"
             "Kombinace" -> "Kombinace"
@@ -356,7 +336,7 @@ class AddActivity : AppCompatActivity() {
         val difficultyLevels = resources.getStringArray(R.array.Grade)
         val styleLevels = resources.getStringArray(R.array.Style)
 
-        roadGradeSpinner.setSelection(difficultyLevels.indexOf(cesta.gradeNum))
-        roadStyleSpinner.setSelection(styleLevels.indexOf(cesta.climbStyle))
+        routeGradeSpinner.setSelection(difficultyLevels.indexOf(cesta.gradeNum))
+        routeStyleSpinner.setSelection(styleLevels.indexOf(cesta.climbStyle))
     }
 }

@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.helper.StaticLabelsFormatter
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
 
 interface AllStatisticsView {
     fun displayGraph(view: View)
@@ -37,29 +39,44 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
         graphView.viewport.isXAxisBoundsManual = true
         graphView.viewport.isYAxisBoundsManual = true
 
+
         val maxY = series.highestValueY
         graphView.viewport.setMaxX(series.highestValueX + 0.5)
         graphView.viewport.setMaxY(maxY + 1.0)
 
-        graphView.addSeries(series)
+        if (series.isEmpty) {
+            graphView.viewport.isXAxisBoundsManual = true
+            graphView.viewport.isYAxisBoundsManual = true
 
-        val numLabels = controller.getXLabelsGraph(requireContext()).size
-        graphView.gridLabelRenderer.numHorizontalLabels = numLabels
-        graphView.gridLabelRenderer.numVerticalLabels = maxY.toInt() + 2
+            graphView.gridLabelRenderer.numHorizontalLabels = 0
+            graphView.gridLabelRenderer.numVerticalLabels = 0
+            val staticLabelsFormatter = StaticLabelsFormatter(graphView)
+            staticLabelsFormatter.setHorizontalLabels(arrayOf("", ""))
+            graphView.gridLabelRenderer.labelFormatter = staticLabelsFormatter
+            graphView.viewport.setMinX(0.0)
+            graphView.viewport.setMinY(0.0)
 
-        graphView.gridLabelRenderer.labelHorizontalHeight = 50
-        graphView.gridLabelRenderer.setVerticalLabelsAlign(Paint.Align.CENTER)
-        graphView.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.NONE
-        graphView.gridLabelRenderer.setHorizontalLabelsAngle(-25)
+        } else {
+            graphView.addSeries(series)
 
-        val staticLabelsFormatter = StaticLabelsFormatter(graphView)
-        staticLabelsFormatter.setHorizontalLabels(controller.getXLabelsGraph(requireContext()))
-        graphView.gridLabelRenderer.labelFormatter = staticLabelsFormatter
+            val numLabels = controller.getXLabelsGraph(requireContext()).size
+            graphView.gridLabelRenderer.numHorizontalLabels = numLabels
+            graphView.gridLabelRenderer.numVerticalLabels = (maxY.toInt() + 2) / 2
 
-        // Přidat následující řádek pro posunutí labelů o jedno místo doprava
-        graphView.viewport.setMinX(0.5)
+            graphView.gridLabelRenderer.labelHorizontalHeight = 50
+            graphView.gridLabelRenderer.verticalLabelsAlign = Paint.Align.CENTER
+            graphView.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.NONE
+            graphView.gridLabelRenderer.setHorizontalLabelsAngle(-25)
 
-        val barWidthPx = 25
-        series.spacing = barWidthPx
+            val staticLabelsFormatter = StaticLabelsFormatter(graphView)
+            staticLabelsFormatter.setHorizontalLabels(controller.getXLabelsGraph(requireContext()))
+            graphView.gridLabelRenderer.labelFormatter = staticLabelsFormatter
+
+            // Přidat následující řádek pro posunutí labelů o jedno místo doprava
+            graphView.viewport.setMinX(0.5)
+
+            val barWidthPx = 25
+            series.spacing = barWidthPx
+        }
     }
 }

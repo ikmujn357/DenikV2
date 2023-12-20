@@ -143,10 +143,13 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView {
             graphView2.gridLabelRenderer.numVerticalLabels = maxY.toInt() + 2 // Změna na celočíselné hodnoty
 
             // Nastavení popisků
-            graphView2.gridLabelRenderer.labelHorizontalHeight = 50
+            graphView2.gridLabelRenderer.labelHorizontalHeight = 100
             graphView2.gridLabelRenderer.verticalLabelsAlign = Paint.Align.CENTER
             graphView2.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.NONE
-            graphView2.gridLabelRenderer.setHorizontalLabelsAngle(-25)
+            graphView2.gridLabelRenderer.setHorizontalLabelsAngle(25)
+
+
+
 
             // Nastavení statických popisků pro osu X
             val staticLabelsFormatter = StaticLabelsFormatter(graphView2)
@@ -163,7 +166,7 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView {
         } else {
             graphView2.viewport.isXAxisBoundsManual = true
             graphView2.viewport.isYAxisBoundsManual = true
-            // Clear any existing labels or formatting
+
             graphView2.gridLabelRenderer.numHorizontalLabels = 0
             graphView2.gridLabelRenderer.numVerticalLabels = 0
             val staticLabelsFormatter = StaticLabelsFormatter(graphView2)

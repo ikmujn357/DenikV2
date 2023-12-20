@@ -34,6 +34,6 @@ interface CestaDao {
     suspend fun getCestaById(cestaId: Long): CestaEntity
 
     // Metoda pro získání cest podle názvu cesty.
-    @Query("SELECT * FROM CestaEntity WHERE roadName = :roadName")
-    suspend fun getAllCestaByName(roadName: String): List<CestaEntity>
+    @Query("SELECT * FROM CestaEntity WHERE routeName = :routeName")
+    suspend fun getAllCestaByName(routeName: String): List<CestaEntity>
 }

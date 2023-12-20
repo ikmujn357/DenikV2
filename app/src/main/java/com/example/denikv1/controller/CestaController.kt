@@ -41,8 +41,8 @@ class CestaControllerImpl(private val cestaModel: CestaModel) : CestaController 
     }
 
     // Metoda pro získání všech cest se zadaným názvem
-    override suspend fun getAllCestaByName(roadName: String): List<CestaEntity> {
-        return cestaModel.getAllCestaByName(roadName)
+    override suspend fun getAllCestaByName(routeName: String): List<CestaEntity> {
+        return cestaModel.getAllCestaByName(routeName)
     }
 
     // Metoda pro zobrazení Toast zprávy

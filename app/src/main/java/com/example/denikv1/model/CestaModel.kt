@@ -34,7 +34,7 @@ interface CestaModel {
     suspend fun getCestaById(cestaId: Long): CestaEntity
 
     // Metoda pro získání všech cest podle částečného názvu.
-    suspend fun getAllCestaByName(roadName: String): List<CestaEntity>
+    suspend fun getAllCestaByName(routeName: String): List<CestaEntity>
 
     // Metoda pro export dat do souboru CSV.
     suspend fun exportDataToFile(context: Context, fileName: String)
@@ -67,12 +67,12 @@ class CestaModelImpl(private val context: Context) : CestaModel {
             val existingCesta = getCestaById(cesta.id)
             existingCesta.apply {
                 // Aktualizace hodnot
-                roadName = cesta.roadName
+                routeName = cesta.routeName
                 fallCount = cesta.fallCount
                 climbStyle = cesta.climbStyle
                 gradeNum = cesta.gradeNum
                 gradeSign = cesta.gradeSign
-                roadChar = cesta.roadChar
+                routeChar = cesta.routeChar
                 timeMinute = cesta.timeMinute
                 timeSecond = cesta.timeSecond
                 description = cesta.description
@@ -101,7 +101,7 @@ class CestaModelImpl(private val context: Context) : CestaModel {
 
                 // Data
                 data.forEach { cesta ->
-                    csvWriter.append("${cesta.roadName},${cesta.fallCount},${cesta.climbStyle},${cesta.gradeNum},${cesta.gradeSign},${cesta.roadChar},${cesta.timeMinute},${cesta.timeSecond},${cesta.description},${cesta.opinion},${formatDate(cesta.date)}\n")
+                    csvWriter.append("${cesta.routeName},${cesta.fallCount},${cesta.climbStyle},${cesta.gradeNum},${cesta.gradeSign},${cesta.routeChar},${cesta.timeMinute},${cesta.timeSecond},${cesta.description},${cesta.opinion},${formatDate(cesta.date)}\n")
                 }
 
                 csvWriter.close()
@@ -141,7 +141,7 @@ class CestaModelImpl(private val context: Context) : CestaModel {
     override suspend fun getAllCestaByName(partialName: String): List<CestaEntity> {
         return withContext(Dispatchers.IO) {
             return@withContext cestaDao.getAllCesta().filter { cesta ->
-                cesta.roadName.contains(partialName, ignoreCase = true)
+                cesta.routeName.contains(partialName, ignoreCase = true)
             }
         }
     }

@@ -11,7 +11,7 @@ data class CestaEntity(
     var id: Long = 0,
 
     // Název cesty
-    var roadName: String,
+    var routeName: String,
 
     // Počet pádů
     var fallCount: Int,
@@ -26,7 +26,7 @@ data class CestaEntity(
     var gradeSign: String,
 
     // Charakter cesty
-    var roadChar: String,
+    var routeChar: String,
 
     // Doba lezení v minutách
     var timeMinute: Int,
@@ -45,18 +45,18 @@ data class CestaEntity(
 ) {
     // konstruktor pro vytváření instance bez ID.
     constructor(
-        roadName: String,
+        routeName: String,
         fallCount: Int,
         climbStyle: String,
         gradeNum: String,
         gradeSign: String,
-        roadChar: String,
+        routeChar: String,
         timeMinute: Int,
         timeSecond: Int,
         description: String,
         opinion: String,
         date: Long
     ) : this(
-        0, roadName, fallCount, climbStyle, gradeNum, gradeSign, roadChar, timeMinute, timeSecond, description, opinion, date
+        0, routeName, fallCount, climbStyle, gradeNum, gradeSign, routeChar, timeMinute, timeSecond, description, opinion, date
     )
 }
