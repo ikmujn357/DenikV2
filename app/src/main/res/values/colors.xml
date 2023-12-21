@@ -8,4 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="zkouska">#D6DF0E</color>
+    <color name="colorPrimary">#EEEEF3</color>
+    <color name="colorButton">#FFFFFFFF</color>
+    <color name="shadowButton">#80FFFFFF</color>
+    <color name="border">#80000000</color>
 </resources>

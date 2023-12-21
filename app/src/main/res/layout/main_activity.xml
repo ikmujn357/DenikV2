@@ -2,34 +2,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:id="@+id/topPanel"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         android:gravity="end|bottom">
 
-        <Button
+        <ImageButton
             android:id="@+id/button_add"
             android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:drawableStart="@drawable/add2"
+            android:src="@drawable/add2"
             android:background="@android:color/transparent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_find"
-            android:layout_width="40dp"
+            android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:drawableStart="@drawable/search"
+            android:src="@drawable/search"
             android:background="@android:color/transparent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_statistics"
             android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:drawableTop="@drawable/statistics"
+            android:src="@drawable/statistics"
             android:background="@android:color/transparent" />
 
     </LinearLayout>

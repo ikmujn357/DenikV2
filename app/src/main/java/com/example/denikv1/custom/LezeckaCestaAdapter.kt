@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 // Adapter pro propojení dat cest s RecyclerView
-class CestaAdapter(private val cesta: List<CestaEntity>, private val cestaClickListener: (Long) -> Unit) :
+class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickListener: (Long) -> Unit) :
     RecyclerView.Adapter<CestaAdapter.CestaViewHolder>() {
 
     // ViewHolder pro každý prvek v RecyclerView
@@ -46,4 +46,9 @@ class CestaAdapter(private val cesta: List<CestaEntity>, private val cestaClickL
 
     // Vrací počet položek v seznamu
     override fun getItemCount() = cesta.size
+
+    fun clear() {
+        cesta = emptyList()
+    }
 }
+

@@ -3,6 +3,7 @@ package com.example.denikv1
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -68,7 +69,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
 
     // Metoda pro přidání tlačítka pro přidání nové cesty
     override fun addButton() {
-        val buttonShowAdd = findViewById<Button>(R.id.button_add)
+        val buttonShowAdd: ImageButton = findViewById(R.id.button_add)
         buttonShowAdd.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
             startActivity(intent)
@@ -77,7 +78,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
 
     // Metoda pro přidání tlačítka pro vyhledávání
     override fun findButton() {
-        val buttonShowFind = findViewById<Button>(R.id.button_find)
+        val buttonShowFind: ImageButton = findViewById(R.id.button_find)
         buttonShowFind.setOnClickListener {
             val intent = Intent(this, FindActivity::class.java)
             startActivity(intent)
@@ -86,7 +87,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
 
     // Metoda pro přidání tlačítka pro zobrazení statistik
     override fun statisticsButton() {
-        val buttonShowStatistics = findViewById<Button>(R.id.button_statistics)
+        val buttonShowStatistics: ImageButton = findViewById(R.id.button_statistics)
         buttonShowStatistics.setOnClickListener {
             val intent = Intent(this, ShowStatistics::class.java)
             startActivity(intent)

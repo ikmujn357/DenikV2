@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">Lezecký deník</string>
     <string name="informace">Informace o cestě</string>
-    <string name="datum">Datum</string>
+    <string name="date">Datum</string>
+    <string name="minus">Mínus</string>
+    <string name="combination">Kombinace síly a techniky</string>
+    <string name="plus">Plus</string>
+    <string name="technique">Tecnická</string>
+    <string name="Empty">Prázdná hodnota</string>
+    <string name="Strenght">Silová</string>
+    <string name="EnterRouteName">Zadejte jméno cesty</string>
 
     <string-array name="Grade">
         <item>3</item>
@@ -30,5 +37,7 @@
         <item>Silová</item>
         <item>Kombinace</item>
     </string-array>
+
+
 
 </resources>
