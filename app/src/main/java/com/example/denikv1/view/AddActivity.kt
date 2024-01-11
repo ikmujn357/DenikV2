@@ -31,6 +31,33 @@ class AddActivity : AppCompatActivity() {
         supportActionBar?.elevation = 0f
 
         setupSpinner()
+        val showHideButton: LinearLayout = findViewById(R.id.showHideButton)
+        val showHideButtonImg: ImageView = findViewById(R.id.showHideButtonImg)
+        val timeLayout: LinearLayout = findViewById(R.id.timeLayout)
+        val descriptionLayout: LinearLayout = findViewById(R.id.descriptionLayout)
+        val opinionLayout: LinearLayout = findViewById(R.id.opinionLayout)
+
+        timeLayout.visibility = View.GONE
+        descriptionLayout.visibility = View.GONE
+        opinionLayout.visibility = View.GONE
+
+        // Přidání posluchače pro tlačítko showHideButton
+        showHideButton.setOnClickListener {
+            // Změna viditelnosti položek podle aktuálního stavu
+            if (timeLayout.visibility == View.VISIBLE) {
+                // Pokud jsou položky viditelné, skryj je
+                timeLayout.visibility = View.GONE
+                descriptionLayout.visibility = View.GONE
+                opinionLayout.visibility = View.GONE
+                showHideButtonImg.setImageResource(R.drawable.ic_arrow_right)
+            } else {
+                // Pokud jsou položky skryté, zobraz je
+                timeLayout.visibility = View.VISIBLE
+                descriptionLayout.visibility = View.VISIBLE
+                opinionLayout.visibility = View.VISIBLE
+                showHideButtonImg.setImageResource(R.drawable.ic_arrow_down)
+            }
+        }
 
         val plusButton: ImageButton = findViewById(R.id.button_plus)
         val nulaButton: ImageButton = findViewById(R.id.button_nula)

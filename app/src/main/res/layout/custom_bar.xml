@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/activityTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="Lezecký deník"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/button_find"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:text="Vyhledat"
+            android:textSize="10sp"
+            android:drawableTop="@drawable/search"
+            android:background="@android:color/transparent" />
+
+        <Button
+            android:id="@+id/button_statistics"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:text="Statistika"
+            android:textSize="10sp"
+            android:drawableTop="@drawable/statistics"
+            android:background="@android:color/transparent" />
+        <Button
+            android:id="@+id/exportButton"
+            android:layout_width="48dp"
+            android:layout_height="40dp"
+            android:drawableTop="@drawable/download"
+            android:text="Export"
+            android:textSize="10sp"
+            android:background="@android:color/transparent" />
+
+    </LinearLayout>
+</RelativeLayout>

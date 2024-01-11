@@ -4,50 +4,20 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <LinearLayout
-        android:id="@+id/topPanel"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:gravity="end|bottom">
-
-        <ImageButton
-            android:id="@+id/button_add"
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/add2"
-            android:background="@android:color/transparent" />
-
-        <ImageButton
-            android:id="@+id/button_find"
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/search"
-            android:background="@android:color/transparent" />
-
-        <ImageButton
-            android:id="@+id/button_statistics"
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/statistics"
-            android:background="@android:color/transparent" />
-
-    </LinearLayout>
-
     <!-- Recyclerview pro zobrazení seznamu lezeckých cest -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/topPanel" />
+        android:layout_height="wrap_content" />
 
     <!-- Tlačítko pro export -->
     <Button
-        android:id="@+id/exportButton"
-        android:layout_width="55dp"
-        android:layout_height="40dp"
-        android:drawableTop="@drawable/download"
-        android:text="Export"
+        android:id="@+id/button_add"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:drawableTop="@drawable/add2"
+        android:text="Přidat cestu"
+        android:textSize="10sp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"

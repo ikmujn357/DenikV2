@@ -337,12 +337,47 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:background="@android:color/transparent" />
+
+
+            <LinearLayout
+                android:id="@+id/showHideButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:background="@drawable/window_shape"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/showHideButtonImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_right"
+                    android:layout_gravity="center"/>
+
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Doplňující informace"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <View
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:background="@android:color/transparent" />
 
             <LinearLayout
+                android:id="@+id/timeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/window_shape"
@@ -403,6 +438,7 @@
             android:background="@android:color/transparent" />
 
         <LinearLayout
+            android:id="@+id/descriptionLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/window_shape"
@@ -445,6 +481,7 @@
                 android:background="@android:color/transparent" />
 
         <LinearLayout
+            android:id="@+id/opinionLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/window_shape"

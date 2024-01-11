@@ -2,6 +2,7 @@ package com.example.denikv1
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -25,6 +26,7 @@ interface CestaView {
 // Implementace view seznamu cest
 class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope() {
     private lateinit var controller: CestaController
+    private lateinit var customActionBarButton: View
 
     // Metoda volaná při vytvoření aktivity
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +37,13 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
         val cestaRepository: CestaModel = CestaModelImpl(this)
         controller = CestaControllerImpl(cestaRepository)
 
+        // Inicializace customActionBarButton
+        customActionBarButton = layoutInflater.inflate(R.layout.custom_bar, null)
+
         // Odstranění stínu z action baru
         supportActionBar?.elevation = 0f
+        supportActionBar?.customView = customActionBarButton
+        supportActionBar?.setDisplayShowCustomEnabled(true)
 
         // Zobrazení seznamu cest a tlačítek pro přidání cesty, vyhledání a statistiky
         displayCesty()
@@ -69,7 +76,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
 
     // Metoda pro přidání tlačítka pro přidání nové cesty
     override fun addButton() {
-        val buttonShowAdd: ImageButton = findViewById(R.id.button_add)
+        val buttonShowAdd: Button = findViewById(R.id.button_add)
         buttonShowAdd.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
             startActivity(intent)
@@ -78,7 +85,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
 
     // Metoda pro přidání tlačítka pro vyhledávání
     override fun findButton() {
-        val buttonShowFind: ImageButton = findViewById(R.id.button_find)
+        val buttonShowFind: Button = customActionBarButton.findViewById(R.id.button_find)
         buttonShowFind.setOnClickListener {
             val intent = Intent(this, FindActivity::class.java)
             startActivity(intent)
@@ -87,7 +94,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
 
     // Metoda pro přidání tlačítka pro zobrazení statistik
     override fun statisticsButton() {
-        val buttonShowStatistics: ImageButton = findViewById(R.id.button_statistics)
+        val buttonShowStatistics: Button = customActionBarButton.findViewById(R.id.button_statistics)
         buttonShowStatistics.setOnClickListener {
             val intent = Intent(this, ShowStatistics::class.java)
             startActivity(intent)
@@ -111,7 +118,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
 
     // Metoda pro přidání tlačítka pro export dat
     override fun exportButton() {
-        val exportButton = findViewById<Button>(R.id.exportButton)
+        val exportButton = customActionBarButton.findViewById<Button>(R.id.exportButton)
         exportButton.setOnClickListener {
             lifecycleScope.launch {
                 val fileName = "exported_data.csv"
