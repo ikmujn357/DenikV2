@@ -11,17 +11,15 @@
         android:layout_height="wrap_content" />
 
     <!-- Tlačítko pro export -->
-    <Button
+    <ImageButton
         android:id="@+id/button_add"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:drawableTop="@drawable/add2"
-        android:text="Přidat cestu"
-        android:textSize="10sp"
+        android:src="@drawable/add2"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@android:color/transparent" />
+        android:background="@drawable/circular_shape" />
 
 </RelativeLayout>

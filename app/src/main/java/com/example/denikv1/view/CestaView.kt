@@ -76,7 +76,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
 
     // Metoda pro přidání tlačítka pro přidání nové cesty
     override fun addButton() {
-        val buttonShowAdd: Button = findViewById(R.id.button_add)
+        val buttonShowAdd: ImageButton = findViewById(R.id.button_add)
         buttonShowAdd.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
             startActivity(intent)

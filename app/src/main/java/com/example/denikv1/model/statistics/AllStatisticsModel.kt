@@ -16,7 +16,7 @@ interface AllStatisticsModel {
 class AllStatisticsModelImpl(private val cestaModel: CestaModel) : AllStatisticsModel {
 
     //seřazení obtížností
-    private val difficultyComparator = Comparator<String> { difficulty1, difficulty2 ->
+    private val difficultyComparator = Comparator<String?> { difficulty1, difficulty2 ->
         val orderMap = mapOf(
             "3-" to 1, "3" to 2, "3+" to 3,
             "4-" to 4, "4" to 5, "4+" to 6, "5-" to 7, "5" to 8, "5+" to 9,
@@ -26,8 +26,10 @@ class AllStatisticsModelImpl(private val cestaModel: CestaModel) : AllStatistics
             "11+" to 27, "12-" to 28, "12" to 29, "12+" to 30
         )
 
+        val order1 = orderMap[difficulty1] ?: 0
+        val order2 = orderMap[difficulty2] ?: 0
 
-        orderMap[difficulty1]!!.compareTo(orderMap[difficulty2]!!)
+        order1.compareTo(order2)
     }
 
     override fun getDataGraph(context: Context): BarGraphSeries<DataPoint> {
@@ -49,6 +51,9 @@ class AllStatisticsModelImpl(private val cestaModel: CestaModel) : AllStatistics
 
     override fun getUniqueDifficulties(context: Context): List<String> {
         val allCesta = runBlocking { cestaModel.getAllCesta() }
-        return allCesta.map { it.gradeNum + it.gradeSign }.distinct()
+        return allCesta
+            .map { it.gradeNum + it.gradeSign }
+            .filter { it != "x" }
+            .distinct()
     }
 }

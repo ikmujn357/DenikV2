@@ -55,9 +55,10 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
             "10-" to 22, "10" to 23, "10+" to 24, "11-" to 25, "11" to 26,
             "11+" to 27, "12-" to 28, "12" to 29, "12+" to 30
         )
+        val order1 = orderMap[difficulty1] ?: 0
+        val order2 = orderMap[difficulty2] ?: 0
 
-
-        orderMap[difficulty1]!!.compareTo(orderMap[difficulty2]!!)
+        order1.compareTo(order2)
     }
 
     private val climbingStyleComparator = Comparator<String> { style1, style2 ->
@@ -81,7 +82,9 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
         }
 
         // Seřazení unikátních obtížností podle definovaného pořadí
-        val distinctDifficulties = getUniqueDifficulty(context, startDate,endDate).sortedWith(difficultyComparator)
+        val distinctDifficulties = getUniqueDifficulty(context, startDate,endDate)
+            .sortedWith(difficultyComparator)
+            .filter { it != "x" }
 
         // Vytvoření datových bodů pro sloupcový graf
         val dataPoints = distinctDifficulties.mapIndexed { index, difficulty ->
@@ -95,7 +98,10 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
     // Metoda pro získání osy X pro první sloupcový graf
     override fun getXLabelsGraph1(context: Context, startDate: Long, endDate: Long): Array<String> {
         // Seřazení unikátních obtížností podle definovaného pořadí a přidání prázdného labelu na konec
-        val labels = getUniqueDifficulty(context, startDate, endDate).sortedWith(difficultyComparator).toTypedArray()
+        val labels = getUniqueDifficulty(context, startDate, endDate)
+            .sortedWith(difficultyComparator)
+            .filter { it != "x" }
+            .toTypedArray()
         return arrayOf(*labels, "")
     }
 

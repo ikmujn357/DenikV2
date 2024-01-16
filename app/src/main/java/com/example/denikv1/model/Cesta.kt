@@ -38,7 +38,7 @@ data class CestaEntity(
     var description: String,
 
     // Názor na cestu
-    var opinion: String,
+    var rating: Float,
 
     // Datum vylezení
     var date: Long
@@ -54,9 +54,9 @@ data class CestaEntity(
         timeMinute: Int,
         timeSecond: Int,
         description: String,
-        opinion: String,
+        rating: Float,
         date: Long
     ) : this(
-        0, routeName, fallCount, climbStyle, gradeNum, gradeSign, routeChar, timeMinute, timeSecond, description, opinion, date
+        0, routeName, fallCount, climbStyle, gradeNum, gradeSign, routeChar, timeMinute, timeSecond, description, rating, date
     )
 }

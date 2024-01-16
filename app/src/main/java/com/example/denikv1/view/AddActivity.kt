@@ -59,6 +59,34 @@ class AddActivity : AppCompatActivity() {
             }
         }
 
+
+        val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
+        val linearLayoutFalls: LinearLayout = findViewById(R.id.falls)
+
+        routeStyleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View?,
+                position: Int,
+                id: Long
+            ) {
+                // Získání vybrané položky ze Spinneru
+                val selectedStyle = parentView?.getItemAtPosition(position).toString()
+
+                // Nastavení viditelnosti pole pro počet pádů podle vybraného stylu
+                linearLayoutFalls.visibility = if (selectedStyle.equals("On sight", ignoreCase = true) ||
+                    selectedStyle.equals("Flash", ignoreCase = true)
+                ) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
         val plusButton: ImageButton = findViewById(R.id.button_plus)
         val nulaButton: ImageButton = findViewById(R.id.button_nula)
         val minusButton: ImageButton = findViewById(R.id.button_minus)
@@ -194,11 +222,6 @@ class AddActivity : AppCompatActivity() {
 
     }
 
-
-
-
-
-
     private fun setupSpinner() {
         val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
         val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
@@ -229,17 +252,12 @@ class AddActivity : AppCompatActivity() {
         selectedButton = button
     }
 
-
-
-
-
     private fun updateCharModifier(value: String, button: ImageButton) {
         charModifier = value
         selectedButton2?.isSelected = false
         button.isSelected = true
         selectedButton2 = button
     }
-
 
     private fun newCesta() {
         val routeNameEditText: EditText = findViewById(R.id.nameEditText)
@@ -261,7 +279,7 @@ class AddActivity : AppCompatActivity() {
         val minuteEditText: EditText = findViewById(R.id.minutesEditText)
         val secondEditText: EditText = findViewById(R.id.secondsEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
-        val opinionEditText: EditText = findViewById(R.id.opinionEditText)
+        var opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
 
         val cestaName = routeNameEditText.text.toString()
         val fallCountString = fallEditText.text.toString()
@@ -271,12 +289,10 @@ class AddActivity : AppCompatActivity() {
         val minuteString = minuteEditText.text.toString()
         val secondString = secondEditText.text.toString()
         val descriptionroute = descriptionEditText.text.toString()
-        val opinionroute = opinionEditText.text.toString()
 
         val currentDate = if (selectedDate == 0L) System.currentTimeMillis() else selectedDate
 
-        if (cestaName.isNotBlank() && fallCountString.isNotBlank() && styleSpinner.isNotBlank()
-            && gradeSpinner.isNotBlank() && charImage.isNotBlank()) {
+        if (cestaName.isNotBlank()) {
 
             var timeMinutes = 0
             var timeSecond = 0
@@ -293,9 +309,15 @@ class AddActivity : AppCompatActivity() {
                 0
             }
 
+            val fallCount = if (fallCountString.isNotBlank()) {
+                fallCountString.toInt()
+            } else {
+                0
+            }
+
             val newCesta = CestaEntity(
                 routeName = cestaName,
-                fallCount = fallCountString.toInt(),
+                fallCount = fallCount,
                 climbStyle = styleSpinner,
                 gradeNum = gradeSpinner,
                 gradeSign = signImage,
@@ -303,7 +325,7 @@ class AddActivity : AppCompatActivity() {
                 timeMinute = timeMinutes,
                 timeSecond = timeSecond,
                 description = descriptionroute,
-                opinion = opinionroute,
+                rating = opinionRatingBar.rating, // Přidáno pro hodnocení
                 date = currentDate
             )
 
@@ -320,7 +342,7 @@ class AddActivity : AppCompatActivity() {
                         this.timeMinute = timeMinutes
                         this.timeSecond = timeSecond
                         this.description = descriptionroute
-                        this.opinion = opinionroute
+                        this.rating = opinionRatingBar.rating // Přidáno pro hodnocení
                         this.date = currentDate
                     }
 
@@ -340,7 +362,6 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
@@ -354,7 +375,7 @@ class AddActivity : AppCompatActivity() {
         val minuteEditText: EditText = findViewById(R.id.minutesEditText)
         val secondEditText: EditText = findViewById(R.id.secondsEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
-        val opinionEditText: EditText = findViewById(R.id.opinionEditText)
+        var opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
         val datePicker: DatePicker = findViewById(R.id.datePicker)
 
         routeNameEditText.setText(cesta.routeName)
@@ -362,7 +383,7 @@ class AddActivity : AppCompatActivity() {
         minuteEditText.setText(cesta.timeMinute.toString())
         secondEditText.setText(cesta.timeSecond.toString())
         descriptionEditText.setText(cesta.description)
-        opinionEditText.setText(cesta.opinion)
+        opinionRatingBar.rating = cesta.rating
 
         // Nastavení vybraného tlačítka
         selectedButtonTag = when (cesta.gradeSign) {
