@@ -16,9 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingLeft="14dp"
             android:paddingTop="8dp"
-            android:paddingRight="14dp"
             android:orientation="vertical"
             tools:ignore="UselessParent">
 
@@ -30,6 +28,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
             android:background="@drawable/window_shape"
 
             android:baselineAligned="true">

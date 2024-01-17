@@ -10,6 +10,8 @@ data class CestaEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
 
+    val routeId: Long = 0,
+
     // Název cesty
     var routeName: String,
 
@@ -45,6 +47,7 @@ data class CestaEntity(
 ) {
     // konstruktor pro vytváření instance bez ID.
     constructor(
+        routeId: Long,
         routeName: String,
         fallCount: Int,
         climbStyle: String,
@@ -57,6 +60,6 @@ data class CestaEntity(
         rating: Float,
         date: Long
     ) : this(
-        0, routeName, fallCount, climbStyle, gradeNum, gradeSign, routeChar, timeMinute, timeSecond, description, rating, date
+        0,routeId, routeName, fallCount, climbStyle, gradeNum, gradeSign, routeChar, timeMinute, timeSecond, description, rating, date
     )
 }

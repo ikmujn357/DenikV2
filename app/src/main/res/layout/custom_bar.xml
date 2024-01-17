@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -38,15 +39,15 @@
             android:textSize="10sp"
             android:drawableTop="@drawable/statistics"
             android:background="@android:color/transparent" />
+
         <Button
             android:id="@+id/exportButton"
             android:layout_width="48dp"
             android:layout_height="40dp"
+            android:background="@android:color/transparent"
             android:drawableTop="@drawable/download"
             android:text="Export"
-            android:textSize="10sp"
-            android:background="@android:color/transparent"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:textSize="10sp" />
 
     </LinearLayout>
 </RelativeLayout>

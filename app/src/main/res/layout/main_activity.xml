@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <!-- Tlačítko pro export -->
+
     <ImageButton
         android:id="@+id/button_add"
         android:layout_width="50dp"
