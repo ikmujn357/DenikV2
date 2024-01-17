@@ -45,7 +45,8 @@
             android:drawableTop="@drawable/download"
             android:text="Export"
             android:textSize="10sp"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            style="?android:attr/buttonBarButtonStyle" />
 
     </LinearLayout>
 </RelativeLayout>

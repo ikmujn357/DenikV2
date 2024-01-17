@@ -1,23 +1,23 @@
-package com.example.denikv1
+package com.example.denikv1.view.statistics
 
 import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import com.example.denikv1.R
+import com.example.denikv1.controller.statistics.DailyStatisticsController
+import com.example.denikv1.controller.statistics.DailyStatisticsControllerImpl
+import com.example.denikv1.model.CestaModel
+import com.example.denikv1.model.CestaModelImpl
+import com.example.denikv1.model.statistics.DailyStatisticsModelImpl
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.helper.StaticLabelsFormatter
 import com.jjoe64.graphview.series.BarGraphSeries
 import com.jjoe64.graphview.series.DataPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 
 // Rozhraní

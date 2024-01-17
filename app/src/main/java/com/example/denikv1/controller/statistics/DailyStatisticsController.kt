@@ -1,13 +1,10 @@
-package com.example.denikv1
+package com.example.denikv1.controller.statistics
 
 import android.content.Context
-import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.lifecycleScope
+import com.example.denikv1.view.statistics.DailyStatisticsFragment
+import com.example.denikv1.model.statistics.DailyStatisticsModel
 import com.jjoe64.graphview.series.BarGraphSeries
 import com.jjoe64.graphview.series.DataPoint
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.util.Calendar
 
 // Rozhraní pro kontrolér denních statistik

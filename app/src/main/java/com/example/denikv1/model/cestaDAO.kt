@@ -1,4 +1,4 @@
-package com.example.denikv1
+package com.example.denikv1.model
 
 import androidx.room.Dao
 import androidx.room.Delete

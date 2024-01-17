@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <shape xmlns:android="http://schemas.android.com/apk/res/android"
-        android:shape="rectangle">
-        <solid android:color="#FFFF00" /> <!-- Změňte barvu podle potřeby -->
-    </shape>
-</selector>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FFFF00" /> <!-- Změňte barvu podle potřeby -->
+</shape>

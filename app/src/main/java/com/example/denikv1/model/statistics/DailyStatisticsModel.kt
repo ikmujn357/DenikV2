@@ -1,11 +1,10 @@
-package com.example.denikv1
+package com.example.denikv1.model.statistics
 
 import android.content.Context
-import android.util.Log
+import com.example.denikv1.model.CestaEntity
+import com.example.denikv1.model.CestaModel
 import com.jjoe64.graphview.series.BarGraphSeries
 import com.jjoe64.graphview.series.DataPoint
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 // Rozhraní pro model denních statistik s sloupcovým grafem
@@ -77,9 +76,6 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
         val allCesta = getDataByDate(startDate,endDate)
 
         // Pokud nejsou žádná data, vrátíme prázdný graf
-        if (allCesta == null) {
-            return BarGraphSeries(emptyArray())
-        }
 
         // Seřazení unikátních obtížností podle definovaného pořadí
         val distinctDifficulties = getUniqueDifficulty(context, startDate,endDate)
@@ -111,9 +107,6 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
         val allCesta = getDataByDate(startDate,endDate)
 
         // Pokud nejsou žádná data, vrátíme prázdný graf
-        if (allCesta == null) {
-            return BarGraphSeries(emptyArray())
-        }
 
         // Seřazení unikátních obtížností podle definovaného pořadí
         val distinctStyle = getUniqueStyle(context, startDate,endDate).sortedWith(climbingStyleComparator)

@@ -1,4 +1,4 @@
-package com.example.denikv1
+package com.example.denikv1.model
 
 import android.content.Context
 import androidx.room.Database

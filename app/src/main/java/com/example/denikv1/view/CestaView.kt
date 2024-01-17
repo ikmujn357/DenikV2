@@ -1,5 +1,6 @@
-package com.example.denikv1
+package com.example.denikv1.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -7,10 +8,15 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.lifecycleScope
+import com.example.denikv1.R
+import com.example.denikv1.controller.CestaController
+import com.example.denikv1.controller.CestaControllerImpl
+import com.example.denikv1.custom.CestaAdapter
+import com.example.denikv1.model.CestaModel
+import com.example.denikv1.model.CestaModelImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -30,6 +36,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
     private lateinit var customActionBarButton: View
 
     // Metoda volaná při vytvoření aktivity
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)

@@ -1,4 +1,4 @@
-package com.example.denikv1
+package com.example.denikv1.model
 
 import android.content.Context
 import android.os.Environment
@@ -41,7 +41,7 @@ interface CestaModel {
 }
 
 // Implementace rozhraní CestaModel.
-class CestaModelImpl(private val context: Context) : CestaModel {
+class CestaModelImpl(context: Context) : CestaModel {
     // Získání přístupu k databázi.
     private val cestaDao = AppDatabase.getDatabase(context).cestaDao()
 
@@ -138,10 +138,10 @@ class CestaModelImpl(private val context: Context) : CestaModel {
     }
 
     // Metoda pro získání všech cest podle částečného názvu.
-    override suspend fun getAllCestaByName(partialName: String): List<CestaEntity> {
+    override suspend fun getAllCestaByName(routeName: String): List<CestaEntity> {
         return withContext(Dispatchers.IO) {
             return@withContext cestaDao.getAllCesta().filter { cesta ->
-                cesta.routeName.contains(partialName, ignoreCase = true)
+                cesta.routeName.contains(routeName, ignoreCase = true)
             }
         }
     }

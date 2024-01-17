@@ -1,6 +1,8 @@
-package com.example.denikv1
+package com.example.denikv1.controller
 
 import android.content.Context
+import com.example.denikv1.model.CestaEntity
+import com.example.denikv1.model.CestaModel
 
 // Rozhraní
 interface CestaController {
@@ -41,8 +43,8 @@ class CestaControllerImpl(private val cestaModel: CestaModel) : CestaController 
     }
 
     // Metoda pro získání všech cest se zadaným názvem
-    override suspend fun getAllCestaByName(routeName: String): List<CestaEntity> {
-        return cestaModel.getAllCestaByName(routeName)
+    override suspend fun getAllCestaByName(roadName: String): List<CestaEntity> {
+        return cestaModel.getAllCestaByName(roadName)
     }
 
     // Metoda pro zobrazení Toast zprávy

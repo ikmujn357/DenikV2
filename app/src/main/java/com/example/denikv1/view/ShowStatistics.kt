@@ -1,8 +1,11 @@
-package com.example.denikv1
+package com.example.denikv1.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.denikv1.R
+import com.example.denikv1.view.statistics.AllStatisticsFragment
+import com.example.denikv1.view.statistics.DailyStatisticsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 //zobrazení statistiky

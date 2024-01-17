@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ShowStatistics"
+    tools:context=".view.ShowStatistics"
     android:background="@color/pozadí">
 
     <RelativeLayout
@@ -19,7 +19,8 @@
             android:paddingLeft="14dp"
             android:paddingTop="8dp"
             android:paddingRight="14dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
 
 
@@ -104,8 +105,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewVyhledavani"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linarLayout" />
+            android:layout_height="wrap_content" />
         </LinearLayout>
     </RelativeLayout>
 

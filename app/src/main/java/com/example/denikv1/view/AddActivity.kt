@@ -1,4 +1,4 @@
-package com.example.denikv1
+package com.example.denikv1.view
 
 import android.os.Build
 import android.os.Bundle
@@ -7,6 +7,13 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.denikv1.R
+import com.example.denikv1.controller.CestaController
+import com.example.denikv1.controller.CestaControllerImpl
+import com.example.denikv1.custom.CustomArrayAdapter
+import com.example.denikv1.model.CestaEntity
+import com.example.denikv1.model.CestaModel
+import com.example.denikv1.model.CestaModelImpl
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -23,6 +30,7 @@ class AddActivity : AppCompatActivity() {
     private var selectedButtonTag2: String? = null
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.zapis)
@@ -131,7 +139,7 @@ class AddActivity : AppCompatActivity() {
         }
 
         val datePicker: DatePicker = findViewById(R.id.datePicker)
-        datePicker.setOnDateChangedListener() { _, year, month, dayOfMonth ->
+        datePicker.setOnDateChangedListener { _, year, month, dayOfMonth ->
             val calendar = Calendar.getInstance()
             calendar.set(year, month, dayOfMonth)
             selectedDate = calendar.timeInMillis
@@ -148,7 +156,7 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    fun onButtonClicked(view: View) {
+    private fun onButtonClicked(view: View) {
         // Odmáčkne předchozí tlačítko, pokud existuje
         selectedButton?.isSelected = false
 
@@ -168,7 +176,7 @@ class AddActivity : AppCompatActivity() {
         updateSelectedButtonView()
     }
 
-    fun onButtonClicked2(view: View) {
+    private fun onButtonClicked2(view: View) {
         // Odmáčkne předchozí tlačítko, pokud existuje
         selectedButton2?.isSelected = false
 
@@ -264,22 +272,22 @@ class AddActivity : AppCompatActivity() {
         val fallEditText: EditText = findViewById(R.id.fallEditText)
         val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
         val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
-        val signImage = when {
-            selectedButtonTag == "plus" -> "+"
-            selectedButtonTag == "nula" -> ""
-            selectedButtonTag == "minus" -> "-"
+        val signImage = when (selectedButtonTag) {
+            "plus" -> "+"
+            "nula" -> ""
+            "minus" -> "-"
             else -> ""
         }
-        val charImage = when {
-            selectedButtonTag2 == "Síla" -> "Silová"
-            selectedButtonTag2 == "Technika" -> "Technická"
-            selectedButtonTag2 == "Kombinace" -> "Kombinace"
+        val charImage = when (selectedButtonTag2) {
+            "Síla" -> "Silová"
+            "Technika" -> "Technická"
+            "Kombinace" -> "Kombinace"
             else -> ""
         }
         val minuteEditText: EditText = findViewById(R.id.minutesEditText)
         val secondEditText: EditText = findViewById(R.id.secondsEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
-        var opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
+        val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
 
         val cestaName = routeNameEditText.text.toString()
         val fallCountString = fallEditText.text.toString()
@@ -294,10 +302,9 @@ class AddActivity : AppCompatActivity() {
 
         if (cestaName.isNotBlank()) {
 
-            var timeMinutes = 0
-            var timeSecond = 0
+            val timeSecond: Int
 
-            timeMinutes = if(minuteString.isNotBlank()) {
+            val timeMinutes: Int = if(minuteString.isNotBlank()) {
                 minuteString.toInt()
             } else {
                 0
@@ -375,7 +382,7 @@ class AddActivity : AppCompatActivity() {
         val minuteEditText: EditText = findViewById(R.id.minutesEditText)
         val secondEditText: EditText = findViewById(R.id.secondsEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
-        var opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
+        val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
         val datePicker: DatePicker = findViewById(R.id.datePicker)
 
         routeNameEditText.setText(cesta.routeName)

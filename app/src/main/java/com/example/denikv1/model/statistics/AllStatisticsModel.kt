@@ -1,6 +1,7 @@
-package com.example.denikv1
+package com.example.denikv1.model.statistics
 
 import android.content.Context
+import com.example.denikv1.model.CestaModel
 import com.jjoe64.graphview.series.BarGraphSeries
 import com.jjoe64.graphview.series.DataPoint
 import kotlinx.coroutines.runBlocking

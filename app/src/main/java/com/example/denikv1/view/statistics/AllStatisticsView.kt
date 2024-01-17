@@ -1,4 +1,4 @@
-package com.example.denikv1
+package com.example.denikv1.view.statistics
 
 import android.graphics.Paint
 import android.os.Bundle
@@ -6,11 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.denikv1.R
+import com.example.denikv1.controller.statistics.AllStatisticsController
+import com.example.denikv1.controller.statistics.AllStatisticsControllerImpl
+import com.example.denikv1.model.CestaModel
+import com.example.denikv1.model.CestaModelImpl
+import com.example.denikv1.model.statistics.AllStatisticsModelImpl
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.helper.StaticLabelsFormatter
-import com.jjoe64.graphview.series.DataPoint
-import com.jjoe64.graphview.series.LineGraphSeries
 
 interface AllStatisticsView {
     fun displayGraph(view: View)
@@ -27,7 +31,7 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
         val view = inflater.inflate(R.layout.celkova, container, false)
         cestaModel = CestaModelImpl(requireContext())
         val statisticsModel = AllStatisticsModelImpl(cestaModel)
-        controller = AllStatisticsControllerImpl(statisticsModel, requireContext())
+        controller = AllStatisticsControllerImpl(statisticsModel)
         displayGraph(view)
         return view
     }
@@ -51,7 +55,7 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
             graphView.gridLabelRenderer.numHorizontalLabels = 0
             graphView.gridLabelRenderer.numVerticalLabels = 0
             val staticLabelsFormatter = StaticLabelsFormatter(graphView)
-            staticLabelsFormatter.setHorizontalLabels(arrayOf("", ""))
+            staticLabelsFormatter.setHorizontalLabels(arrayOf("",""))
             graphView.gridLabelRenderer.labelFormatter = staticLabelsFormatter
             graphView.viewport.setMinX(0.0)
             graphView.viewport.setMinY(0.0)
@@ -72,7 +76,7 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
             staticLabelsFormatter.setHorizontalLabels(controller.getXLabelsGraph(requireContext()))
             graphView.gridLabelRenderer.labelFormatter = staticLabelsFormatter
 
-            // Přidat následující řádek pro posunutí labelů o jedno místo doprava
+            // pro posunutí labelů o jedno místo doprava
             graphView.viewport.setMinX(0.5)
 
             val barWidthPx = 25

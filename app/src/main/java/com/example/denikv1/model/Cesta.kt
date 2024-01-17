@@ -1,4 +1,4 @@
-package com.example.denikv1
+package com.example.denikv1.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

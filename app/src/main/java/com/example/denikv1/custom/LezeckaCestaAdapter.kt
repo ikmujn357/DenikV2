@@ -1,10 +1,13 @@
-package com.example.denikv1
+package com.example.denikv1.custom
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.denikv1.model.CestaEntity
+import com.example.denikv1.R
 
 // Adapter pro propojení dat cest s RecyclerView
 class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickListener: (Long) -> Unit) :
@@ -13,8 +16,8 @@ class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickL
     // ViewHolder pro každý prvek v RecyclerView
     class CestaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // Reference na textová pole v layoutu item_cesta
-        val CestaName: TextView = view.findViewById(R.id.cestaName)
-        val CestaGrade: TextView = view.findViewById(R.id.cestaGrade)
+        val cestaName: TextView = view.findViewById(R.id.cestaName)
+        val cestaGrade: TextView = view.findViewById(R.id.cestaGrade)
     }
 
     // Vytvoří nový ViewHolder vytvořením nového view z layoutu item_cesta
@@ -24,12 +27,13 @@ class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickL
     }
 
     // Nastaví obsah ViewHolderu na základě pozice v seznamu
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CestaViewHolder, position: Int) {
         val cesta = cesta[position]
 
         // Nastavení textu v textových polích ViewHolderu
-        holder.CestaName.text = cesta.routeName
-        holder.CestaGrade.text = cesta.gradeNum + cesta.gradeSign
+        holder.cestaName.text = cesta.routeName
+        holder.cestaGrade.text = cesta.gradeNum + cesta.gradeSign
 
         // Nastavení odstupu mezi položkami v RecyclerView
         val spacingInPixels = holder.itemView.resources.getDimensionPixelSize(R.dimen.spacing_between_items)
