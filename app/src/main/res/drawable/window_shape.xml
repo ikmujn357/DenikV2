@@ -10,14 +10,14 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="20dp" />
-            <solid android:color="@color/colorButton" />
+            <solid android:color="@color/polozka" />
         </shape>
     </item>
     <!-- Light shadow on top -->
     <item android:bottom="1dp">
         <shape android:shape="rectangle">
             <corners android:radius="20dp" />
-            <solid android:color="@color/shadowButton" />
+            <solid android:color="@color/polozka" />
         </shape>
     </item>
 </layer-list>

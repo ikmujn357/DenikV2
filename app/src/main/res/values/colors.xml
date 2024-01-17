@@ -12,4 +12,15 @@
     <color name="colorButton">#FFFFFFFF</color>
     <color name="shadowButton">#80FFFFFF</color>
     <color name="border">#80000000</color>
+    <color name="bar">#303F9F</color>
+
+    <color name="polozka">#EDF2F4</color>
+    <color name="pozadí">#8D99AE</color>
+    <color name="pridat_cestu">#28BDB0</color>
+
+    <!---
+    <color name="polozka">#DCF0F3</color>
+    <color name="pozadí">#FFFFFF</color>
+    <color name="pridat_cestu">#4C8E4E</color>
+    -->
 </resources>
