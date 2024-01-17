@@ -1,5 +1,6 @@
 package com.example.denikv1.model
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Environment
 import kotlinx.coroutines.Dispatchers
@@ -21,9 +22,6 @@ interface CestaModel {
     // Metoda pro vložení cesty.
     suspend fun insertCesta(cesta: CestaEntity)
 
-    // Metoda pro přidání nebo aktualizaci cesty.
-    suspend fun addOrUpdateCesta(cesta: CestaEntity)
-
     // Metoda pro získání všech cest na konkrétní datum.
     suspend fun getAllCestaForDate(selectedDate: Long): List<CestaEntity>
 
@@ -33,11 +31,28 @@ interface CestaModel {
     // Metoda pro získání cesty podle ID.
     suspend fun getCestaById(cestaId: Long): CestaEntity
 
+    suspend fun getCestaByRouteId(routeId: Long): CestaEntity
+
     // Metoda pro získání všech cest podle částečného názvu.
     suspend fun getAllCestaByName(routeName: String): List<CestaEntity>
 
     // Metoda pro export dat do souboru CSV.
     suspend fun exportDataToFile(context: Context, fileName: String)
+    suspend fun updateCesta(cesta: CestaEntity)
+    suspend fun addCesta(
+        routeId: Long,
+        routeName: String,
+        fallCount: Int,
+        climbStyle: String,
+        gradeNum: String,
+        gradeSign: String,
+        routeChar: String,
+        timeMinute: Int,
+        timeSecond: Int,
+        description: String,
+        rating: Float,
+        date: Long
+    )
 }
 
 // Implementace rozhraní CestaModel.
@@ -61,30 +76,40 @@ class CestaModelImpl(context: Context) : CestaModel {
     }
 
     // Metoda pro přidání nebo aktualizaci cesty.
-    override suspend fun addOrUpdateCesta(cesta: CestaEntity) {
-        if (cesta.id != 0L) {
-            // Aktualizace existující cesty
-            val existingCesta = getCestaById(cesta.id)
-            existingCesta.apply {
-                // Aktualizace hodnot
-                routeName = cesta.routeName
-                fallCount = cesta.fallCount
-                climbStyle = cesta.climbStyle
-                gradeNum = cesta.gradeNum
-                gradeSign = cesta.gradeSign
-                routeChar = cesta.routeChar
-                timeMinute = cesta.timeMinute
-                timeSecond = cesta.timeSecond
-                description = cesta.description
-                rating = cesta.rating
-                date = cesta.date
-            }
-            removeCesta(existingCesta)
-            insertCesta(existingCesta)
-        } else {
-            // Přidání nové cesty
-            insertCesta(cesta)
-        }
+    @SuppressLint("SuspiciousIndentation")
+    override suspend fun addCesta(
+        routeId: Long,
+        routeName: String,
+        fallCount: Int,
+        climbStyle: String,
+        gradeNum: String,
+        gradeSign: String,
+        routeChar: String,
+        timeMinute: Int,
+        timeSecond: Int,
+        description: String,
+        rating: Float,
+        date: Long
+    ) {
+        val newCesta = CestaEntity(
+            routeId = routeId,
+            routeName = routeName,
+            fallCount= fallCount,
+            climbStyle = climbStyle,
+            gradeNum = gradeNum,
+            gradeSign = gradeSign,
+            routeChar = routeChar,
+            timeMinute = timeMinute,
+            timeSecond = timeSecond,
+            description = description,
+            rating = rating,
+            date = date
+        )
+            insertCesta(newCesta)
+    }
+
+    override suspend fun updateCesta(cesta: CestaEntity) {
+        return cestaDao.updateCesta(cesta)
     }
 
     // Metoda pro export dat do souboru CSV.
@@ -97,7 +122,7 @@ class CestaModelImpl(context: Context) : CestaModel {
                 val csvWriter = FileWriter(file, false)
 
                 // Header
-                csvWriter.append("Jméno cesty,Počet pádů,Styl přelezu,Obtížnost,Charakter cesty,Minuty,Sekundy,Popis cesty,Názor, Datum\n")
+                csvWriter.append("Jméno cesty,Počet pádů,Styl přelezu,Obtížnost,Obtížnost znak,Charakter cesty,Minuty,Sekundy,Popis cesty,Hodnocení, Datum\n")
 
                 // Data
                 data.forEach { cesta ->
@@ -135,6 +160,10 @@ class CestaModelImpl(context: Context) : CestaModel {
     // Metoda pro získání cesty podle ID.
     override suspend fun getCestaById(cestaId: Long): CestaEntity {
         return cestaDao.getCestaById(cestaId)
+    }
+
+    override suspend fun getCestaByRouteId(routeId: Long): CestaEntity {
+        return cestaDao.getCestaByRouteId(routeId)
     }
 
     // Metoda pro získání všech cest podle částečného názvu.

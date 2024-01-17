@@ -22,6 +22,23 @@ interface CestaController {
 
     // Metoda pro zobrazení Toast zprávy
     fun showToast(message: String, duration: Int)
+    suspend fun getCestaById(cestaId: Long): CestaEntity
+
+    suspend fun getCestaByRouteId(routeId: Long): CestaEntity
+    suspend fun addCesta(
+        routeId: Long,
+        routeName: String,
+        fallCount: Int,
+        climbStyle: String,
+        gradeNum: String,
+        gradeSign: String,
+        routeChar: String,
+        timeMinute: Int,
+        timeSecond: Int,
+        description: String,
+        rating: Float,
+        date: Long
+    )
 }
 
 // Implementace rozhraní CestaController
@@ -45,6 +62,34 @@ class CestaControllerImpl(private val cestaModel: CestaModel) : CestaController 
     // Metoda pro získání všech cest se zadaným názvem
     override suspend fun getAllCestaByName(roadName: String): List<CestaEntity> {
         return cestaModel.getAllCestaByName(roadName)
+    }
+
+    override suspend fun getCestaById(cestaId: Long): CestaEntity {
+        return cestaModel.getCestaById(cestaId)
+    }
+
+    override suspend fun getCestaByRouteId(routeId: Long): CestaEntity {
+        return cestaModel.getCestaByRouteId(routeId)
+    }
+
+    override suspend fun addCesta(
+        routeId: Long,
+        routeName: String,
+        fallCount: Int,
+        climbStyle: String,
+        gradeNum: String,
+        gradeSign: String,
+        routeChar: String,
+        timeMinute: Int,
+        timeSecond: Int,
+        description: String,
+        rating: Float,
+        date: Long
+    ) {
+
+        cestaModel.addCesta(
+            routeId, routeName, fallCount, climbStyle, gradeNum, gradeSign,
+            routeChar, timeMinute, timeSecond, description, rating, date)
     }
 
     // Metoda pro zobrazení Toast zprávy

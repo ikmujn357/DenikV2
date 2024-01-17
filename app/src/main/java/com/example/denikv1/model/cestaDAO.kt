@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 // Rozhraní pro manipulaci s entitou CestaEntity v databázi.
 // Obsahuje metody pro vkládání, získávání a mazání záznamů v
@@ -12,6 +13,9 @@ interface CestaDao {
     // Metoda pro vložení nové cesty do databáze.
     @Insert
     suspend fun insertCesta(cesta: CestaEntity)
+
+    @Update
+    suspend fun updateCesta(cesta: CestaEntity)
 
     // Metoda pro získání všech cest v databázi.
     @Query("SELECT * FROM CestaEntity")
@@ -32,6 +36,9 @@ interface CestaDao {
     // Metoda pro získání cesty podle ID.
     @Query("SELECT * FROM CestaEntity WHERE id = :cestaId")
     suspend fun getCestaById(cestaId: Long): CestaEntity
+
+    @Query("SELECT * FROM CestaEntity WHERE id = :routeId")
+    suspend fun getCestaByRouteId(routeId: Long): CestaEntity
 
     // Metoda pro získání cest podle názvu cesty.
     @Query("SELECT * FROM CestaEntity WHERE routeName = :routeName")
