@@ -28,7 +28,6 @@ class AddActivity : AppCompatActivity() {
     private var gradeModifier: String = ""
     private var charModifier: String = ""
     private var cestaId: Long = 0
-    private var newCestaId: Long = 0
     private var selectedButtonTag: String? = null
     private var selectedButtonTag2: String? = null
     private var isCestaCreated: Boolean = false
@@ -47,10 +46,8 @@ class AddActivity : AppCompatActivity() {
             val allTasks = cestaController.getAllCesta()
             if (allTasks.isNotEmpty()) {
                 cestaId = allTasks.last().id + 1
-                newCestaId = (cestaController.getAllCesta().size + 1).toLong()
             } else {
                 cestaId = 1
-                newCestaId = 1
             }
         }
 
@@ -268,8 +265,8 @@ class AddActivity : AppCompatActivity() {
 
         if (cestaId != 0L) {
             lifecycleScope.launch {
-                val cesta = cestaModel.getCestaById(cestaId)
-                fillUI(cesta)
+                currentCesta = cestaModel.getCestaById(cestaId)
+                fillUI(currentCesta!!)
             }
         }
     }
@@ -545,7 +542,9 @@ class AddActivity : AppCompatActivity() {
                 }
 
                 lifecycleScope.launch {
-                    val existingCesta = currentCesta?.let { cestaController.getCestaByRouteId(newCestaId) }
+                    val existingCesta = currentCesta?.let {
+                        cestaController.getCestaByRouteId(it.routeId)
+                    }
 
                     if (existingCesta != null) {
                         existingCesta.routeName = cestaName
@@ -563,7 +562,7 @@ class AddActivity : AppCompatActivity() {
                         cestaModel.updateCesta(existingCesta)
                     } else {
                         cestaController.addCesta(
-                            routeId = newCestaId,
+                            routeId = cestaId,
                             routeName = cestaName,
                             fallCount= fallCount,
                             climbStyle = styleSpinner,
@@ -578,7 +577,7 @@ class AddActivity : AppCompatActivity() {
                         )
 
                         // Nastav aktuální úkol
-                        currentCesta = cestaController.getCestaByRouteId(cestaId)
+                        currentCesta = cestaController.getCestaById(cestaId)
                     }
 
                     isCestaCreated = false
