@@ -26,7 +26,6 @@ interface CestaController {
 
     suspend fun getCestaByRouteId(routeId: Long): CestaEntity
     suspend fun addCesta(
-        routeId: Long,
         routeName: String,
         fallCount: Int,
         climbStyle: String,
@@ -73,7 +72,6 @@ class CestaControllerImpl(private val cestaModel: CestaModel) : CestaController 
     }
 
     override suspend fun addCesta(
-        routeId: Long,
         routeName: String,
         fallCount: Int,
         climbStyle: String,
@@ -88,7 +86,7 @@ class CestaControllerImpl(private val cestaModel: CestaModel) : CestaController 
     ) {
 
         cestaModel.addCesta(
-            routeId, routeName, fallCount, climbStyle, gradeNum, gradeSign,
+            routeName, fallCount, climbStyle, gradeNum, gradeSign,
             routeChar, timeMinute, timeSecond, description, rating, date)
     }
 

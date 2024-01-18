@@ -40,7 +40,6 @@ interface CestaModel {
     suspend fun exportDataToFile(context: Context, fileName: String)
     suspend fun updateCesta(cesta: CestaEntity)
     suspend fun addCesta(
-        routeId: Long,
         routeName: String,
         fallCount: Int,
         climbStyle: String,
@@ -62,7 +61,7 @@ class CestaModelImpl(context: Context) : CestaModel {
 
     // Metoda pro získání všech cest.
     override suspend fun getAllCesta(): List<CestaEntity> = withContext(Dispatchers.IO) {
-        return@withContext cestaDao.getAllCesta()
+        return@withContext cestaDao.getAllCesta().filter { it.routeName != "" }
     }
 
     // Metoda pro odstranění cesty.
@@ -78,7 +77,6 @@ class CestaModelImpl(context: Context) : CestaModel {
     // Metoda pro přidání nebo aktualizaci cesty.
     @SuppressLint("SuspiciousIndentation")
     override suspend fun addCesta(
-        routeId: Long,
         routeName: String,
         fallCount: Int,
         climbStyle: String,
@@ -92,7 +90,6 @@ class CestaModelImpl(context: Context) : CestaModel {
         date: Long
     ) {
         val newCesta = CestaEntity(
-            routeId = routeId,
             routeName = routeName,
             fallCount= fallCount,
             climbStyle = climbStyle,

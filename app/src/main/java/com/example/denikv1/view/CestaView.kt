@@ -46,7 +46,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
         controller = CestaControllerImpl(cestaRepository)
 
         // Inicializace customActionBarButton
-        customActionBarButton = layoutInflater.inflate(R.layout.custom_bar, null)
+        customActionBarButton = layoutInflater.inflate(R.layout.custom_bar_main, null)
 
         // Odstranění stínu z action baru
         supportActionBar?.elevation = 0f

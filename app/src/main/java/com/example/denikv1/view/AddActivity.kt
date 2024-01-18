@@ -1,9 +1,11 @@
 package com.example.denikv1.view
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -32,15 +34,38 @@ class AddActivity : AppCompatActivity() {
     private var selectedButtonTag2: String? = null
     private var isCestaCreated: Boolean = false
     private var currentCesta: CestaEntity? = null
+    private var isCestaDeleted: Boolean = false
 
 
+    @SuppressLint("InflateParams")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.zapis)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // Set up custom action bar button click listener
+        val customBarAdd = layoutInflater.inflate(R.layout.custom_bar_add, null)
+        supportActionBar?.customView = customBarAdd
+        supportActionBar?.setDisplayShowCustomEnabled(true)
         supportActionBar?.elevation = 0f
+
+        customBarAdd.findViewById<Button>(R.id.deleteButton).setOnClickListener {
+            if (currentCesta != null) {
+                lifecycleScope.launch {
+                    currentCesta?.let { deleteTask(it) }
+                    isCestaDeleted = true
+                }
+            }
+            else {
+                finish()
+            }
+        }
+
+        // Set up back button click listener
+        customBarAdd.findViewById<ImageButton>(R.id.action_back).setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
 
         lifecycleScope.launch {
             val allTasks = cestaController.getAllCesta()
@@ -94,8 +119,7 @@ class AddActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         routeGradeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -106,8 +130,7 @@ class AddActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         minuteEditText.addTextChangedListener(object : TextWatcher {
@@ -248,11 +271,6 @@ class AddActivity : AppCompatActivity() {
             onButtonClicked2(kombinaceButton)
         }
 
-        val addCestaButton: Button = findViewById(R.id.saveButton)
-        addCestaButton.setOnClickListener {
-            //newCesta()
-        }
-
         val datePicker: DatePicker = findViewById(R.id.datePicker)
         datePicker.setOnDateChangedListener { _, year, month, dayOfMonth ->
             val calendar = Calendar.getInstance()
@@ -265,8 +283,9 @@ class AddActivity : AppCompatActivity() {
 
         if (cestaId != 0L) {
             lifecycleScope.launch {
-                currentCesta = cestaModel.getCestaById(cestaId)
-                fillUI(currentCesta!!)
+                val cesta = cestaModel.getCestaById(cestaId)
+                currentCesta = cesta
+                fillUI(cesta)
             }
         }
     }
@@ -523,32 +542,27 @@ class AddActivity : AppCompatActivity() {
             if (cestaName.isNotBlank()) {
                 isCestaCreated = true
 
-                val timeMinutes: Int = if(minuteString.isNotBlank()) {
+                val timeMinutes: Int = if (minuteString.isNotBlank()) {
                     minuteString.toInt()
                 } else {
                     0
                 }
 
-                val timeSecond = if(secondString.isNotBlank()) {
+                val timeSecond = if (secondString.isNotBlank()) {
                     secondString.toInt()
-                } else {
-                    0
-                }
-
-                val fallCount = if (fallCountString.isNotBlank()) {
-                    fallCountString.toInt()
                 } else {
                     0
                 }
 
                 lifecycleScope.launch {
                     val existingCesta = currentCesta?.let {
-                        cestaController.getCestaByRouteId(it.routeId)
+                        cestaController.getCestaById(it.id)
                     }
 
                     if (existingCesta != null) {
+                        // Update existing Cesta
                         existingCesta.routeName = cestaName
-                        existingCesta.fallCount= fallCount
+                        existingCesta.fallCount = fallCountString.toIntOrNull() ?: 0
                         existingCesta.climbStyle = styleSpinner
                         existingCesta.gradeNum = gradeSpinner
                         existingCesta.gradeSign = signImage
@@ -561,23 +575,7 @@ class AddActivity : AppCompatActivity() {
 
                         cestaModel.updateCesta(existingCesta)
                     } else {
-                        cestaController.addCesta(
-                            routeId = cestaId,
-                            routeName = cestaName,
-                            fallCount= fallCount,
-                            climbStyle = styleSpinner,
-                            gradeNum = gradeSpinner,
-                            gradeSign = signImage,
-                            routeChar = charImage,
-                            timeMinute = timeMinutes,
-                            timeSecond = timeSecond,
-                            description = descriptionroute,
-                            rating = opinionRatingBar.rating,
-                            date = currentDate
-                        )
-
-                        // Nastav aktuální úkol
-                        currentCesta = cestaController.getCestaById(cestaId)
+                        createCesta ()
                     }
 
                     isCestaCreated = false
@@ -585,6 +583,26 @@ class AddActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun createCesta () {
+        lifecycleScope.launch {
+            cestaController.addCesta(
+                routeName = "",
+                fallCount = 0,
+                climbStyle = "",
+                gradeNum = "",
+                gradeSign = "",
+                routeChar = "",
+                timeMinute = 0,
+                timeSecond = 0,
+                description = "",
+                rating = 0f,
+                date = 0
+            )
+            currentCesta = cestaController.getCestaById(cestaId)
+        }
+    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
@@ -644,4 +662,23 @@ class AddActivity : AppCompatActivity() {
         routeStyleSpinner.setSelection(styleLevels.indexOf(cesta.climbStyle))
     }
 
+    private fun deleteTask(cesta: CestaEntity) {
+        lifecycleScope.launch {
+            if (cestaModel.getAllCesta().size == 1) {
+                createCesta ()
+            }
+            cestaModel.removeCesta(cesta)
+            finish() // nebo naviguj na jinou obrazovku podle potřeby
+        }
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    override fun onPause() {
+        super.onPause()
+        // Před zavřením aktivity aktualizuj currentCesta
+        currentCesta?.let {
+            if(!isCestaDeleted)
+            saveCesta()
+        }
+    }
 }
