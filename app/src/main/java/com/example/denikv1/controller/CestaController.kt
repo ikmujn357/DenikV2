@@ -38,6 +38,8 @@ interface CestaController {
         rating: Float,
         date: Long
     )
+
+    suspend fun deleteAllCesta()
 }
 
 // Implementace rozhraní CestaController
@@ -88,6 +90,10 @@ class CestaControllerImpl(private val cestaModel: CestaModel) : CestaController 
         cestaModel.addCesta(
             routeName, fallCount, climbStyle, gradeNum, gradeSign,
             routeChar, timeMinute, timeSecond, description, rating, date)
+    }
+
+    override suspend fun deleteAllCesta () {
+        return cestaModel.deleteAllCesta()
     }
 
     // Metoda pro zobrazení Toast zprávy

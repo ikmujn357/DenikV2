@@ -71,7 +71,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
             layoutManager.stackFromEnd = true
             recyclerView.layoutManager = layoutManager
 
-            val adapter = CestaAdapter(controller.getAllCesta()) { cestaId ->
+            val adapter = CestaAdapter(controller.getAllCesta().filter { it.routeName != "" }) { cestaId ->
                 // Přesměrování na AddActivity s předáním ID cesty
                 val intent = Intent(this@CestaViewImp, AddActivity::class.java)
                 intent.putExtra("cestaId", cestaId)

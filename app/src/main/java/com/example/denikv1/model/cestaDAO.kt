@@ -43,4 +43,7 @@ interface CestaDao {
     // Metoda pro získání cest podle názvu cesty.
     @Query("SELECT * FROM CestaEntity WHERE routeName = :routeName")
     suspend fun getAllCestaByName(routeName: String): List<CestaEntity>
+
+    @Query("DELETE FROM cestaentity")
+    suspend fun deleteAllCesta()
 }

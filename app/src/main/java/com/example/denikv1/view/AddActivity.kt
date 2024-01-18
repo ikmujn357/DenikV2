@@ -665,12 +665,17 @@ class AddActivity : AppCompatActivity() {
     private fun deleteTask(cesta: CestaEntity) {
         lifecycleScope.launch {
             if (cestaModel.getAllCesta().size == 1) {
+                cestaModel.removeCesta(cesta)
+                cestaId = 1
                 createCesta ()
             }
-            cestaModel.removeCesta(cesta)
+            else {
+                cestaModel.removeCesta(cesta)
+            }
             finish() // nebo naviguj na jinou obrazovku podle potřeby
         }
     }
+
 
     @SuppressLint("SuspiciousIndentation")
     override fun onPause() {

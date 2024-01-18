@@ -52,6 +52,8 @@ interface CestaModel {
         rating: Float,
         date: Long
     )
+
+    suspend fun deleteAllCesta()
 }
 
 // Implementace rozhraní CestaModel.
@@ -61,7 +63,7 @@ class CestaModelImpl(context: Context) : CestaModel {
 
     // Metoda pro získání všech cest.
     override suspend fun getAllCesta(): List<CestaEntity> = withContext(Dispatchers.IO) {
-        return@withContext cestaDao.getAllCesta().filter { it.routeName != "" }
+        return@withContext cestaDao.getAllCesta()
     }
 
     // Metoda pro odstranění cesty.
@@ -170,5 +172,9 @@ class CestaModelImpl(context: Context) : CestaModel {
                 cesta.routeName.contains(routeName, ignoreCase = true)
             }
         }
+    }
+
+    override suspend fun deleteAllCesta () {
+        return cestaDao.deleteAllCesta()
     }
 }
