@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +14,7 @@ import com.example.denikv1.R
 import com.example.denikv1.controller.CestaController
 import com.example.denikv1.controller.CestaControllerImpl
 import com.example.denikv1.custom.CestaAdapter
+import com.example.denikv1.model.CestaEntity
 import com.example.denikv1.model.CestaModel
 import com.example.denikv1.model.CestaModelImpl
 import kotlinx.coroutines.CoroutineScope
@@ -88,8 +88,10 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
         buttonShowAdd.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
             startActivity(intent)
-        }
-    }
+
+
+        }}
+
 
     // Metoda pro přidání tlačítka pro vyhledávání
     override fun findButton() {
@@ -119,10 +121,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
         }
     }
 
-    // Funkce pro zobrazení vyskakovací zprávy (Toast)
-    private fun showToast(message: String, duration: Int) {
-        Toast.makeText(this, message, duration).show()
-    }
+
 
     // Metoda pro přidání tlačítka pro export dat
     override fun exportButton() {
@@ -132,9 +131,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
                 val fileName = "exported_data.csv"
                 try {
                     controller.exportDataToFile(applicationContext, fileName)
-                    showToast("Data úspěšně exportována.", Toast.LENGTH_SHORT)
                 } catch (e: Exception) {
-                    showToast("Chyba při exportu dat: ${e.message}", Toast.LENGTH_SHORT)
                     e.printStackTrace()
                 }
             }

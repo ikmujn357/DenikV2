@@ -3,48 +3,36 @@ package com.example.denikv1.model.statistics
 import android.content.Context
 import com.example.denikv1.model.CestaEntity
 import com.example.denikv1.model.CestaModel
-import com.jjoe64.graphview.series.BarGraphSeries
-import com.jjoe64.graphview.series.DataPoint
+import com.github.mikephil.charting.data.BarEntry
 import kotlinx.coroutines.runBlocking
 
-// Rozhraní pro model denních statistik s sloupcovým grafem
+// Interface for the model handling daily statistics
 interface DailyStatisticsModel {
-    // Metoda pro získání dat pro první sloupcový graf
-    fun getDataGraph1(context: Context, startDate: Long, endDate: Long): BarGraphSeries<DataPoint>
-
-    // Metoda pro získání osy X pro první sloupcový graf
+    fun getDataGraph1(context: Context, startDate: Long, endDate: Long): List<BarEntry>
     fun getXLabelsGraph1(context: Context, startDate: Long, endDate: Long): Array<String>
-
-    fun getDataByDate (startDate: Long, endDate: Long): List<CestaEntity>
-    // Metoda pro získání unikátních obtížností
+    fun getDataByDate(startDate: Long, endDate: Long): List<CestaEntity>
     fun getUniqueDifficulty(context: Context, startDate: Long, endDate: Long): List<String>
     fun getUniqueStyle(context: Context, startDate: Long, endDate: Long): List<String>
-
-    // Metoda pro získání dat pro druhý sloupcový graf
-    fun getDataGraph2(context: Context, startDate: Long, endDate: Long): BarGraphSeries<DataPoint>
-
-    // Metoda pro získání osy X pro druhý sloupcový graf
+    fun getDataGraph2(context: Context, startDate: Long, endDate: Long): List<BarEntry>
     fun getXLabelsGraph2(context: Context, startDate: Long, endDate: Long): Array<String>
 }
 
-// Implementace rozhraní pro model denních statistik
+// Implementation of the model for daily statistics
 class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatisticsModel {
-    override fun getDataByDate (startDate: Long, endDate: Long): List<CestaEntity> {
+    override fun getDataByDate(startDate: Long, endDate: Long): List<CestaEntity> {
         return runBlocking { cestaModel.getAllCestaForDateRange(startDate, endDate) }
     }
 
     override fun getUniqueDifficulty(context: Context, startDate: Long, endDate: Long): List<String> {
-        val allCesta = getDataByDate (startDate, endDate)
+        val allCesta = getDataByDate(startDate, endDate)
         return allCesta.map { it.gradeNum + it.gradeSign }.distinct()
     }
 
     override fun getUniqueStyle(context: Context, startDate: Long, endDate: Long): List<String> {
-        val allCesta = getDataByDate (startDate, endDate)
+        val allCesta = getDataByDate(startDate, endDate)
         return allCesta.map { it.climbStyle }.distinct()
     }
 
-
-    // Komparátor pro porovnání obtížností podle jejich pořadí
     private val difficultyComparator = Comparator<String> { difficulty1, difficulty2 ->
         val orderMap = mapOf(
             "3-" to 1, "3" to 2, "3+" to 3,
@@ -69,31 +57,21 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
         orderMap[style1]!!.compareTo(orderMap[style2]!!)
     }
 
-
-    // Metoda pro získání dat pro první sloupcový graf
-    override fun getDataGraph1(context: Context, startDate: Long, endDate: Long): BarGraphSeries<DataPoint> {
-        // Načtení všech cest pro zadaný rozsah dat
-        val allCesta = getDataByDate(startDate,endDate)
-
-        // Pokud nejsou žádná data, vrátíme prázdný graf
-
-        // Seřazení unikátních obtížností podle definovaného pořadí
-        val distinctDifficulties = getUniqueDifficulty(context, startDate,endDate)
+    override fun getDataGraph1(context: Context, startDate: Long, endDate: Long): List<BarEntry> {
+        val allCesta = getDataByDate(startDate, endDate)
+        val distinctDifficulties = getUniqueDifficulty(context, startDate, endDate)
             .sortedWith(difficultyComparator)
             .filter { it != "x" }
 
-        // Vytvoření datových bodů pro sloupcový graf
-        val dataPoints = distinctDifficulties.mapIndexed { index, difficulty ->
+        val entries = distinctDifficulties.mapIndexed { index, difficulty ->
             val count = allCesta.count { it.gradeNum + it.gradeSign == difficulty }
-            DataPoint(index + 1.0, count.toDouble())
-        }.toTypedArray()
+            BarEntry(index.toFloat(), count.toFloat())
+        }
 
-        return BarGraphSeries(dataPoints)
+        return entries
     }
 
-    // Metoda pro získání osy X pro první sloupcový graf
     override fun getXLabelsGraph1(context: Context, startDate: Long, endDate: Long): Array<String> {
-        // Seřazení unikátních obtížností podle definovaného pořadí a přidání prázdného labelu na konec
         val labels = getUniqueDifficulty(context, startDate, endDate)
             .sortedWith(difficultyComparator)
             .filter { it != "x" }
@@ -101,29 +79,22 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
         return arrayOf(*labels, "")
     }
 
-    // Metoda pro získání dat pro druhý sloupcový graf
-    override fun getDataGraph2(context: Context, startDate: Long, endDate: Long): BarGraphSeries<DataPoint> {
-        // Načtení všech cest pro zadaný rozsah dat
-        val allCesta = getDataByDate(startDate,endDate)
+    override fun getDataGraph2(context: Context, startDate: Long, endDate: Long): List<BarEntry> {
+        val allCesta = getDataByDate(startDate, endDate)
+        val distinctStyle = getUniqueStyle(context, startDate, endDate).sortedWith(climbingStyleComparator)
 
-        // Pokud nejsou žádná data, vrátíme prázdný graf
-
-        // Seřazení unikátních obtížností podle definovaného pořadí
-        val distinctStyle = getUniqueStyle(context, startDate,endDate).sortedWith(climbingStyleComparator)
-
-        // Vytvoření datových bodů pro sloupcový graf
-        val dataPoints = distinctStyle.mapIndexed { index, style ->
+        val entries = distinctStyle.mapIndexed { index, style ->
             val count = allCesta.count { it.climbStyle == style }
-            DataPoint(index + 1.0, count.toDouble())
-        }.toTypedArray()
+            BarEntry(index.toFloat(), count.toFloat())
+        }
 
-        return BarGraphSeries(dataPoints)
+        return entries
     }
 
-    // Metoda pro získání osy X pro druhý sloupcový graf
     override fun getXLabelsGraph2(context: Context, startDate: Long, endDate: Long): Array<String> {
-        // Seřazení unikátních obtížností podle definovaného pořadí a přidání prázdného labelu na konec
-        val labels = getUniqueStyle(context, startDate, endDate).sortedWith(climbingStyleComparator).toTypedArray()
+        val labels = getUniqueStyle(context, startDate, endDate)
+            .sortedWith(climbingStyleComparator)
+            .toTypedArray()
         return arrayOf(*labels, "")
     }
 }

@@ -48,7 +48,7 @@
             android:textSize="18sp"
             android:padding="16dp"/>
 
-        <com.jjoe64.graphview.GraphView
+        <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/graph_obtiznost_denni"
             android:layout_width="300dp"
             android:layout_height="220dp"
@@ -77,7 +77,7 @@
             android:textSize="18sp"
             android:padding="16dp"/>
 
-        <com.jjoe64.graphview.GraphView
+        <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/graph_styl_prelezu"
             android:layout_width="300dp"
             android:layout_height="220dp"

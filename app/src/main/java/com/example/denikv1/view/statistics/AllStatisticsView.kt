@@ -1,10 +1,12 @@
 package com.example.denikv1.view.statistics
 
-import android.graphics.Paint
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.denikv1.R
 import com.example.denikv1.controller.statistics.AllStatisticsController
@@ -12,9 +14,11 @@ import com.example.denikv1.controller.statistics.AllStatisticsControllerImpl
 import com.example.denikv1.model.CestaModel
 import com.example.denikv1.model.CestaModelImpl
 import com.example.denikv1.model.statistics.AllStatisticsModelImpl
-import com.jjoe64.graphview.GraphView
-import com.jjoe64.graphview.GridLabelRenderer
-import com.jjoe64.graphview.helper.StaticLabelsFormatter
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 interface AllStatisticsView {
     fun displayGraph(view: View)
@@ -37,50 +41,51 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
     }
 
     override fun displayGraph(view: View) {
-        val graphView = view.findViewById<GraphView>(R.id.graph_obtiznost)
-        val series = controller.getDataGraph(requireContext())
+        val barChart = view.findViewById<BarChart>(R.id.graph_obtiznost)
+        val barEntries = controller.getDataGraph(requireContext())
 
-        graphView.viewport.isXAxisBoundsManual = true
-        graphView.viewport.isYAxisBoundsManual = true
+        val barDataSet = BarDataSet(barEntries, null)
 
+        barDataSet.color = ContextCompat.getColor(requireContext(), R.color.purple_700)
 
-        val maxY = series.highestValueY
-        graphView.viewport.setMaxX(series.highestValueX + 0.5)
-        graphView.viewport.setMaxY(maxY + 1.0)
+        val barData = BarData(barDataSet)
 
-        if (series.isEmpty) {
-            graphView.viewport.isXAxisBoundsManual = true
-            graphView.viewport.isYAxisBoundsManual = true
-
-            graphView.gridLabelRenderer.numHorizontalLabels = 0
-            graphView.gridLabelRenderer.numVerticalLabels = 0
-            val staticLabelsFormatter = StaticLabelsFormatter(graphView)
-            staticLabelsFormatter.setHorizontalLabels(arrayOf("",""))
-            graphView.gridLabelRenderer.labelFormatter = staticLabelsFormatter
-            graphView.viewport.setMinX(0.0)
-            graphView.viewport.setMinY(0.0)
-
+        if (barData.dataSetCount == 0) {
+            // Set empty graph
+            barChart.setNoDataText("No data available")
+            barChart.invalidate()
         } else {
-            graphView.addSeries(series)
+            barChart.data = barData
 
-            val numLabels = controller.getXLabelsGraph(requireContext()).size
-            graphView.gridLabelRenderer.numHorizontalLabels = numLabels
-            graphView.gridLabelRenderer.numVerticalLabels = (maxY.toInt() + 2) / 2
+            // Set X-axis labels
+            val xLabels = controller.getXLabelsGraph(requireContext())
 
-            graphView.gridLabelRenderer.labelHorizontalHeight = 50
-            graphView.gridLabelRenderer.verticalLabelsAlign = Paint.Align.CENTER
-            graphView.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.NONE
-            graphView.gridLabelRenderer.setHorizontalLabelsAngle(-25)
+            val xAxis = barChart.xAxis
+            xAxis.valueFormatter = IndexAxisValueFormatter(xLabels)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.granularity = 1f
+            xAxis.setDrawGridLines(false)
+            xAxis.axisMaximum = xLabels.size.toFloat() - 0.5f
 
-            val staticLabelsFormatter = StaticLabelsFormatter(graphView)
-            staticLabelsFormatter.setHorizontalLabels(controller.getXLabelsGraph(requireContext()))
-            graphView.gridLabelRenderer.labelFormatter = staticLabelsFormatter
+            val yAxis = barChart.axisLeft
+            yAxis.axisMinimum = 0f
+            yAxis.granularity = 1f
+            yAxis.setDrawGridLines(false)
 
-            // pro posunutí labelů o jedno místo doprava
-            graphView.viewport.setMinX(0.5)
+            // Set Y-axis labels
+            barChart.axisLeft.granularity = 1f
 
-            val barWidthPx = 25
-            series.spacing = barWidthPx
+            // Customize other graph properties as needed
+            barChart.isHighlightPerDragEnabled = false
+            barChart.isHighlightPerTapEnabled = false
+            barChart.axisRight.isEnabled = false
+            barChart.description.isEnabled = false
+            barChart.isDoubleTapToZoomEnabled = false
+            barChart.isScaleYEnabled = false
+            barChart.isScaleXEnabled = false
+            barChart.isClickable = false
+            barChart.legend.isEnabled = false
+            barChart.invalidate()
         }
     }
 }

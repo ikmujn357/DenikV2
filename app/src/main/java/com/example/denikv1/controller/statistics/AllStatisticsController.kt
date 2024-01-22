@@ -2,11 +2,10 @@ package com.example.denikv1.controller.statistics
 
 import android.content.Context
 import com.example.denikv1.model.statistics.AllStatisticsModel
-import com.jjoe64.graphview.series.BarGraphSeries
-import com.jjoe64.graphview.series.DataPoint
+import com.github.mikephil.charting.data.BarEntry
 
 interface AllStatisticsController {
-    fun getDataGraph(context: Context): BarGraphSeries<DataPoint>
+    fun getDataGraph(context: Context): List<BarEntry>
     fun getXLabelsGraph(context: Context): Array<String>
     fun getUniqueDifficulties(context: Context): List<String>
 }
@@ -16,7 +15,7 @@ class AllStatisticsControllerImpl(
     private val model: AllStatisticsModel
 ) : AllStatisticsController {
 
-    override fun getDataGraph(context: Context): BarGraphSeries<DataPoint> {
+    override fun getDataGraph(context: Context): List<BarEntry> {
         return model.getDataGraph(context)
     }
 

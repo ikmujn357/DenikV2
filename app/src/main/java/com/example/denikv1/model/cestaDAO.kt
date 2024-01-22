@@ -46,4 +46,13 @@ interface CestaDao {
 
     @Query("DELETE FROM cestaentity")
     suspend fun deleteAllCesta()
+    @Query("SELECT COUNT(*) FROM CestaEntity")
+    suspend fun getCountOfItems(): Int
+
+    @Query("SELECT * FROM CestaEntity ORDER BY id DESC LIMIT 1")
+    suspend fun getLastCesta(): CestaEntity?
+
+    @Query("SELECT id FROM CestaEntity ORDER BY id DESC LIMIT 1")
+    suspend fun getLastCestaId(): Long?
+
 }

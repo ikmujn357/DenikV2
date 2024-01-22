@@ -5,11 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageButton
+    <Button
         android:id="@+id/action_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/arrow_back"
+        android:drawableTint="@android:color/black"
         />
 
     <TextView
@@ -18,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
+        android:layout_marginStart="32dp"
         android:text="Přidat cestu"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp"
@@ -35,7 +39,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/minus"
+            android:drawableTop="@drawable/delete"
             android:text="Smazat"
             android:textSize="10sp" />
 

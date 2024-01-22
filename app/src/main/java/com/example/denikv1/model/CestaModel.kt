@@ -31,7 +31,13 @@ interface CestaModel {
     // Metoda pro získání cesty podle ID.
     suspend fun getCestaById(cestaId: Long): CestaEntity
 
+    suspend fun getLastCesta(): CestaEntity?
+
+    suspend fun getLastCestaId(): Long?
+
     suspend fun getCestaByRouteId(routeId: Long): CestaEntity
+
+    suspend fun getCountOfItems(): Int
 
     // Metoda pro získání všech cest podle částečného názvu.
     suspend fun getAllCestaByName(routeName: String): List<CestaEntity>
@@ -109,6 +115,18 @@ class CestaModelImpl(context: Context) : CestaModel {
 
     override suspend fun updateCesta(cesta: CestaEntity) {
         return cestaDao.updateCesta(cesta)
+    }
+
+    override suspend fun getCountOfItems(): Int{
+        return cestaDao.getCountOfItems()
+    }
+
+    override suspend fun getLastCesta(): CestaEntity?{
+        return cestaDao.getLastCesta()
+    }
+
+    override suspend fun getLastCestaId(): Long?{
+    return cestaDao.getLastCestaId()
     }
 
     // Metoda pro export dat do souboru CSV.

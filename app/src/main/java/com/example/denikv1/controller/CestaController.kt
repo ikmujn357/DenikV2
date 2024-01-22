@@ -20,8 +20,7 @@ interface CestaController {
     // Metoda pro získání všech cest se zadaným názvem
     suspend fun getAllCestaByName(roadName: String): List<CestaEntity>
 
-    // Metoda pro zobrazení Toast zprávy
-    fun showToast(message: String, duration: Int)
+
     suspend fun getCestaById(cestaId: Long): CestaEntity
 
     suspend fun getCestaByRouteId(routeId: Long): CestaEntity
@@ -96,10 +95,7 @@ class CestaControllerImpl(private val cestaModel: CestaModel) : CestaController 
         return cestaModel.deleteAllCesta()
     }
 
-    // Metoda pro zobrazení Toast zprávy
-    override fun showToast(message: String, duration: Int) {
 
-    }
 
 
 }

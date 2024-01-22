@@ -1,14 +1,20 @@
 package com.example.denikv1.view
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
-import android.widget.*
-import androidx.annotation.RequiresApi
+import android.widget.AdapterView
+import android.widget.Button
+import android.widget.DatePicker
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RatingBar
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.denikv1.R
@@ -18,8 +24,11 @@ import com.example.denikv1.custom.CustomArrayAdapter
 import com.example.denikv1.model.CestaEntity
 import com.example.denikv1.model.CestaModel
 import com.example.denikv1.model.CestaModelImpl
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.coroutines.runBlocking
+import java.util.Calendar
 
 class AddActivity : AppCompatActivity() {
     private val cestaModel: CestaModel = CestaModelImpl(this)
@@ -27,8 +36,6 @@ class AddActivity : AppCompatActivity() {
     private var selectedDate: Long = 0
     private var selectedButton: ImageButton? = null
     private var selectedButton2: ImageButton? = null
-    private var gradeModifier: String = ""
-    private var charModifier: String = ""
     private var cestaId: Long = 0
     private var selectedButtonTag: String? = null
     private var selectedButtonTag2: String? = null
@@ -36,46 +43,64 @@ class AddActivity : AppCompatActivity() {
     private var currentCesta: CestaEntity? = null
     private var isCestaDeleted: Boolean = false
 
-
-    @SuppressLint("InflateParams")
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.zapis)
 
-        // Set up custom action bar button click listener
-        val customBarAdd = layoutInflater.inflate(R.layout.custom_bar_add, null)
+        cestaId = calculateNextCestaId()
+
+        setupCustomActionBar()
+        setupUIComponents()
+        toggleVisibility()
+        setupButtons()
+        setupSpinner()
+
+        val receivedIntent = intent
+        cestaId = receivedIntent.getLongExtra("cestaId", 0)
+
+        if (cestaId != 0L) {
+            lifecycleScope.launch {
+                val cesta = cestaModel.getCestaById(cestaId)
+                currentCesta = cesta
+                fillUI(cesta)
+            }
+        }
+    }
+
+    private fun setupCustomActionBar() {
+        val customBarAdd = layoutInflater.inflate(R.layout.custom_bar_add, FrameLayout(this))
         supportActionBar?.customView = customBarAdd
         supportActionBar?.setDisplayShowCustomEnabled(true)
         supportActionBar?.elevation = 0f
 
-        customBarAdd.findViewById<Button>(R.id.deleteButton).setOnClickListener {
-            if (currentCesta != null) {
-                lifecycleScope.launch {
-                    currentCesta?.let { deleteTask(it) }
-                    isCestaDeleted = true
-                }
-            }
-            else {
-                finish()
-            }
-        }
-
-        // Set up back button click listener
-        customBarAdd.findViewById<ImageButton>(R.id.action_back).setOnClickListener {
+        customBarAdd.findViewById<Button>(R.id.action_back).setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-
-        lifecycleScope.launch {
-            val allTasks = cestaController.getAllCesta()
-            if (allTasks.isNotEmpty()) {
-                cestaId = allTasks.last().id + 1
-            } else {
-                cestaId = 1
+        customBarAdd.findViewById<Button>(R.id.deleteButton).setOnClickListener {
+            lifecycleScope.launch {
+                currentCesta?.let { deleteCesta(it) }
+                isCestaDeleted = true
             }
         }
+    }
 
+    private fun calculateNextCestaId(): Long {
+        val result = runBlocking {
+            val deferredResult = async(Dispatchers.Default) {
+                val allTasks = cestaController.getAllCesta()
+                if (allTasks.isNotEmpty()) {
+                    allTasks.last().id + 1
+                } else {
+                    1
+                }
+            }
+            deferredResult.await()
+        }
+        return result
+    }
+
+    private fun setupUIComponents() {
         val routeNameEditText: EditText = findViewById(R.id.nameEditText)
         val fallEditText: EditText = findViewById(R.id.fallEditText)
         val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
@@ -84,132 +109,61 @@ class AddActivity : AppCompatActivity() {
         val secondEditText: EditText = findViewById(R.id.secondsEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
         val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
+        val datePicker: DatePicker = findViewById(R.id.datePicker)
 
-        routeNameEditText.addTextChangedListener(object : TextWatcher {
+        val textWatcher = createTextWatcher()
+        val itemSelectedListener = createItemSelectedListener()
+
+        routeNameEditText.addTextChangedListener(textWatcher)
+        fallEditText.addTextChangedListener(textWatcher)
+        routeStyleSpinner.onItemSelectedListener = itemSelectedListener
+        routeGradeSpinner.onItemSelectedListener = itemSelectedListener
+        minuteEditText.addTextChangedListener(textWatcher)
+        descriptionEditText.addTextChangedListener(textWatcher)
+        secondEditText.addTextChangedListener(textWatcher)
+
+        opinionRatingBar.setOnRatingBarChangeListener { _, _, _ -> saveCesta() }
+        setupDatePickerListener(datePicker)
+
+        val linearLayoutFalls: LinearLayout = findViewById(R.id.falls)
+        routeStyleSpinner.onItemSelectedListener = createClimbStyleItemSelectedListener(linearLayoutFalls)
+    }
+
+    private fun createTextWatcher(): TextWatcher {
+        val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(s: Editable?) {
-                // Delay the saving by 500 milliseconds to capture continuous changes
-                lifecycleScope.launch {
-                    saveCesta()
-                }
-            }
-        })
-
-        fallEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                // Delay the saving by 500 milliseconds to capture continuous changes
-                lifecycleScope.launch {
-                    saveCesta()
-                }
-            }
-        })
-
-        routeStyleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // Akce po výběru položky ve Spinneru
-                lifecycleScope.launch {
-                    saveCesta()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        routeGradeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // Akce po výběru položky ve Spinneru
-                lifecycleScope.launch {
-                    saveCesta()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        minuteEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                // Delay the saving by 500 milliseconds to capture continuous changes
-                lifecycleScope.launch {
-                    saveCesta()
-                }
-            }
-        })
-
-        descriptionEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                // Delay the saving by 500 milliseconds to capture continuous changes
-                lifecycleScope.launch {
-                    saveCesta()
-                }
-            }
-        })
-
-        secondEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                // Delay the saving by 500 milliseconds to capture continuous changes
-                lifecycleScope.launch {
-                    saveCesta()
-                }
-            }
-        })
-
-        opinionRatingBar.setOnRatingBarChangeListener { _, _, _ ->
-            lifecycleScope.launch {
                 saveCesta()
             }
         }
+        return textWatcher
+    }
 
-        setupSpinner()
-        val showHideButton: LinearLayout = findViewById(R.id.showHideButton)
-        val showHideButtonImg: ImageView = findViewById(R.id.showHideButtonImg)
-        val timeLayout: LinearLayout = findViewById(R.id.timeLayout)
-        val descriptionLayout: LinearLayout = findViewById(R.id.descriptionLayout)
-        val opinionLayout: LinearLayout = findViewById(R.id.opinionLayout)
+    private fun createItemSelectedListener(): AdapterView.OnItemSelectedListener {
+        val itemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                saveCesta()
+            }
 
-        timeLayout.visibility = View.GONE
-        descriptionLayout.visibility = View.GONE
-        opinionLayout.visibility = View.GONE
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        return itemSelectedListener
+    }
 
-        // Přidání posluchače pro tlačítko showHideButton
-        showHideButton.setOnClickListener {
-            // Změna viditelnosti položek podle aktuálního stavu
-            if (timeLayout.visibility == View.VISIBLE) {
-                // Pokud jsou položky viditelné, skryj je
-                timeLayout.visibility = View.GONE
-                descriptionLayout.visibility = View.GONE
-                opinionLayout.visibility = View.GONE
-                showHideButtonImg.setImageResource(R.drawable.ic_arrow_right)
-            } else {
-                // Pokud jsou položky skryté, zobraz je
-                timeLayout.visibility = View.VISIBLE
-                descriptionLayout.visibility = View.VISIBLE
-                opinionLayout.visibility = View.VISIBLE
-                showHideButtonImg.setImageResource(R.drawable.ic_arrow_down)
+    private fun setupDatePickerListener(datePicker: DatePicker) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            datePicker.setOnDateChangedListener { _, year, month, dayOfMonth ->
+                val calendar = Calendar.getInstance()
+                calendar.set(year, month, dayOfMonth)
+                selectedDate = calendar.timeInMillis
+                saveCesta()
             }
         }
+    }
 
-        val linearLayoutFalls: LinearLayout = findViewById(R.id.falls)
-
-        routeStyleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+    private fun createClimbStyleItemSelectedListener(linearLayoutFalls: LinearLayout): AdapterView.OnItemSelectedListener {
+        return object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,
                 selectedItemView: View?,
@@ -232,103 +186,133 @@ class AddActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
+    }
 
-        val plusButton: ImageButton = findViewById(R.id.button_plus)
-        val nulaButton: ImageButton = findViewById(R.id.button_nula)
-        val minusButton: ImageButton = findViewById(R.id.button_minus)
+    private fun toggleVisibility() {
+        val showHideButton: LinearLayout = findViewById(R.id.showHideButton)
+        val showHideButtonImg: ImageView = findViewById(R.id.showHideButtonImg)
+        val timeLayout: LinearLayout = findViewById(R.id.timeLayout)
+        val descriptionLayout: LinearLayout = findViewById(R.id.descriptionLayout)
+        val opinionLayout: LinearLayout = findViewById(R.id.opinionLayout)
 
-        val silaButton: ImageButton = findViewById(R.id.button_sila)
-        val technikaButton: ImageButton = findViewById(R.id.button_technika)
-        val kombinaceButton: ImageButton = findViewById(R.id.button_kombinace)
+        timeLayout.visibility = View.GONE
+        descriptionLayout.visibility = View.GONE
+        opinionLayout.visibility = View.GONE
 
-        plusButton.setOnClickListener {
-            updateGradeModifier("+", plusButton)
-            onButtonClicked(plusButton)
-        }
-
-        nulaButton.setOnClickListener {
-            updateGradeModifier("", nulaButton)
-            onButtonClicked(nulaButton)
-        }
-
-        minusButton.setOnClickListener {
-            updateGradeModifier("-", minusButton)
-            onButtonClicked(minusButton)
-        }
-
-        silaButton.setOnClickListener {
-            updateCharModifier("Silová", silaButton)
-            onButtonClicked2(silaButton)
-        }
-
-        technikaButton.setOnClickListener {
-            updateCharModifier("Technická", technikaButton)
-            onButtonClicked2(technikaButton)
-        }
-
-        kombinaceButton.setOnClickListener {
-            updateCharModifier("Kombinace", kombinaceButton)
-            onButtonClicked2(kombinaceButton)
-        }
-
-        val datePicker: DatePicker = findViewById(R.id.datePicker)
-        datePicker.setOnDateChangedListener { _, year, month, dayOfMonth ->
-            val calendar = Calendar.getInstance()
-            calendar.set(year, month, dayOfMonth)
-            selectedDate = calendar.timeInMillis
-        }
-
-        val receivedIntent = intent
-        cestaId = receivedIntent.getLongExtra("cestaId", 0)
-
-        if (cestaId != 0L) {
-            lifecycleScope.launch {
-                val cesta = cestaModel.getCestaById(cestaId)
-                currentCesta = cesta
-                fillUI(cesta)
+        showHideButton.setOnClickListener {
+            if (timeLayout.visibility == View.VISIBLE) {
+                // Pokud jsou položky viditelné, skryj je
+                timeLayout.visibility = View.GONE
+                descriptionLayout.visibility = View.GONE
+                opinionLayout.visibility = View.GONE
+                showHideButtonImg.setImageResource(R.drawable.ic_arrow_right)
+            } else {
+                // Pokud jsou položky skryté, zobraz je
+                timeLayout.visibility = View.VISIBLE
+                descriptionLayout.visibility = View.VISIBLE
+                opinionLayout.visibility = View.VISIBLE
+                showHideButtonImg.setImageResource(R.drawable.ic_arrow_down)
             }
+        }
+    }
+
+    private fun setupButtons() {
+        val gradeButtons = listOf(
+            R.id.button_plus to "+",
+            R.id.button_nula to "",
+            R.id.button_minus to "-"
+        )
+
+        val characterButtons = listOf(
+            R.id.button_sila to "Silová",
+            R.id.button_technika to "Technická",
+            R.id.button_kombinace to "Kombinace"
+        )
+
+        gradeButtons.forEach { (buttonId, actionName) ->
+            setupButtonAction(actionName, findViewById(buttonId))
+        }
+
+        characterButtons.forEach { (buttonId, actionName) ->
+            setupButtonAction(actionName, findViewById(buttonId))
+        }
+    }
+
+    private fun setupButtonAction(actionName: String, button: ImageButton) {
+        button.setOnClickListener {
+            val isSelectedButton = when (actionName) {
+                in listOf("+", "", "-") -> selectedButton
+                in listOf("Silová", "Technická", "Kombinace") -> selectedButton2
+                else -> null
+            }
+
+            // Odmáčkne předchozí tlačítko, pokud existuje
+            isSelectedButton?.isSelected = false
+
+            button.isSelected = true
+
+            when (actionName) {
+                in listOf("+", "", "-") -> {
+                    selectedButtonTag = when (actionName) {
+                        "+" -> "plus"
+                        "" -> "nula"
+                        "-" -> "minus"
+                        else -> null
+                    }
+                    selectedButton = button
+                }
+                in listOf("Silová", "Technická", "Kombinace") -> {
+                    selectedButtonTag2 = when (actionName) {
+                        "Silová" -> "Síla"
+                        "Technická" -> "Technika"
+                        "Kombinace" -> "Kombinace"
+                        else -> null
+                    }
+                    selectedButton2 = button
+                }
+            }
+
+            // Aktualizujte barvy tlačítek
+            updateSelectedButtonView()
+
+            onButtonClicked(button)
+            saveCesta()
         }
     }
 
     private fun onButtonClicked(view: View) {
         // Odmáčkne předchozí tlačítko, pokud existuje
-        selectedButton?.isSelected = false
+        when (view) {
+            selectedButton -> selectedButton?.isSelected = false
+            selectedButton2 -> selectedButton2?.isSelected = false
+        }
 
         view.isSelected = true
 
-        selectedButtonTag = when (view.id) {
-            R.id.button_plus -> "plus"
-            R.id.button_nula -> "nula"
-            R.id.button_minus -> "minus"
-            else -> null
+        when (view.id) {
+            R.id.button_plus, R.id.button_nula, R.id.button_minus -> {
+                selectedButtonTag = when (view.id) {
+                    R.id.button_plus -> "plus"
+                    R.id.button_nula -> "nula"
+                    R.id.button_minus -> "minus"
+                    else -> null
+                }
+                selectedButton = view as? ImageButton
+            }
+            R.id.button_sila, R.id.button_technika, R.id.button_kombinace -> {
+                selectedButtonTag2 = when (view.id) {
+                    R.id.button_sila -> "Síla"
+                    R.id.button_technika -> "Technika"
+                    R.id.button_kombinace -> "Kombinace"
+                    else -> null
+                }
+                selectedButton2 = view as? ImageButton
+            }
         }
-        selectedButton = view as? ImageButton
-
-
 
         // Aktualizujte barvy tlačítek
         updateSelectedButtonView()
     }
-
-    private fun onButtonClicked2(view: View) {
-        // Odmáčkne předchozí tlačítko, pokud existuje
-        selectedButton2?.isSelected = false
-
-        view.isSelected = true
-
-        selectedButtonTag2 = when (view.id) {
-            R.id.button_sila -> "Síla"
-            R.id.button_technika -> "Technika"
-            R.id.button_kombinace -> "Kombinace"
-            else -> null
-        }
-        selectedButton2 = view as? ImageButton
-
-        // Aktualizujte barvy tlačítek
-        updateSelectedButtonView()
-    }
-
-
 
     private fun updateSelectedButtonView() {
         val buttonPlus: ImageButton = findViewById(R.id.button_plus)
@@ -339,13 +323,11 @@ class AddActivity : AppCompatActivity() {
         val buttonTechnika: ImageButton = findViewById(R.id.button_technika)
         val buttonKombinace: ImageButton = findViewById(R.id.button_kombinace)
 
-
         when (selectedButtonTag) {
             "plus" -> buttonPlus.isSelected = true
             "nula" -> buttonNula.isSelected = true
             "minus" -> buttonMinus.isSelected = true
         }
-
 
         buttonPlus.setBackgroundResource(if (selectedButtonTag == "plus") R.drawable.icon_selection_background else R.color.polozka)
         buttonNula.setBackgroundResource(if (selectedButtonTag == "nula") R.drawable.icon_selection_background else R.color.polozka)
@@ -357,56 +339,35 @@ class AddActivity : AppCompatActivity() {
             "Kombinace" -> buttonKombinace.isSelected = true
         }
 
-
         buttonSila.setBackgroundResource(if (selectedButtonTag2 == "Síla") R.drawable.icon_selection_background else R.color.polozka)
         buttonTechnika.setBackgroundResource(if (selectedButtonTag2 == "Technika") R.drawable.icon_selection_background else R.color.polozka)
         buttonKombinace.setBackgroundResource(if (selectedButtonTag2 == "Kombinace") R.drawable.icon_selection_background else R.color.polozka)
-
     }
 
     private fun setupSpinner() {
+        val difficultyLevels = resources.getStringArray(R.array.Grade)
+        val styleLevels = resources.getStringArray(R.array.Style)
         val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
         val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
 
-        val difficultyLevels = resources.getStringArray(R.array.Grade)
-        val styleLevels = resources.getStringArray(R.array.Style)
-        val characterLevels = resources.getStringArray(R.array.Character)
-
         val adapterDif = CustomArrayAdapter(this, R.layout.item_spinner, difficultyLevels.toList())
         val adapterStyle = CustomArrayAdapter(this, R.layout.item_spinner, styleLevels.toList())
-        val adapterCharacter = CustomArrayAdapter(this, R.layout.item_spinner, characterLevels.toList())
-
-        routeGradeSpinner.adapter = adapterDif
-        routeStyleSpinner.adapter = adapterStyle
-
         adapterDif.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         adapterStyle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        adapterCharacter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         routeGradeSpinner.adapter = adapterDif
         routeStyleSpinner.adapter = adapterStyle
     }
 
-    private fun updateGradeModifier(value: String, button: ImageButton) {
-        gradeModifier = value
-        selectedButton?.isSelected = false
-        button.isSelected = true
-        selectedButton = button
-    }
-
-    private fun updateCharModifier(value: String, button: ImageButton) {
-        charModifier = value
-        selectedButton2?.isSelected = false
-        button.isSelected = true
-        selectedButton2 = button
-    }
-
-    /*
-    private fun newCesta() {
+    private fun saveCesta() {
         val routeNameEditText: EditText = findViewById(R.id.nameEditText)
         val fallEditText: EditText = findViewById(R.id.fallEditText)
         val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
         val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
+        val minuteEditText: EditText = findViewById(R.id.minutesEditText)
+        val secondEditText: EditText = findViewById(R.id.secondsEditText)
+        val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
+        val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
         val signImage = when (selectedButtonTag) {
             "plus" -> "+"
             "nula" -> ""
@@ -419,194 +380,73 @@ class AddActivity : AppCompatActivity() {
             "Kombinace" -> "Kombinace"
             else -> ""
         }
-        val minuteEditText: EditText = findViewById(R.id.minutesEditText)
-        val secondEditText: EditText = findViewById(R.id.secondsEditText)
-        val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
-        val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
 
         val cestaName = routeNameEditText.text.toString()
         val fallCountString = fallEditText.text.toString()
         val styleSpinner = routeStyleSpinner.selectedItem.toString()
         val gradeSpinner = routeGradeSpinner.selectedItem.toString()
-
         val minuteString = minuteEditText.text.toString()
         val secondString = secondEditText.text.toString()
         val descriptionroute = descriptionEditText.text.toString()
-
         val currentDate = if (selectedDate == 0L) System.currentTimeMillis() else selectedDate
 
         if (cestaName.isNotBlank()) {
-
-
-
-            val timeMinutes: Int = if(minuteString.isNotBlank()) {
+            val timeMinutes: Int = if (minuteString.isNotBlank()) {
                 minuteString.toInt()
             } else {
                 0
             }
 
-            val timeSecond = if(secondString.isNotBlank()) {
+            val timeSecond = if (secondString.isNotBlank()) {
                 secondString.toInt()
             } else {
                 0
             }
 
-            val fallCount = if (fallCountString.isNotBlank()) {
-                fallCountString.toInt()
-            } else {
-                0
-            }
-
-            val newCesta = CestaEntity(
-                routeName = cestaName,
-                fallCount = fallCount,
-                climbStyle = styleSpinner,
-                gradeNum = gradeSpinner,
-                gradeSign = signImage,
-                routeChar = charImage,
-                timeMinute = timeMinutes,
-                timeSecond = timeSecond,
-                description = descriptionroute,
-                rating = opinionRatingBar.rating, // Přidáno pro hodnocení
-                date = currentDate
-            )
-
             lifecycleScope.launch {
-                if (cestaId != 0L) {
-                    val existingCesta = cestaModel.getCestaById(cestaId)
-                    existingCesta.apply {
-                        this.routeName = cestaName
-                        this.fallCount = fallCountString.toInt()
-                        this.climbStyle = styleSpinner
-                        this.gradeNum = gradeSpinner
-                        this.gradeSign = signImage
-                        this.routeChar = charImage
-                        this.timeMinute = timeMinutes
-                        this.timeSecond = timeSecond
-                        this.description = descriptionroute
-                        this.rating = opinionRatingBar.rating // Přidáno pro hodnocení
-                        this.date = currentDate
-                    }
+                val lastCestaId = cestaModel.getLastCestaId() ?: 0
+                val existingCesta = currentCesta?.let {
+                    cestaController.getCestaById(it.id)
 
-                    cestaModel.addOrUpdateCesta(existingCesta)
-
-                    cestaController.showToast("Cesta aktualizována!", Toast.LENGTH_LONG)
-                    finish()
-                } else {
-                    cestaModel.addOrUpdateCesta(newCesta)
-
-                    cestaController.showToast("Cesta přidána!", Toast.LENGTH_LONG)
-                    finish()
                 }
-            }
-        } else {
-            cestaController.showToast("Nevyplnil jste všechno.", Toast.LENGTH_SHORT)
-        }
-    }
-     */
-
-    private fun saveCesta() {
-        if (!isCestaCreated) {
-            val routeNameEditText: EditText = findViewById(R.id.nameEditText)
-            val fallEditText: EditText = findViewById(R.id.fallEditText)
-            val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
-            val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
-            val signImage = when (selectedButtonTag) {
-                "plus" -> "+"
-                "nula" -> ""
-                "minus" -> "-"
-                else -> ""
-            }
-            val charImage = when (selectedButtonTag2) {
-                "Síla" -> "Silová"
-                "Technika" -> "Technická"
-                "Kombinace" -> "Kombinace"
-                else -> ""
-            }
-            val minuteEditText: EditText = findViewById(R.id.minutesEditText)
-            val secondEditText: EditText = findViewById(R.id.secondsEditText)
-            val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
-            val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
-
-            val cestaName = routeNameEditText.text.toString()
-            val fallCountString = fallEditText.text.toString()
-            val styleSpinner = routeStyleSpinner.selectedItem.toString()
-            val gradeSpinner = routeGradeSpinner.selectedItem.toString()
-
-            val minuteString = minuteEditText.text.toString()
-            val secondString = secondEditText.text.toString()
-            val descriptionroute = descriptionEditText.text.toString()
-
-            val currentDate = if (selectedDate == 0L) System.currentTimeMillis() else selectedDate
-
-            if (cestaName.isNotBlank()) {
-                isCestaCreated = true
-
-                val timeMinutes: Int = if (minuteString.isNotBlank()) {
-                    minuteString.toInt()
-                } else {
-                    0
+                if (existingCesta==null) {
+                    val newCesta = CestaEntity(
+                        lastCestaId+1,  // Auto-generate ID
+                        cestaName,
+                        fallCountString.toIntOrNull() ?: 0,
+                        styleSpinner,
+                        gradeSpinner,
+                        signImage,
+                        charImage,
+                        minuteString.toIntOrNull() ?: 0,
+                        secondString.toIntOrNull() ?: 0,
+                        descriptionroute,
+                        opinionRatingBar.rating,
+                        currentDate
+                    )
+                    cestaModel.insertCesta(newCesta)
+                    currentCesta = newCesta
+                    isCestaCreated = true
                 }
 
-                val timeSecond = if (secondString.isNotBlank()) {
-                    secondString.toInt()
-                } else {
-                    0
-                }
+                if (existingCesta!=null) {
+                    // Update existing Cesta
+                    existingCesta.routeName = cestaName
+                    existingCesta.fallCount = fallCountString.toIntOrNull() ?: 0
+                    existingCesta.climbStyle = styleSpinner
+                    existingCesta.gradeNum = gradeSpinner
+                    existingCesta.gradeSign = signImage
+                    existingCesta.routeChar = charImage
+                    existingCesta.timeMinute = timeMinutes
+                    existingCesta.timeSecond = timeSecond
+                    existingCesta.description = descriptionroute
+                    existingCesta.rating = opinionRatingBar.rating
+                    existingCesta.date = currentDate
 
-                lifecycleScope.launch {
-                    val existingCesta = currentCesta?.let {
-                        cestaController.getCestaById(it.id)
-                    }
-
-                    if (existingCesta != null) {
-                        // Update existing Cesta
-                        existingCesta.routeName = cestaName
-                        existingCesta.fallCount = fallCountString.toIntOrNull() ?: 0
-                        existingCesta.climbStyle = styleSpinner
-                        existingCesta.gradeNum = gradeSpinner
-                        existingCesta.gradeSign = signImage
-                        existingCesta.routeChar = charImage
-                        existingCesta.timeMinute = timeMinutes
-                        existingCesta.timeSecond = timeSecond
-                        existingCesta.description = descriptionroute
-                        existingCesta.rating = opinionRatingBar.rating
-                        existingCesta.date = currentDate
-
-                        cestaModel.updateCesta(existingCesta)
-                    } else {
-                        createCesta ()
-                    }
-
-                    isCestaCreated = false
+                    cestaModel.updateCesta(existingCesta)
                 }
             }
         }
-    }
-
-    private fun createCesta () {
-        lifecycleScope.launch {
-            cestaController.addCesta(
-                routeName = "",
-                fallCount = 0,
-                climbStyle = "",
-                gradeNum = "",
-                gradeSign = "",
-                routeChar = "",
-                timeMinute = 0,
-                timeSecond = 0,
-                description = "",
-                rating = 0f,
-                date = 0
-            )
-            currentCesta = cestaController.getCestaById(cestaId)
-        }
-    }
-
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
     }
 
     private fun fillUI(cesta: CestaEntity) {
@@ -662,12 +502,10 @@ class AddActivity : AppCompatActivity() {
         routeStyleSpinner.setSelection(styleLevels.indexOf(cesta.climbStyle))
     }
 
-    private fun deleteTask(cesta: CestaEntity) {
+    private fun deleteCesta(cesta: CestaEntity) {
         lifecycleScope.launch {
             if (cestaModel.getAllCesta().size == 1) {
                 cestaModel.removeCesta(cesta)
-                cestaId = 1
-                createCesta ()
             }
             else {
                 cestaModel.removeCesta(cesta)
@@ -676,14 +514,8 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-
-    @SuppressLint("SuspiciousIndentation")
-    override fun onPause() {
-        super.onPause()
-        // Před zavřením aktivity aktualizuj currentCesta
-        currentCesta?.let {
-            if(!isCestaDeleted)
-            saveCesta()
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 }
