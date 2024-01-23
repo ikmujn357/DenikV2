@@ -3,13 +3,16 @@ package com.example.denikv1.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.lifecycle.lifecycleScope
 import com.example.denikv1.R
 import com.example.denikv1.controller.CestaController
 import com.example.denikv1.controller.CestaControllerImpl
@@ -34,9 +37,11 @@ interface CestaView {
 class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope() {
     private lateinit var controller: CestaController
     private lateinit var customActionBarButton: View
+    private lateinit var nameEditText: EditText
+    private lateinit var recyclerView: RecyclerView
 
     // Metoda volaná při vytvoření aktivity
-    @SuppressLint("InflateParams")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -59,7 +64,51 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
         findButton()
         statisticsButton()
         exportButton()
+
+        nameEditText = findViewById(R.id.nameEditText)
+        recyclerView = findViewById(R.id.recyclerView)
+        nameEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Nepotřebujeme tuto metodu
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Nepotřebujeme tuto metodu
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Po změně textu provedeme hledání
+                if (s.isNullOrBlank()) {
+                    // Pokud je pole prázdné, zobrazíme všechny cesty
+                    displayCesty()
+                } else {
+                    // Jinak provedeme filtrování podle zadaného textu
+                    filterCestyByName(s.toString())
+                }
+            }
+        })
     }
+
+    private fun filterCestyByName(searchText: String) {
+        lifecycleScope.launch {
+            val filteredCesty = controller.getAllCestaByName(searchText)
+            updateRecyclerView(filteredCesty)
+        }
+    }
+
+    private fun updateRecyclerView(cesty: List<CestaEntity>) {
+        val layoutManager = LinearLayoutManager(this@CestaViewImp)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = CestaAdapter(cesty) { cestaId ->
+            val intent = Intent(this@CestaViewImp, AddActivity::class.java)
+            intent.putExtra("cestaId", cestaId)
+            startActivity(intent)
+        }
+    }
+
+
 
     // Metoda pro zobrazení seznamu cest
     override fun displayCesty() {

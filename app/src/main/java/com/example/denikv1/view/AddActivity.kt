@@ -1,5 +1,6 @@
 package com.example.denikv1.view
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -42,6 +43,7 @@ class AddActivity : AppCompatActivity() {
     private var isCestaCreated: Boolean = false
     private var currentCesta: CestaEntity? = null
     private var isCestaDeleted: Boolean = false
+    private var oldCesta: CestaEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +57,9 @@ class AddActivity : AppCompatActivity() {
         setupButtons()
         setupSpinner()
 
+        revertChangesButton()
+        saveAndBack()
+
         val receivedIntent = intent
         cestaId = receivedIntent.getLongExtra("cestaId", 0)
 
@@ -63,6 +68,38 @@ class AddActivity : AppCompatActivity() {
                 val cesta = cestaModel.getCestaById(cestaId)
                 currentCesta = cesta
                 fillUI(cesta)
+                oldCesta = cesta
+            }
+        }
+    }
+
+    private fun revertChangesButton() {
+        val buttonShowAdd: Button = findViewById(R.id.button_vratit_zmeny)
+        buttonShowAdd.setOnClickListener {
+
+            if (cestaId.toInt() == 0) {
+                lifecycleScope.launch {
+                    val intent = Intent(this@AddActivity, CestaViewImp::class.java)
+                    startActivity(intent)
+                    currentCesta?.let { deleteCesta(it) }
+                }
+            }
+            else {
+                lifecycleScope.launch {
+                    oldCesta?.let { it1 -> cestaModel.updateCesta(it1) }
+                    val intent = Intent(this@AddActivity, CestaViewImp::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+    }
+
+    private fun saveAndBack() {
+        val buttonShowAdd: Button = findViewById(R.id.button_ulozit)
+        buttonShowAdd.setOnClickListener {
+            lifecycleScope.launch {
+            val intent = Intent(this@AddActivity, CestaViewImp::class.java)
+            startActivity(intent)
             }
         }
     }
@@ -191,26 +228,21 @@ class AddActivity : AppCompatActivity() {
     private fun toggleVisibility() {
         val showHideButton: LinearLayout = findViewById(R.id.showHideButton)
         val showHideButtonImg: ImageView = findViewById(R.id.showHideButtonImg)
-        val timeLayout: LinearLayout = findViewById(R.id.timeLayout)
-        val descriptionLayout: LinearLayout = findViewById(R.id.descriptionLayout)
-        val opinionLayout: LinearLayout = findViewById(R.id.opinionLayout)
 
-        timeLayout.visibility = View.GONE
-        descriptionLayout.visibility = View.GONE
-        opinionLayout.visibility = View.GONE
+        val descriptionAll: LinearLayout = findViewById(R.id.Description_hide)
+
+
+        descriptionAll.visibility = View.GONE
+
 
         showHideButton.setOnClickListener {
-            if (timeLayout.visibility == View.VISIBLE) {
+            if (descriptionAll.visibility == View.VISIBLE) {
                 // Pokud jsou položky viditelné, skryj je
-                timeLayout.visibility = View.GONE
-                descriptionLayout.visibility = View.GONE
-                opinionLayout.visibility = View.GONE
+                descriptionAll.visibility = View.GONE
                 showHideButtonImg.setImageResource(R.drawable.ic_arrow_right)
             } else {
                 // Pokud jsou položky skryté, zobraz je
-                timeLayout.visibility = View.VISIBLE
-                descriptionLayout.visibility = View.VISIBLE
-                opinionLayout.visibility = View.VISIBLE
+                descriptionAll.visibility = View.VISIBLE
                 showHideButtonImg.setImageResource(R.drawable.ic_arrow_down)
             }
         }
@@ -486,7 +518,7 @@ class AddActivity : AppCompatActivity() {
 
         // Nastavení data do DatePickeru
         val calendar = Calendar.getInstance()
-        calendar.timeInMillis = cesta.date // předpokládám, že cesta.date je typu Long
+        calendar.timeInMillis = cesta.date
 
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -510,7 +542,7 @@ class AddActivity : AppCompatActivity() {
             else {
                 cestaModel.removeCesta(cesta)
             }
-            finish() // nebo naviguj na jinou obrazovku podle potřeby
+            finish()
         }
     }
 

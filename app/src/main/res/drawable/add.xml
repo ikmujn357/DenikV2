@@ -3,9 +3,8 @@
     android:height="24dp"
     android:viewportWidth="960"
     android:viewportHeight="960"
-    android:tint="@color/black"
-    android:autoMirrored="true">
+    android:tint="@color/black">
   <path
       android:fillColor="@android:color/white"
-      android:pathData="M517.85,480L333.85,296L376,253.85L602.15,480L376,706.15L333.85,664L517.85,480Z"/>
+      android:pathData="M423.41,535.83L164.65,535.83L164.65,422.65L423.41,422.65L423.41,163.65L536.59,163.65L536.59,422.65L795.35,422.65L795.35,535.83L536.59,535.83L536.59,794.59L423.41,794.59L423.41,535.83Z"/>
 </vector>

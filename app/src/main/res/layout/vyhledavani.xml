@@ -63,7 +63,6 @@
                 android:orientation="vertical"
                 android:visibility="visible">
 
-                <!-- Tady můžete mít všechny položky pro vyhledávání podle názvu -->
 
                 <EditText
                     android:id="@+id/nameEditText"

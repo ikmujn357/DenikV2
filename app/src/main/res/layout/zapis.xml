@@ -14,9 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingLeft="14dp"
+            android:paddingLeft="10dp"
             android:paddingTop="8dp"
-            android:paddingRight="14dp"
+            android:paddingRight="10dp"
             android:orientation="vertical"
             tools:ignore="UselessParent">
 
@@ -38,7 +38,7 @@
         </LinearLayout>
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="8dp"
                 android:background="@android:color/transparent" />
 
             <LinearLayout
@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="Jméno cesty:"
+                    android:text="@string/routeName"
                     android:textStyle="bold"
                     android:textColor="#000000"
                     android:layout_marginEnd="16dp"/>
@@ -71,7 +71,7 @@
 
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="8dp"
                 android:background="@android:color/transparent" />
 
             <LinearLayout
@@ -95,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_gravity="center"
-                        android:text="Styl přelezu:"
+                        android:text="@string/climbingStyle"
                         android:textColor="#000000"
                         android:textStyle="bold"
                         android:layout_marginEnd="16dp" />
@@ -122,7 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="Počet pádů:"
+                        android:text="@string/fallCount"
                         android:layout_marginBottom="10dp"
                         android:textColor="#000000"
                         android:textStyle="bold"
@@ -135,14 +135,14 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="10dp"
                         android:layout_gravity="center"
-                        android:hint="Zadejte počet pádů"
+                        android:hint="@string/entryFallCount"
                         android:inputType="number" />
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="8dp"
                 android:background="@android:color/transparent" />
 
             <LinearLayout
@@ -159,7 +159,7 @@
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                android:text="Obtížnost:"
+                android:text="@string/grade"
                 android:textStyle="bold"
                 android:textColor="#000000"
                 android:layout_marginEnd="28dp"/>
@@ -199,7 +199,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/icon_selection_background"
-                    android:src="@drawable/nothing"
+                    android:src="@drawable/empty_circle"
                     android:contentDescription="@string/Empty"/>
 
                 <View
@@ -220,7 +220,7 @@
         </LinearLayout>
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="8dp"
                 android:background="@android:color/transparent" />
 
         <LinearLayout
@@ -236,7 +236,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Charakter cesty:"
+                android:text="@string/routeCharacter"
                 android:textStyle="bold"
                 android:layout_marginEnd="14dp"
                 android:textColor="#000000"/>
@@ -270,7 +270,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Silová"
+                        android:text="@string/Strenght"
                         android:textColor="@android:color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -302,7 +302,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Technická"
+                        android:text="@string/technique"
                         android:textColor="@android:color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -333,7 +333,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Kombinace"
+                        android:text="@string/combinationShow"
                         android:textColor="@android:color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -342,7 +342,7 @@
 
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="8dp"
                 android:background="@android:color/transparent" />
 
 
@@ -362,23 +362,31 @@
                     android:layout_gravity="center"/>
 
                 <View
-                    android:layout_width="16dp"
+                    android:layout_width="8dp"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Doplňující informace"
+                    android:text="@string/additionalInformation"
                     android:textSize="18sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
 
-            <View
-            android:layout_width="wrap_content"
-            android:layout_height="16dp"
-            android:background="@android:color/transparent" />
 
+
+
+
+            <LinearLayout
+                android:id="@+id/Description_hide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="8dp"
+                    android:background="@android:color/transparent" />
             <LinearLayout
                 android:id="@+id/timeLayout"
                 android:layout_width="match_parent"
@@ -394,7 +402,7 @@
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                android:text="Čas výlezu:"
+                android:text="@string/timeToclimb"
                 android:textStyle="bold"
                 android:textColor="#000000"
                 android:layout_marginEnd="30dp"/>
@@ -412,14 +420,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:hint="Minut"
+                    android:hint="@string/minutes"
                     android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text=":"
+                    android:text="@string/colon"
                     android:textStyle="bold"
                     android:textColor="#000000"/>
 
@@ -428,16 +436,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:hint="Sekund"
+                    android:hint="@string/seconds"
                     android:inputType="number" />
 
 
             </LinearLayout>
+
         </LinearLayout>
+
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="16dp"
+            android:layout_height="8dp"
             android:background="@android:color/transparent" />
 
         <LinearLayout
@@ -454,7 +464,7 @@
                 android:id="@+id/descriptionTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Popis cesty:"
+                android:text="@string/routeDescription"
                 android:layout_marginStart="10dp"
                 android:textStyle="bold"
                 android:textColor="#000000"/>
@@ -466,7 +476,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/edittext_border"
-                android:hint="Napište popis cesty"
+                android:hint="@string/entryRouteDescription"
                 android:inputType="textMultiLine"
                 android:minLines="5"
                 android:maxLines="10"
@@ -480,7 +490,7 @@
 
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="8dp"
                 android:background="@android:color/transparent" />
 
         <LinearLayout
@@ -497,7 +507,7 @@
                 android:id="@+id/opinionTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hodnocení:"
+                android:text="@string/assessment"
                 android:layout_marginStart="10dp"
                 android:textStyle="bold"
                 android:textColor="#000000"/>
@@ -510,21 +520,55 @@
                 android:numStars="5"
                 android:rating="0"
                 android:stepSize="0.5"/>
+
         </LinearLayout>
-            <ImageButton
-                android:id="@+id/button_zkouska"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/icon_selection_background"
-                android:src="@drawable/plus"
-                android:contentDescription="@string/plus"/>
+            </LinearLayout>
+
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="8dp"
+                android:background="@android:color/transparent" />
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/button_vratit_zmeny"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/undo"
+                    android:text="@string/revert"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@drawable/rectangle_button" />
+
+                <Button
+                    android:id="@+id/button_ulozit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:drawableTop="@drawable/save"
+                    android:text="@string/save"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@drawable/rectangle_button" />
+            </LinearLayout>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="8dp"
                 android:background="@android:color/transparent" />
         </LinearLayout>
-
 
     </RelativeLayout>
 </ScrollView>

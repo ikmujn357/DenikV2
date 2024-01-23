@@ -1,26 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pozadí">
+
+    <!-- AppBarLayout s CollapsingToolbarLayout pro zajištění efektu scrollování -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pozadí">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <!-- Vyhledávací pole -->
+            <LinearLayout
+                android:id="@+id/layoutByName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:background="@drawable/window_shape"
+                app:layout_collapseMode="pin">
+
+                <TextView
+                    android:id="@+id/search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/search"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/nameEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:hint="@string/routeNameOnly"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Recyclerview pro zobrazení seznamu lezeckých cest -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/layoutByName"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-
+    <!-- Tlačítko pro přidání -->
     <ImageButton
         android:id="@+id/button_add"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/add2"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        android:src="@drawable/add"
+        android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/circular_shape"
-        android:contentDescription="TODO" />
+        android:contentDescription="@string/listOfroute" />
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
