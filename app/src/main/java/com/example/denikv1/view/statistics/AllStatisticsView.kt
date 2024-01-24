@@ -18,7 +18,9 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 
 interface AllStatisticsView {
     fun displayGraph(view: View)
@@ -65,7 +67,8 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.granularity = 1f
             xAxis.setDrawGridLines(false)
-            xAxis.axisMaximum = xLabels.size.toFloat() - 0.5f
+            xAxis.axisMaximum = xLabels.size.toFloat()
+            xAxis.labelCount = xLabels.size
 
             val yAxis = barChart.axisLeft
             yAxis.axisMinimum = 0f
@@ -75,7 +78,15 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
             // Set Y-axis labels
             barChart.axisLeft.granularity = 1f
 
-            // Customize other graph properties as needed
+            barDataSet.valueFormatter = object : ValueFormatter() {
+                override fun getBarLabel(barEntry: BarEntry?): String {
+                    return barEntry?.y?.toInt().toString()
+                }
+            }
+
+            barDataSet.valueTextSize=10f
+
+
             barChart.isHighlightPerDragEnabled = false
             barChart.isHighlightPerTapEnabled = false
             barChart.axisRight.isEnabled = false

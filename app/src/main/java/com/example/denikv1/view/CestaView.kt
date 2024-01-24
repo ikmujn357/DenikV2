@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 interface CestaView {
     fun displayCesty()
     fun addButton()
-    fun findButton()
     fun statisticsButton()
     fun exportButton()
 }
@@ -61,7 +60,6 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
         // Zobrazení seznamu cest a tlačítek pro přidání cesty, vyhledání a statistiky
         displayCesty()
         addButton()
-        findButton()
         statisticsButton()
         exportButton()
 
@@ -142,14 +140,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
         }}
 
 
-    // Metoda pro přidání tlačítka pro vyhledávání
-    override fun findButton() {
-        val buttonShowFind: Button = customActionBarButton.findViewById(R.id.button_find)
-        buttonShowFind.setOnClickListener {
-            val intent = Intent(this, FindActivity::class.java)
-            startActivity(intent)
-        }
-    }
+    
 
     // Metoda pro přidání tlačítka pro zobrazení statistik
     override fun statisticsButton() {

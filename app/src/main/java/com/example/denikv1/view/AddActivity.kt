@@ -400,11 +400,15 @@ class AddActivity : AppCompatActivity() {
         val secondEditText: EditText = findViewById(R.id.secondsEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
         val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
-        val signImage = when (selectedButtonTag) {
-            "plus" -> "+"
-            "nula" -> ""
-            "minus" -> "-"
-            else -> ""
+        val signImage = if (routeGradeSpinner.selectedItem.toString() == "x") {
+            ""
+        } else {
+            when (selectedButtonTag) {
+                "plus" -> "+"
+                "nula" -> ""
+                "minus" -> "-"
+                else -> ""
+            }
         }
         val charImage = when (selectedButtonTag2) {
             "Síla" -> "Silová"
@@ -441,6 +445,8 @@ class AddActivity : AppCompatActivity() {
                     cestaController.getCestaById(it.id)
 
                 }
+
+
                 if (existingCesta==null) {
                     val newCesta = CestaEntity(
                         lastCestaId+1,  // Auto-generate ID

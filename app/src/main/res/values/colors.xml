@@ -13,6 +13,8 @@
     <color name="shadowButton">#80FFFFFF</color>
     <color name="border">#80000000</color>
     <color name="bar">#303F9F</color>
+    <color name="mark_button">#28BDB0</color>
+
 
     <color name="polozka">#EDF2F4</color>
     <color name="pozadí">#8D99AE</color>

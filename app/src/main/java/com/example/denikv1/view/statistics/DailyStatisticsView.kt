@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +29,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -47,6 +49,8 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView {
     private lateinit var barChart1: BarChart
     private lateinit var barChart2: BarChart
 
+    private lateinit var layoutObtiznost: LinearLayout
+    private lateinit var layoutStylPrelezu: LinearLayout
 
     private val calendar: Calendar = Calendar.getInstance()
 
@@ -72,6 +76,9 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView {
             (controller as DailyStatisticsControllerImpl).onDateChanged(year, month, dayOfMonth)
         }
 
+        // Initialize views
+        layoutObtiznost = view.findViewById(R.id.layout_obtiznost)
+        layoutStylPrelezu = view.findViewById(R.id.layout_styl_prelezu)
 
         (controller as DailyStatisticsControllerImpl).onDateChanged(
             calendar.get(Calendar.YEAR),
@@ -87,16 +94,36 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView {
     override fun updateGraph1(barEntries: List<BarEntry>, startDate: Long, endDate: Long) {
         val xLabels = controller.getXLabelsGraph1(requireContext(), startDate, endDate).toList()
         setupBarChart(barChart1, barEntries, xLabels)
-        updateRecyclerViewCesty(startDate, endDate)
+
+        if (barEntries.isNotEmpty()) {
+            // Data jsou k dispozici, zobrazit prvky
+            layoutObtiznost.visibility = View.VISIBLE
+
+            updateRecyclerViewCesty(startDate, endDate)
+        } else {
+            // Data nejsou k dispozici, skrýt prvky
+            layoutObtiznost.visibility = View.GONE
+            recyclerViewRoutes.adapter = null
+        }
     }
 
     // Aktualizace druhého grafu
     override fun updateGraph2(barEntries: List<BarEntry>, startDate: Long, endDate: Long) {
         val xLabels = controller.getXLabelsGraph2(requireContext(), startDate, endDate).toList()
         setupBarChart(barChart2, barEntries, xLabels)
-        updateRecyclerViewCesty(startDate, endDate)
-    }
 
+        if (barEntries.isNotEmpty()) {
+            // Data jsou k dispozici, zobrazit prvky
+            layoutStylPrelezu.visibility = View.VISIBLE
+
+            updateRecyclerViewCesty(startDate, endDate)
+        } else {
+            // Data nejsou k dispozici, skrýt prvky
+            layoutStylPrelezu.visibility = View.GONE
+            recyclerViewRoutes.adapter = null
+
+        }
+    }
 
     private fun updateRecyclerViewCesty(startDate: Long, endDate: Long) {
         lifecycleScope.launch {
@@ -126,6 +153,13 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView {
 
         barChart.data = BarData(barDataSet)
 
+        barDataSet.valueFormatter = object : ValueFormatter() {
+            override fun getBarLabel(barEntry: BarEntry?): String {
+                return barEntry?.y?.toInt().toString()
+            }
+        }
+
+        barDataSet.valueTextSize=10f
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawAxisLine(true)
@@ -140,9 +174,7 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView {
         yAxis.axisMinimum = 0f
         yAxis.granularity = 1f
         yAxis.setDrawGridLines(false)
-
-
-
+        yAxis.textSize = 12f
         // Customize other properties as needed
         barChart.isHighlightPerDragEnabled = false
         barChart.isHighlightPerTapEnabled = false
@@ -155,9 +187,4 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView {
         barChart.legend.isEnabled = false
         barChart.invalidate()
     }
-
-
-
 }
-
-
