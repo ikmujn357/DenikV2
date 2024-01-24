@@ -483,6 +483,8 @@ class AddActivity : AppCompatActivity() {
         val secondEditText: EditText = findViewById(R.id.secondsEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
         val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
+        val latitudeEditText: EditText = findViewById(R.id.latitudeEditText)
+        val longitudeEditText: EditText = findViewById(R.id.longitudeEditText)
         val signImage = if (routeGradeSpinner.selectedItem.toString() == "x") {
             ""
         } else {
@@ -507,6 +509,9 @@ class AddActivity : AppCompatActivity() {
         val minuteString = minuteEditText.text.toString()
         val secondString = secondEditText.text.toString()
         val descriptionroute = descriptionEditText.text.toString()
+        val latitude = latitudeEditText.text.toString()
+        val longitude = longitudeEditText.text.toString()
+
         val currentDate = if (selectedDate == 0L) System.currentTimeMillis() else selectedDate
 
         if (cestaName.isNotBlank()) {
@@ -543,7 +548,9 @@ class AddActivity : AppCompatActivity() {
                         secondString.toIntOrNull() ?: 0,
                         descriptionroute,
                         opinionRatingBar.rating,
-                        currentDate
+                        currentDate,
+                        latitude.toDoubleOrNull() ?: 0.0,
+                        longitude.toDoubleOrNull() ?: 0.0
                     )
                     cestaModel.insertCesta(newCesta)
                     currentCesta = newCesta
@@ -563,6 +570,8 @@ class AddActivity : AppCompatActivity() {
                     existingCesta.description = descriptionroute
                     existingCesta.rating = opinionRatingBar.rating
                     existingCesta.date = currentDate
+                    existingCesta.latitude = latitude.toDoubleOrNull() ?: 0.0
+                    existingCesta.longitude = longitude.toDoubleOrNull() ?: 0.0
 
                     cestaModel.updateCesta(existingCesta)
                 }
@@ -580,6 +589,8 @@ class AddActivity : AppCompatActivity() {
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
         val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
         val datePicker: DatePicker = findViewById(R.id.datePicker)
+        val latitudeEditText: EditText = findViewById(R.id.latitudeEditText)
+        val longitudeEditText: EditText = findViewById(R.id.longitudeEditText)
 
         routeNameEditText.setText(cesta.routeName)
         fallEditText.setText(cesta.fallCount.toString())
@@ -587,6 +598,8 @@ class AddActivity : AppCompatActivity() {
         secondEditText.setText(cesta.timeSecond.toString())
         descriptionEditText.setText(cesta.description)
         opinionRatingBar.rating = cesta.rating
+        latitudeEditText.setText(cesta.latitude.toString())
+        longitudeEditText.setText(cesta.longitude.toString())
 
         // Nastavení vybraného tlačítka
         selectedButtonTag = when (cesta.gradeSign) {

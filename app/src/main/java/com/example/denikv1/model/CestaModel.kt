@@ -57,7 +57,9 @@ interface CestaModel {
         timeSecond: Int,
         description: String,
         rating: Float,
-        date: Long
+        date: Long,
+        latitude: Double,
+        longitude: Double
     )
 
     suspend fun deleteAllCesta()
@@ -98,7 +100,9 @@ class CestaModelImpl(context: Context) : CestaModel {
         timeSecond: Int,
         description: String,
         rating: Float,
-        date: Long
+        date: Long,
+        latitude: Double,
+        longitude: Double
     ) {
         val newCesta = CestaEntity(
             routeName = routeName,
@@ -111,7 +115,9 @@ class CestaModelImpl(context: Context) : CestaModel {
             timeSecond = timeSecond,
             description = description,
             rating = rating,
-            date = date
+            date = date,
+            latitude = latitude,
+            longitude = longitude
         )
             insertCesta(newCesta)
     }

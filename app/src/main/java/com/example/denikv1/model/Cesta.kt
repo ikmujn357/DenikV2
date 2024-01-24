@@ -41,7 +41,13 @@ data class CestaEntity(
     var rating: Float,
 
     // Datum vylezení
-    var date: Long
+    var date: Long,
+
+    // Datum vylezení
+    var latitude: Double,
+
+    // Datum vylezení
+    var longitude: Double
 ) {
     // konstruktor pro vytváření instance bez ID.
     constructor(
@@ -55,8 +61,10 @@ data class CestaEntity(
         timeSecond: Int,
         description: String,
         rating: Float,
-        date: Long
+        date: Long,
+        latitude: Double,
+        longitude: Double
     ) : this(
-        0, routeName, fallCount, climbStyle, gradeNum, gradeSign, routeChar, timeMinute, timeSecond, description, rating, date
+        0, routeName, fallCount, climbStyle, gradeNum, gradeSign, routeChar, timeMinute, timeSecond, description, rating, date, latitude,longitude
     )
 }

@@ -35,7 +35,9 @@ interface CestaController {
         timeSecond: Int,
         description: String,
         rating: Float,
-        date: Long
+        date: Long,
+        latitude: Double,
+        longitude: Double
     )
 
     suspend fun deleteAllCesta()
@@ -83,12 +85,14 @@ class CestaControllerImpl(private val cestaModel: CestaModel) : CestaController 
         timeSecond: Int,
         description: String,
         rating: Float,
-        date: Long
+        date: Long,
+        latitude: Double,
+        longitude: Double
     ) {
 
         cestaModel.addCesta(
             routeName, fallCount, climbStyle, gradeNum, gradeSign,
-            routeChar, timeMinute, timeSecond, description, rating, date)
+            routeChar, timeMinute, timeSecond, description, rating, date, latitude, longitude)
     }
 
     override suspend fun deleteAllCesta () {
