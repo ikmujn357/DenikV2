@@ -1,11 +1,17 @@
 package com.example.denikv1.view
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.DatePicker
@@ -30,6 +36,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.Calendar
+import android.webkit.JavascriptInterface
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.denikv1.custom.LocationHelper
+import com.example.denikv1.custom.MyLocationListener
 
 class AddActivity : AppCompatActivity() {
     private val cestaModel: CestaModel = CestaModelImpl(this)
@@ -44,7 +55,10 @@ class AddActivity : AppCompatActivity() {
     private var currentCesta: CestaEntity? = null
     private var isCestaDeleted: Boolean = false
     private var oldCesta: CestaEntity? = null
+    lateinit var locationHelper: LocationHelper
+    private val locationListener = MyLocationListener(this)
 
+    @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.zapis)
@@ -71,6 +85,59 @@ class AddActivity : AppCompatActivity() {
                 oldCesta = cesta
             }
         }
+
+        // Inicializujte LocationHelper
+        locationHelper = LocationHelper(this)
+
+        // Kontrola povolení
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Získat aktuální hrubou polohu
+            locationHelper.requestLocationUpdates(locationListener)
+        } else {
+            // Povolení nebylo uděleno, získejte povolení od uživatele
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                1
+            )
+        }
+        updateEditTextWithLastLocation()
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    fun updateEditTextWithLastLocation() {
+        val latitudeEditText = findViewById<EditText>(R.id.latitudeEditText)
+        val longitudeEditText = findViewById<EditText>(R.id.longitudeEditText)
+        val webView: WebView = findViewById(R.id.webView)
+
+        // Nastavení cesty k HTML souboru s mapou
+        webView.settings.javaScriptEnabled = true
+        webView.addJavascriptInterface(WebAppInterface(latitudeEditText, longitudeEditText), "Android")
+        webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+
+                locationListener.lastLocation?.let { lastLocation ->
+                    val latitude = lastLocation.latitude
+                    val longitude = lastLocation.longitude
+
+                    // Aktualizovat hodnoty v EditText prvcích
+                    latitudeEditText.setText(latitude.toString())
+                    longitudeEditText.setText(longitude.toString())
+
+                    val javascriptCommand = "updateMapToCurrentLocation($latitude, $longitude);"
+                    webView.post { webView.loadUrl("javascript:$javascriptCommand") }
+                }
+            }
+        }
+
+        webView.settings.javaScriptEnabled = true
+        webView.addJavascriptInterface(WebAppInterface(latitudeEditText, longitudeEditText), "Android")
+        webView.loadUrl("file:///android_asset/leaflet_map.html")
     }
 
     private fun revertChangesButton() {
@@ -228,7 +295,6 @@ class AddActivity : AppCompatActivity() {
     private fun toggleVisibility() {
         val showHideButton: LinearLayout = findViewById(R.id.showHideButton)
         val showHideButtonImg: ImageView = findViewById(R.id.showHideButtonImg)
-
         val descriptionAll: LinearLayout = findViewById(R.id.Description_hide)
 
 
@@ -556,4 +622,23 @@ class AddActivity : AppCompatActivity() {
         onBackPressedDispatcher.onBackPressed()
         return true
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Odhlásit se z aktualizací polohy při zničení aktivity
+        locationHelper.removeLocationUpdates(locationListener)
+    }
 }
+
+class WebAppInterface(
+    private val latitudeEditText: EditText,
+    private val longitudeEditText: EditText
+) {
+    @JavascriptInterface
+    fun updateCoordinates(latitude: Double, longitude: Double) {
+        // Update the coordinates in your EditText elements
+        latitudeEditText.setText(latitude.toString())
+        longitudeEditText.setText(longitude.toString())
+    }
+}
+

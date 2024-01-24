@@ -522,7 +522,52 @@
                 android:stepSize="0.5"/>
 
         </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@android:color/transparent" />
+
+                <LinearLayout
+                    android:id="@+id/map_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/window_shape"
+                    android:gravity="center"
+                    android:paddingTop="4dp"
+                    android:orientation="vertical"
+                    android:baselineAligned="true">
+
+                    <WebView
+                        android:id="@+id/webView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:nestedScrollingEnabled="false" />
+
+                    <EditText
+                        android:id="@+id/latitudeEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:enabled="false"
+                        android:hint="Latitude"
+                        android:inputType="none" />
+
+                    <EditText
+                        android:id="@+id/longitudeEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/latitudeEditText"
+                        android:enabled="false"
+                        android:hint="Longitude"
+                        android:inputType="none" />
+
+                </LinearLayout>
+
             </LinearLayout>
+
 
             <View
                 android:layout_width="wrap_content"

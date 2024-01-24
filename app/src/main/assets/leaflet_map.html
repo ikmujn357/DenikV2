@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map with Waypoints and Search</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet Search CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search/dist/leaflet-search.min.css" />
+    <style>
+        #map {
+            border: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Map container -->
+<div id="map" style="height: 400px;"></div>
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- Leaflet Search JavaScript -->
+<script src="https://unpkg.com/leaflet-search/dist/leaflet-search.min.js"></script>
+
+<script>
+        // Leaflet map initialization
+        var map = L.map('map').setView([0, 0], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Marker for the current location
+        var marker;
+        // Global variable to store current coordinates
+        var currentLocation;
+
+        // Function to set the initial waypoint
+        function setInitialWaypoint(latitude, longitude) {
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker([latitude, longitude], { draggable: true }).addTo(map);
+
+            // Add event listener for marker dragend event
+            marker.on('dragend', function (event) {
+                var newLatLng = event.target.getLatLng();
+                updateCoordinates(newLatLng.lat, newLatLng.lng);
+            });
+        }
+
+        // Function to update coordinates on the map
+        function updateCoordinates(latitude, longitude) {
+            // Save current coordinates
+            currentLocation = { lat: latitude, lng: longitude };
+
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker([latitude, longitude], { draggable: true }).addTo(map);
+
+            // Add event listener for marker dragend event
+            marker.on('dragend', function (event) {
+                var newLatLng = event.target.getLatLng();
+                updateCoordinates(newLatLng.lat, newLatLng.lng);
+            });
+        }
+
+        // Function to update map to the current location
+        function updateMapToCurrentLocation(latitude, longitude) {
+            // Use the provided coordinates
+            setInitialWaypoint(latitude, longitude);
+        }
+
+        // Leaflet Search initialization
+        var searchControl = new L.Control.Search({
+            position: 'topright',
+            layer: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }),
+            propertyName: 'title', // Update to the property you want to search
+            marker: false,
+            moveToLocation: function (latlng, title, map) {
+                // Function to be called when a location is selected from search results
+                var latitude = latlng.lat.toFixed(6);
+                var longitude = latlng.lng.toFixed(6);
+                updateCoordinates(latlng.lat, latlng.lng);
+            },
+            filterData: function (text, records) {
+                // Uncomment this block if you want to see the raw data
+                // console.log("Text:", text);
+                // console.log("Records:", records);
+
+                // Return unfiltered data
+                return records;
+            }
+        });
+
+        map.addControl(searchControl);
+
+        // Update map to the current location on page load
+        // Provide initial coordinates if available, otherwise, use default (0, 0)
+        updateMapToCurrentLocation(currentLocation ? currentLocation.lat : 0, currentLocation ? currentLocation.lng : 0);
+
+        // Function to be called from Kotlin to update map when GPS is available
+        function updateMapWithGpsLocation(latitude, longitude) {
+            // Use the provided coordinates
+            setInitialWaypoint(latitude, longitude);
+        }
+
+        // Add event listener for map click event
+        var mapClickHandler = function (event) {
+            var clickedLatLng = event.latlng;
+            updateCoordinates(clickedLatLng.lat, clickedLatLng.lng);
+            setInitialWaypoint(clickedLatLng.lat, clickedLatLng.lng);
+            map.off('click', mapClickHandler); // Remove the click event listener after the first click
+        };
+
+        // Attach the click event listener only once
+        map.on('click', mapClickHandler);
+    </script>
+</body>
+
+</html>
