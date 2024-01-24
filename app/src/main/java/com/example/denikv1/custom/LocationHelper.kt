@@ -61,4 +61,3 @@ class MyLocationListener(private val activity: AddActivity) : LocationListener {
         }
     }
 }
-

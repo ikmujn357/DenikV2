@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -89,16 +88,16 @@ class AddActivity : AppCompatActivity() {
         // Inicializujte LocationHelper
         locationHelper = LocationHelper(this)
 
-        // Kontrola povolení
+        // Check for permissions
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // Získat aktuální hrubou polohu
+            // Permissions are granted, proceed to get the location
             locationHelper.requestLocationUpdates(locationListener)
         } else {
-            // Povolení nebylo uděleno, získejte povolení od uživatele
+            // Request permissions
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
@@ -116,28 +115,45 @@ class AddActivity : AppCompatActivity() {
 
         // Nastavení cesty k HTML souboru s mapou
         webView.settings.javaScriptEnabled = true
-        webView.addJavascriptInterface(WebAppInterface(latitudeEditText, longitudeEditText), "Android")
-        webView.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
+        webView.addJavascriptInterface(
+            WebAppInterface(latitudeEditText, longitudeEditText),
+            "Android"
+        )
+        webView.webViewClient = WebViewClient()
 
-                locationListener.lastLocation?.let { lastLocation ->
-                    val latitude = lastLocation.latitude
-                    val longitude = lastLocation.longitude
+        locationListener.lastLocation?.let { lastLocation ->
+            val latitude = lastLocation.latitude
+            val longitude = lastLocation.longitude
 
-                    // Aktualizovat hodnoty v EditText prvcích
-                    latitudeEditText.setText(latitude.toString())
-                    longitudeEditText.setText(longitude.toString())
+            // Aktualizovat hodnoty v EditText prvcích
+            latitudeEditText.setText(latitude.toString())
+            longitudeEditText.setText(longitude.toString())
 
-                    val javascriptCommand = "updateMapToCurrentLocation($latitude, $longitude);"
-                    webView.post { webView.loadUrl("javascript:$javascriptCommand") }
-                }
-            }
+            val javascriptCommand = "updateMapToCurrentLocation($latitude, $longitude);"
+            webView.post { webView.loadUrl("javascript:$javascriptCommand") }
         }
 
-        webView.settings.javaScriptEnabled = true
-        webView.addJavascriptInterface(WebAppInterface(latitudeEditText, longitudeEditText), "Android")
         webView.loadUrl("file:///android_asset/leaflet_map.html")
+    }
+
+    // Handle permission results
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            1 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted, proceed to get the location
+                    locationHelper.requestLocationUpdates(locationListener)
+                } else {
+                    // Permission denied, handle accordingly
+                    // You might want to show a message or take appropriate action
+                }
+            }
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
     }
 
     private fun revertChangesButton() {
@@ -295,6 +311,7 @@ class AddActivity : AppCompatActivity() {
     private fun toggleVisibility() {
         val showHideButton: LinearLayout = findViewById(R.id.showHideButton)
         val showHideButtonImg: ImageView = findViewById(R.id.showHideButtonImg)
+
         val descriptionAll: LinearLayout = findViewById(R.id.Description_hide)
 
 
@@ -623,22 +640,14 @@ class AddActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // Odhlásit se z aktualizací polohy při zničení aktivity
-        locationHelper.removeLocationUpdates(locationListener)
-    }
 }
 
-class WebAppInterface(
-    private val latitudeEditText: EditText,
-    private val longitudeEditText: EditText
-) {
+class WebAppInterface(private val latitudeEditText: EditText, private val longitudeEditText: EditText) {
     @JavascriptInterface
-    fun updateCoordinates(latitude: Double, longitude: Double) {
-        // Update the coordinates in your EditText elements
-        latitudeEditText.setText(latitude.toString())
-        longitudeEditText.setText(longitude.toString())
+    fun updateCoordinates(latitude: String, longitude: String) {
+        // Aktualizovat hodnoty v EditText
+        latitudeEditText.setText(latitude)
+        longitudeEditText.setText(longitude)
     }
 }
 
