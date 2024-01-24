@@ -56,6 +56,7 @@ class AddActivity : AppCompatActivity() {
     private var oldCesta: CestaEntity? = null
     lateinit var locationHelper: LocationHelper
     private val locationListener = MyLocationListener(this)
+    private lateinit var btnGetLocation: Button
 
     @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,16 +122,19 @@ class AddActivity : AppCompatActivity() {
         )
         webView.webViewClient = WebViewClient()
 
-        locationListener.lastLocation?.let { lastLocation ->
-            val latitude = lastLocation.latitude
-            val longitude = lastLocation.longitude
+        btnGetLocation = findViewById(R.id.btnGetLocation)
+        btnGetLocation.setOnClickListener {
+            locationListener.lastLocation?.let { lastLocation ->
+                val latitude = lastLocation.latitude
+                val longitude = lastLocation.longitude
 
-            // Aktualizovat hodnoty v EditText prvcích
-            latitudeEditText.setText(latitude.toString())
-            longitudeEditText.setText(longitude.toString())
+                // Aktualizovat hodnoty v EditText prvcích
+                latitudeEditText.setText(latitude.toString())
+                longitudeEditText.setText(longitude.toString())
 
-            val javascriptCommand = "updateMapToCurrentLocation($latitude, $longitude);"
-            webView.post { webView.loadUrl("javascript:$javascriptCommand") }
+                val javascriptCommand = "updateMapToCurrentLocation($latitude, $longitude);"
+                webView.post { webView.loadUrl("javascript:$javascriptCommand") }
+            }
         }
 
         webView.loadUrl("file:///android_asset/leaflet_map.html")
@@ -180,10 +184,8 @@ class AddActivity : AppCompatActivity() {
     private fun saveAndBack() {
         val buttonShowAdd: Button = findViewById(R.id.button_ulozit)
         buttonShowAdd.setOnClickListener {
-            lifecycleScope.launch {
-            val intent = Intent(this@AddActivity, CestaViewImp::class.java)
-            startActivity(intent)
-            }
+            saveCesta()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -230,6 +232,8 @@ class AddActivity : AppCompatActivity() {
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
         val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
         val datePicker: DatePicker = findViewById(R.id.datePicker)
+        val latitudeEditText: EditText = findViewById(R.id.latitudeEditText)
+        val longitudeEditText: EditText = findViewById(R.id.longitudeEditText)
 
         val textWatcher = createTextWatcher()
         val itemSelectedListener = createItemSelectedListener()
@@ -241,6 +245,8 @@ class AddActivity : AppCompatActivity() {
         minuteEditText.addTextChangedListener(textWatcher)
         descriptionEditText.addTextChangedListener(textWatcher)
         secondEditText.addTextChangedListener(textWatcher)
+        latitudeEditText.addTextChangedListener(textWatcher)
+        longitudeEditText.addTextChangedListener(textWatcher)
 
         opinionRatingBar.setOnRatingBarChangeListener { _, _, _ -> saveCesta() }
         setupDatePickerListener(datePicker)

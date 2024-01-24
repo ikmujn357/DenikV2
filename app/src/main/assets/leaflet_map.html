@@ -40,7 +40,7 @@
 
 <script>
         // Leaflet map initialization
-        var map = L.map('map').setView([0, 0], 13);
+        var map = L.map('map').setView([50.0550747, 14.4056989], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
@@ -80,6 +80,10 @@
             });
         }
     </script>
+
+<!-- Add an input field for displaying coordinates -->
+<input type="text" id="coordinates" readonly placeholder="Click on the map">
+
 </body>
 
 </html>

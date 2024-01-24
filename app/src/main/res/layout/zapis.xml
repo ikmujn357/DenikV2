@@ -564,6 +564,15 @@
                         android:hint="Longitude"
                         android:inputType="none" />
 
+                    <Button
+                        android:id="@+id/btnGetLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/webView"
+                        android:text="Get Current Location"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"/>
+
                 </LinearLayout>
 
             </LinearLayout>
