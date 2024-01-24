@@ -55,4 +55,5 @@ interface CestaDao {
     @Query("SELECT id FROM CestaEntity ORDER BY id DESC LIMIT 1")
     suspend fun getLastCestaId(): Long?
 
+
 }

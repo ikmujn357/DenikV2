@@ -67,4 +67,6 @@ class DailyStatisticsControllerImpl(
         view.updateGraph1(barEntries1, startDate, endDate)
         view.updateGraph2(barEntries2, startDate, endDate)
     }
+
+
 }

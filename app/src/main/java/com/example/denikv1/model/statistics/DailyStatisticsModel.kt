@@ -97,4 +97,6 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
             .toTypedArray()
         return arrayOf(*labels, "")
     }
+
+
 }

@@ -8,6 +8,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -60,6 +61,8 @@ interface CestaModel {
     )
 
     suspend fun deleteAllCesta()
+
+
 }
 
 // Implementace rozhraní CestaModel.
@@ -195,4 +198,7 @@ class CestaModelImpl(context: Context) : CestaModel {
     override suspend fun deleteAllCesta () {
         return cestaDao.deleteAllCesta()
     }
+
+
+
 }
