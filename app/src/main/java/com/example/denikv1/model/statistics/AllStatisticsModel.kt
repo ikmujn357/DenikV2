@@ -37,7 +37,7 @@ class AllStatisticsModelImpl(private val cestaModel: CestaModel) : AllStatistics
         val distinctDifficulties = getUniqueDifficulties(context).sortedWith(difficultyComparator)
 
         val barEntries = distinctDifficulties.mapIndexed { index, difficulty ->
-            val count = allCesta.count { it.gradeNum + it.gradeSign == difficulty }
+            val count = allCesta.count { it.gradeNum.toString() + it.gradeSign == difficulty }
             BarEntry(index.toFloat(), count.toFloat())
         }
 
@@ -52,7 +52,7 @@ class AllStatisticsModelImpl(private val cestaModel: CestaModel) : AllStatistics
     override fun getUniqueDifficulties(context: Context): List<String> {
         val allCesta = runBlocking { cestaModel.getAllCesta() }
         return allCesta
-            .map { it.gradeNum + it.gradeSign }
+            .map { it.gradeNum.toString() + it.gradeSign }
             .filter { it != "x" }
             .distinct()
     }

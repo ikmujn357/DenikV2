@@ -75,4 +75,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation ("androidx.cardview:cardview:1.0.0")
+
+    implementation ("com.applandeo:material-calendar-view:1.9.0")
 }

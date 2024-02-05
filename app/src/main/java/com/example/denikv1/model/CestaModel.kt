@@ -65,6 +65,7 @@ interface CestaModel {
     suspend fun deleteAllCesta()
 
 
+    suspend fun hasRouteInDateRange(startDate: Long, endDate: Long): Boolean
 }
 
 // Implementace rozhraní CestaModel.
@@ -205,6 +206,12 @@ class CestaModelImpl(context: Context) : CestaModel {
         return cestaDao.deleteAllCesta()
     }
 
+    override suspend fun hasRouteInDateRange(startDate: Long, endDate: Long): Boolean {
+        return withContext(Dispatchers.IO) {
+            val routes = cestaDao.getAllCestaForDateRange(startDate, endDate)
+            return@withContext routes.isNotEmpty()
+        }
+    }
 
 
 }

@@ -43,10 +43,10 @@ data class CestaEntity(
     // Datum vylezení
     var date: Long,
 
-    // Datum vylezení
+
     var latitude: Double,
 
-    // Datum vylezení
+
     var longitude: Double
 ) {
     // konstruktor pro vytváření instance bez ID.
