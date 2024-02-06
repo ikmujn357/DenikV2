@@ -25,7 +25,7 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
 
     override fun getUniqueDifficulty(context: Context, startDate: Long, endDate: Long): List<String> {
         val allCesta = getDataByDate(startDate, endDate)
-        return allCesta.map { it.gradeNum + it.gradeSign }.distinct()
+        return allCesta.map { it.gradeNum }.filter { it != "x" }.distinct()
     }
 
     override fun getUniqueStyle(context: Context, startDate: Long, endDate: Long): List<String> {
@@ -64,7 +64,7 @@ class DailyStatisticsModelImpl(private val cestaModel: CestaModel) : DailyStatis
             .filter { it != "x" }
 
         val entries = distinctDifficulties.mapIndexed { index, difficulty ->
-            val count = allCesta.count { it.gradeNum + it.gradeSign == difficulty }
+            val count = allCesta.count { it.gradeNum == difficulty }
             BarEntry(index.toFloat(), count.toFloat())
         }
 

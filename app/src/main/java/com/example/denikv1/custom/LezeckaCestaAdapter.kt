@@ -33,7 +33,7 @@ class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickL
 
         // Nastavení textu v textových polích ViewHolderu
         holder.cestaName.text = cesta.routeName
-        holder.cestaGrade.text = cesta.gradeNum + cesta.gradeSign
+        holder.cestaGrade.text = cesta.gradeNum
 
         // Nastavení odstupu mezi položkami v RecyclerView
         val spacingInPixels = holder.itemView.resources.getDimensionPixelSize(R.dimen.spacing_between_items)
@@ -51,8 +51,5 @@ class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickL
     // Vrací počet položek v seznamu
     override fun getItemCount() = cesta.size
 
-    fun clear() {
-        cesta = emptyList()
-    }
 }
 

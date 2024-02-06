@@ -146,6 +146,46 @@
                 android:layout_height="8dp"
                 android:background="@android:color/transparent" />
 
+
+
+
+
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/window_shape"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:baselineAligned="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/window_shape"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:baselineAligned="true">
+                    <ImageButton
+                        android:id="@+id/button_UIAA"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/minus"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/minus"/>
+                    <ImageButton
+                        android:id="@+id/button_French"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/minus"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/minus"/>
+
+                </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -219,6 +259,11 @@
 
             </LinearLayout>
         </LinearLayout>
+        </LinearLayout>
+
+
+
+
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="8dp"

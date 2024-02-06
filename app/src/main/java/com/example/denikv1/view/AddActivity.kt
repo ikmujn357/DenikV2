@@ -88,19 +88,19 @@ class AddActivity : AppCompatActivity() {
             }
         }
 
-        // Inicializujte LocationHelper
+        // Inicializace LocationHelper
         locationHelper = LocationHelper(this)
 
-        // Check for permissions
+        // Kontrola oprávnění
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // Permissions are granted, proceed to get the location
+            // Oprávnění jsou udělena, pokračujte v získávání polohy
             locationHelper.requestLocationUpdates(locationListener)
         } else {
-            // Request permissions
+            // Požádat o oprávnění
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
@@ -546,7 +546,7 @@ class AddActivity : AppCompatActivity() {
         val cestaName = routeNameEditText.text.toString()
         val fallCountString = fallEditText.text.toString()
         val styleSpinner = routeStyleSpinner.selectedItem.toString()
-        val gradeSpinner = routeGradeSpinner.selectedItem.toString()
+        val gradeSpinner = routeGradeSpinner.selectedItem.toString() + signImage
         val minuteString = minuteEditText.text.toString()
         val secondString = secondEditText.text.toString()
         val descriptionroute = descriptionEditText.text.toString()
@@ -584,7 +584,6 @@ class AddActivity : AppCompatActivity() {
                         styleSpinner,
                         gradeSpinner,
                         signImage,
-                        charImage,
                         minuteString.toIntOrNull() ?: 0,
                         secondString.toIntOrNull() ?: 0,
                         descriptionroute,
@@ -604,7 +603,6 @@ class AddActivity : AppCompatActivity() {
                     existingCesta.fallCount = fallCountString.toIntOrNull() ?: 0
                     existingCesta.climbStyle = styleSpinner
                     existingCesta.gradeNum = gradeSpinner
-                    existingCesta.gradeSign = signImage
                     existingCesta.routeChar = charImage
                     existingCesta.timeMinute = timeMinutes
                     existingCesta.timeSecond = timeSecond
@@ -642,18 +640,20 @@ class AddActivity : AppCompatActivity() {
         latitudeEditText.setText(cesta.latitude.toString())
         longitudeEditText.setText(cesta.longitude.toString())
 
-        // Nastavení vybraného tlačítka
-        selectedButtonTag = when (cesta.gradeSign) {
-            "+" -> "plus"
-            "-" -> "minus"
-            else -> "nula"
-        }
+        val gradeLevels = resources.getStringArray(R.array.Grade)
+        val styleLevels = resources.getStringArray(R.array.Style)
 
-        selectedButtonTag2 = when (cesta.routeChar) {
-            "Silová" -> "Síla"
-            "Technická" -> "Technika"
-            "Kombinace" -> "Kombinace"
-            else -> null
+        // Rozdělení hodnoty gradeNUM
+        val gradeNumParts = cesta.gradeNum.split(Regex("(?<=\\d)(?=\\+|\\-)"))
+
+        // Nastavení hodnoty čísla do spinneru
+        routeGradeSpinner.setSelection(gradeLevels.indexOf(gradeNumParts[0]))
+
+        // Nastavení vybraného tlačítka znaku
+        when (gradeNumParts.getOrNull(1)) {
+            "+" -> selectedButtonTag = "plus"
+            "-" -> selectedButtonTag = "minus"
+            else -> selectedButtonTag = "nula"
         }
 
         // Znovu aktualizovat zobrazení vybraného tlačítka
@@ -670,12 +670,9 @@ class AddActivity : AppCompatActivity() {
         datePicker.updateDate(year, month, dayOfMonth)
 
         // Nastavení pozice v Spinnerch
-        val difficultyLevels = resources.getStringArray(R.array.Grade)
-        val styleLevels = resources.getStringArray(R.array.Style)
-
-        routeGradeSpinner.setSelection(difficultyLevels.indexOf(cesta.gradeNum))
         routeStyleSpinner.setSelection(styleLevels.indexOf(cesta.climbStyle))
     }
+
 
     private fun deleteCesta(cesta: CestaEntity) {
         lifecycleScope.launch {

@@ -110,7 +110,6 @@ class CestaModelImpl(context: Context) : CestaModel {
             fallCount= fallCount,
             climbStyle = climbStyle,
             gradeNum = gradeNum,
-            gradeSign = gradeSign,
             routeChar = routeChar,
             timeMinute = timeMinute,
             timeSecond = timeSecond,
@@ -149,11 +148,11 @@ class CestaModelImpl(context: Context) : CestaModel {
                 val csvWriter = FileWriter(file, false)
 
                 // Header
-                csvWriter.append("Jméno cesty,Počet pádů,Styl přelezu,Obtížnost,Obtížnost znak,Charakter cesty,Minuty,Sekundy,Popis cesty,Hodnocení, Datum\n")
+                csvWriter.append("Jméno cesty,Počet pádů,Styl přelezu,Obtížnost,Charakter cesty,Minuty,Sekundy,Popis cesty,Hodnocení, Datum\n")
 
                 // Data
                 data.forEach { cesta ->
-                    csvWriter.append("${cesta.routeName},${cesta.fallCount},${cesta.climbStyle},${cesta.gradeNum},${cesta.gradeSign},${cesta.routeChar},${cesta.timeMinute},${cesta.timeSecond},${cesta.description},${cesta.rating},${formatDate(cesta.date)}\n")
+                    csvWriter.append("${cesta.routeName},${cesta.fallCount},${cesta.climbStyle},${cesta.gradeNum},${cesta.routeChar},${cesta.timeMinute},${cesta.timeSecond},${cesta.description},${cesta.rating},${formatDate(cesta.date)}\n")
                 }
 
                 csvWriter.close()
