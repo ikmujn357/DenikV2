@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -36,6 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 import android.webkit.JavascriptInterface
+import android.widget.ScrollView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.denikv1.custom.LocationHelper
@@ -108,11 +110,24 @@ class AddActivity : AppCompatActivity() {
         updateEditTextWithLastLocation()
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
     fun updateEditTextWithLastLocation() {
         val latitudeEditText = findViewById<EditText>(R.id.latitudeEditText)
         val longitudeEditText = findViewById<EditText>(R.id.longitudeEditText)
         val webView: WebView = findViewById(R.id.webView)
+        val scrollView: ScrollView = findViewById(R.id.scrollViewZapis)
+
+        webView.setOnTouchListener { _, event ->
+            // Zabránit posunu ScrollView, pokud se dotyky nacházejí v mapě
+            if (isTouchInsideMap(event)) {
+                // Dotyk je uvnitř mapy, vrátit true pro zabránění posunu ScrollView
+                scrollView.requestDisallowInterceptTouchEvent(true)
+            } else {
+                // Dotyk není uvnitř mapy, povolit posun ScrollView
+                scrollView.requestDisallowInterceptTouchEvent(false)
+            }
+            false // Vrátit false, aby se prováděly další dotyky
+        }
 
         // Nastavení cesty k HTML souboru s mapou
         webView.settings.javaScriptEnabled = true
@@ -138,6 +153,26 @@ class AddActivity : AppCompatActivity() {
         }
 
         webView.loadUrl("file:///android_asset/leaflet_map.html")
+    }
+
+    private fun isTouchInsideMap(event: MotionEvent): Boolean {
+        val webView: WebView = findViewById(R.id.webView)
+
+        // Zjistěte souřadnice dotyku
+        val x = event.x.toInt()
+        val y = event.y.toInt()
+
+        // Zjistěte souřadnice oblasti mapy ve webView
+        val webViewLocation = IntArray(2)
+        webView.getLocationOnScreen(webViewLocation)
+        val webViewX = webViewLocation[0]
+        val webViewY = webViewLocation[1]
+        val webViewWidth = webView.width
+        val webViewHeight = webView.height
+
+        // Zjistěte, zda je dotyk uvnitř oblasti mapy
+        return (x >= webViewX && x <= webViewX + webViewWidth
+                && y >= webViewY && y <= webViewY + webViewHeight)
     }
 
     // Handle permission results

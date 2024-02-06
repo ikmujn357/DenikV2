@@ -4,16 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map with Waypoints and Search</title>
+    <title>Leaflet Map with Search</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <!-- Leaflet Search CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-search/dist/leaflet-search.min.css" />
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #EDF2F4;
+        }
         #map {
-            border: none;
             box-shadow: none;
             height: 400px;
+            border-radius: 20px;
+            background-color: #EDF2F4;
+        }
+
+        #searchInput {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        #getLocationButton {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -22,68 +47,20 @@
 <!-- Map container -->
 <div id="map"></div>
 
+<!-- Search input -->
+<label for="searchInput"></label><input type="text" id="searchInput" placeholder="Search location..." />
+
+<!-- Get Location button -->
+<button id="getLocationButton">Get Current Location</button>
+
 <!-- Leaflet JavaScript -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<!-- Leaflet Search JavaScript -->
-<script src="https://unpkg.com/leaflet-search/dist/leaflet-search.min.js"></script>
-
-<!-- Android JavaScript Bridge -->
-<script>
-        var AndroidBridge = {
-            // Method to update coordinates in Kotlin
-            updateCoordinates: function (latitude, longitude) {
-                // Call the method in Kotlin
-                Android.updateCoordinates(latitude, longitude);
-            }
-        };
-    </script>
-
-<script>
-        // Leaflet map initialization
-        var map = L.map('map').setView([50.0550747, 14.4056989], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Marker for the current location
-        var marker;
-
-        // Function to update coordinates in the text field
-        function updateCoordinates(latitude, longitude) {
-            // Update the coordinates in the Android code
-            AndroidBridge.updateCoordinates(latitude, longitude);
-
-            // Update the coordinates in the text field or do whatever is needed
-            document.getElementById('coordinates').value = latitude + ', ' + longitude;
-        }
-
-        // Add event listener for map click event
-        map.on('click', function (event) {
-            var clickedLatLng = event.latlng;
-            updateCoordinates(clickedLatLng.lat, clickedLatLng.lng);
-
-            // Remove existing marker and add a new one at the clicked location
-            if (marker) {
-                map.removeLayer(marker);
-            }
-
-            marker = L.marker(clickedLatLng).addTo(map);
-        });
-
-        // Check for Geolocation API support and attempt to get current location on page load
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var latitude = position.coords.latitude;
-                var longitude = position.coords.longitude;
-                updateCoordinates(latitude, longitude);
-                map.setView([latitude, longitude], 13);
-            });
-        }
-    </script>
-
-<!-- Add an input field for displaying coordinates -->
-<input type="text" id="coordinates" readonly placeholder="Click on the map">
-
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Custom JavaScript -->
+<script src="leaflet_map_script.js"></script>
+<!-- Android JS Bridge -->
+<script src="android_js_bridge.js"></script>
 </body>
 
 </html>
