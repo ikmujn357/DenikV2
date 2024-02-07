@@ -201,7 +201,7 @@
                 android:text="@string/grade"
                 android:textStyle="bold"
                 android:textColor="#000000"
-                android:layout_marginEnd="28dp"/>
+                android:layout_marginEnd="6dp"/>
 
             <Spinner
                 android:layout_marginBottom="10dp"
@@ -209,7 +209,8 @@
                 android:id="@+id/difficultySpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                />
 
             <LinearLayout
                 android:id="@+id/topPanel"

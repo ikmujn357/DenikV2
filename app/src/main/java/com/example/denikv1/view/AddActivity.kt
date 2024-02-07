@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -61,6 +62,9 @@ class AddActivity : AppCompatActivity() {
     private lateinit var btnGetLocation: Button
     private lateinit var layoutUIAA: LinearLayout
     private lateinit var layoutFrench: LinearLayout
+
+    private lateinit var buttonUIAA: Button
+    private lateinit var buttonFrench: Button
 
     @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,12 +124,15 @@ class AddActivity : AppCompatActivity() {
         buttonUIAA.text = "UIAA"
         val buttonFrench = findViewById<Button>(R.id.button_French)
         buttonFrench.text = "French"
+        layoutUIAA.visibility = View.VISIBLE
+        layoutFrench.visibility = View.GONE
 
         buttonUIAA.setOnClickListener {
             // Nastavit viditelnost layoutu UIAA na VISIBLE
             layoutUIAA.visibility = View.VISIBLE
             // Nastavit viditelnost layoutu French na GONE
             layoutFrench.visibility = View.GONE
+            setupGradeSpinner(R.array.GradeUIAA)
         }
 
         buttonFrench.setOnClickListener {
@@ -133,10 +140,20 @@ class AddActivity : AppCompatActivity() {
             layoutFrench.visibility = View.VISIBLE
             // Nastavit viditelnost layoutu UIAA na GONE
             layoutUIAA.visibility = View.GONE
+            setupGradeSpinner(R.array.GradeFrench)
         }
     }
 
+    private fun setupGradeSpinner(stringArrayId: Int) {
+        val resources: Resources = resources
+        val gradeLevels = resources.getStringArray(stringArrayId)
+        val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
 
+        val adapter = CustomArrayAdapter(this, R.layout.item_spinner, gradeLevels.toList())
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        routeGradeSpinner.adapter = adapter
+    }
 
     @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
     fun updateEditTextWithLastLocation() {
@@ -214,9 +231,6 @@ class AddActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted, proceed to get the location
                     locationHelper.requestLocationUpdates(locationListener)
-                } else {
-                    // Permission denied, handle accordingly
-                    // You might want to show a message or take appropriate action
                 }
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -529,7 +543,7 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val difficultyLevels = resources.getStringArray(R.array.Grade)
+        val difficultyLevels = resources.getStringArray(R.array.GradeUIAA)
         val styleLevels = resources.getStringArray(R.array.Style)
         val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
         val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
@@ -668,7 +682,7 @@ class AddActivity : AppCompatActivity() {
         latitudeEditText.setText(cesta.latitude.toString())
         longitudeEditText.setText(cesta.longitude.toString())
 
-        val gradeLevels = resources.getStringArray(R.array.Grade)
+        val gradeLevels = resources.getStringArray(R.array.GradeUIAA)
         val styleLevels = resources.getStringArray(R.array.Style)
 
         // Rozdělení hodnoty gradeNUM
