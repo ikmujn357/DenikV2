@@ -665,8 +665,7 @@
                         android:layout_alignParentBottom="true"
                         android:enabled="false"
                         android:hint="Latitude"
-                        android:inputType="none"
-                        android:visibility="gone"/>
+                        android:inputType="none"/>
 
                     <EditText
                         android:id="@+id/longitudeEditText"
@@ -675,8 +674,7 @@
                         android:layout_above="@+id/latitudeEditText"
                         android:enabled="false"
                         android:hint="Longitude"
-                        android:inputType="none"
-                        android:visibility="gone"/>
+                        android:inputType="none"/>
 
                 </LinearLayout>
 
