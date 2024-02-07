@@ -20,21 +20,11 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/window_shape"
-                android:baselineAligned="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <FrameLayout
-                        android:id="@+id/datePickerContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                </FrameLayout>
-
-            </LinearLayout>
+            <FrameLayout
+                    android:id="@+id/datePickerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+            </FrameLayout>
 
 
             <LinearLayout
@@ -46,8 +36,7 @@
 
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
-                android:background="@android:color/transparent" />
+                android:layout_height="16dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

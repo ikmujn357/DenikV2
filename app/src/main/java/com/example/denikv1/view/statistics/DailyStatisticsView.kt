@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -104,41 +105,14 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
                 // You can provide feedback to the user or retry the operation
             }
         }
-
-        dpd.setOnCancelListener {
-            Log.d("DatePickerDialog", "Dialog was cancelled")
-        }
     }
-
-
 
 
     // Method to show the date picker dialog
     private fun showDatePicker() {
-        lifecycleScope.launch {
-            try {
-                val closestDateWithData = cestaModel.getClosestDateWithData()
-                closestDateWithData?.let { closestDate ->
-                    val calendar = Calendar.getInstance()
-                    calendar.timeInMillis = closestDate
-
-                    dpd.initialize(
-                        this@DailyStatisticsFragment,
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)
-                    )
-
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.datePickerContainer, dpd)
-                        ?.addToBackStack(null)
-                        ?.commit()
-                }
-            } catch (e: Exception) {
-                // Handle exceptions
-                Log.e("DatePickerDialog", "Error showing date picker: ${e.message}")
-            }
-        }
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(R.id.datePickerContainer, dpd)
+            ?.commit()
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {

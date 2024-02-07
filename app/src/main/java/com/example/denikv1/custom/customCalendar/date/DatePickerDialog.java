@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
@@ -165,6 +166,8 @@ public class DatePickerDialog extends AppCompatDialogFragment implements
         }
         SimpleDateFormat VERSION_2_FORMAT = new SimpleDateFormat(DateFormat.getBestDateTimePattern(mLocale, "EEEMMMdd"), mLocale);
         VERSION_2_FORMAT.setTimeZone(getTimeZone());
+
+        // Následně upravit označení dne podle aktuálního výběru a zobrazit ho
     }
 
     @Override
@@ -250,7 +253,7 @@ public class DatePickerDialog extends AppCompatDialogFragment implements
 
         mDefaultLimiter.setController(this);
 
-        int viewRes = R.layout.mdtp_date_picker_dialog_v2;
+        int viewRes = R.layout.mdtp_date_picker_view_animator_v2;
         View view = inflater.inflate(viewRes, container, false);
         // All options have been set at this point: round the initial selection if necessary
         mCalendar = mDateRangeLimiter.setToNearestDate(mCalendar);
@@ -259,14 +262,13 @@ public class DatePickerDialog extends AppCompatDialogFragment implements
         mDayPickerView = new DayPickerGroup(activity, this);
         mYearPickerView = new YearPickerView(activity, this);
 
-        // if theme mode has not been set by java code, check if it is specified in Style.xml
-        if (!mThemeDarkChanged) {
-            mThemeDark = Utils.isDarkTheme(mThemeDark);
-        }
 
-        int bgColorResource = mThemeDark ? R.color.mdtp_date_picker_view_animator_dark_theme : R.color.mdtp_date_picker_view_animator;
+        int bgColorResource = R.color.mdtp_date_picker_view_animator;
         int bgColor = ContextCompat.getColor(activity, bgColorResource);
         view.setBackgroundColor(bgColor);
+
+        // Nastavení pozadí na window_shape
+        view.setBackground(ContextCompat.getDrawable(activity, R.drawable.window_shape));
 
         mAnimator = view.findViewById(R.id.mdtp_animator);
         mAnimator.addView(mDayPickerView);
@@ -281,10 +283,14 @@ public class DatePickerDialog extends AppCompatDialogFragment implements
         animation2.setDuration(ANIMATION_DURATION);
         mAnimator.setOutAnimation(animation2);
 
-        // Aktualizace označení aktuálního dne
+        /// Aktualizace označení aktuálního dne
         updatePickers();
 
+        // Poslat aktuálně vybraný den ven bez nutnosti stisknout tlačítko OK
+        notifyOnDateListener();
+
         if (listPosition != -1) {
+            // Pokud je uložená pozice, obnoví ji
             if (currentView == MONTH_AND_DAY_VIEW) {
                 mDayPickerView.postSetSelection(listPosition);
             } else if (currentView == YEAR_VIEW) {
