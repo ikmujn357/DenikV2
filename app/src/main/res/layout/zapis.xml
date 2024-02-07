@@ -665,7 +665,8 @@
                         android:layout_alignParentBottom="true"
                         android:enabled="false"
                         android:hint="Latitude"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:visibility="gone"/>
 
                     <EditText
                         android:id="@+id/longitudeEditText"
@@ -674,16 +675,8 @@
                         android:layout_above="@+id/latitudeEditText"
                         android:enabled="false"
                         android:hint="Longitude"
-                        android:inputType="none" />
-
-                    <Button
-                        android:id="@+id/btnGetLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/webView"
-                        android:text="Get Current Location"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"/>
+                        android:inputType="none"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 
