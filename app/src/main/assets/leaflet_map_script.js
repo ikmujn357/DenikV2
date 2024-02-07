@@ -103,5 +103,15 @@ document.addEventListener('DOMContentLoaded', function () {
 // Function to retrieve the location
 function getLocation() {
     // Call the function defined in the Android JavaScript interface to request location updates
-    Android.requestLocationUpdates();
+    LocationRequestInterface.requestLocationUpdates();
+}
+
+function updateCoordinates(latitude, longitude) {
+    // Update the coordinates in the Android code
+    if (typeof AndroidBridge !== 'undefined') {
+        AndroidBridge.updateCoordinates(latitude, longitude);
+    }
+
+    // Update the coordinates in the text field or do whatever is needed
+    document.getElementById('coordinates').value = latitude + ', ' + longitude;
 }

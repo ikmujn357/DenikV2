@@ -176,30 +176,35 @@ class AddActivity : AppCompatActivity() {
 
         // Nastavení cesty k HTML souboru s mapou
         webView.settings.javaScriptEnabled = true
+        // Přidáme rozhraní pro žádost o aktualizace polohy
+        webView.addJavascriptInterface(
+            object {
+                @JavascriptInterface
+                fun requestLocationUpdates() {
+                    // Zde můžete volat kód pro žádost o aktualizace polohy ze záznamníku polohy
+                    // Tento kód by měl být podobný tomu, co jste měli v posluchači kliknutí na tlačítko
+                    locationListener.lastLocation?.let { lastLocation ->
+                        val latitude = lastLocation.latitude
+                        val longitude = lastLocation.longitude
+
+                        // Aktualizovat hodnoty v EditText prvcích
+                        latitudeEditText.setText(latitude.toString())
+                        longitudeEditText.setText(longitude.toString())
+
+                        // Zavoláme JavaScriptovou funkci k aktualizaci mapy s přijatou polohou
+                        webView.post { webView.loadUrl("javascript:updateMapToCurrentLocation($latitude, $longitude);") }
+                    }
+                }
+            }, "LocationRequestInterface"
+        )
+
+        // Přidáme rozhraní WebAppInterface pro manipulaci s políčky pro zeměpisnou šířku a délku
         webView.addJavascriptInterface(
             WebAppInterface(latitudeEditText, longitudeEditText),
             "Android"
         )
+
         webView.webViewClient = WebViewClient()
-
-        webView.addJavascriptInterface(object {
-            @JavascriptInterface
-            fun requestLocationUpdates() {
-                // Call the code to request location updates from the location listener
-                // This code should be similar to what you had in the button click listener
-                locationListener.lastLocation?.let { lastLocation ->
-                    val latitude = lastLocation.latitude
-                    val longitude = lastLocation.longitude
-
-                    // Aktualizovat hodnoty v EditText prvcích
-                    latitudeEditText.setText(latitude.toString())
-                    longitudeEditText.setText(longitude.toString())
-
-                    // Call the JavaScript function to update the map with the received location
-                    webView.post { webView.loadUrl("javascript:updateMapToCurrentLocation($latitude, $longitude);") }
-                }
-            }
-        }, "Android");
 
         webView.loadUrl("file:///android_asset/leaflet_map.html")
     }
@@ -208,6 +213,7 @@ class AddActivity : AppCompatActivity() {
         val webView: WebView = findViewById(R.id.webView)
         val latitude = cesta.latitude
         val longitude = cesta.longitude
+
         val javascriptCommand = "updateMapToCurrentLocation($latitude, $longitude);"
         webView.post { webView.loadUrl("javascript:$javascriptCommand") }
     }
@@ -422,6 +428,7 @@ class AddActivity : AppCompatActivity() {
                 // Pokud jsou položky skryté, zobraz je
                 descriptionAll.visibility = View.VISIBLE
                 showHideButtonImg.setImageResource(R.drawable.ic_arrow_down)
+                currentCesta?.let { cesta -> loadCestaLocationOnMap(cesta) }
             }
         }
     }
@@ -626,7 +633,6 @@ class AddActivity : AppCompatActivity() {
                 val lastCestaId = cestaModel.getLastCestaId() ?: 0
                 val existingCesta = currentCesta?.let {
                     cestaController.getCestaById(it.id)
-
                 }
 
 
@@ -712,7 +718,6 @@ class AddActivity : AppCompatActivity() {
 
         // Znovu aktualizovat zobrazení vybraného tlačítka
         updateSelectedButtonView()
-        loadCestaLocationOnMap(cesta)
 
         // Nastavení data do DatePickeru
         val calendar = Calendar.getInstance()
