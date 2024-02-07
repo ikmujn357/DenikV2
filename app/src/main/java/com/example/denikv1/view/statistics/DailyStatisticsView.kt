@@ -110,9 +110,29 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
 
     // Method to show the date picker dialog
     private fun showDatePicker() {
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.datePickerContainer, dpd)
-            ?.commit()
+        lifecycleScope.launch {
+            try {
+                val closestDateWithData = cestaModel.getClosestDateWithData()
+                closestDateWithData?.let { closestDate ->
+                    val calendar = Calendar.getInstance()
+                    calendar.timeInMillis = closestDate
+
+                    dpd.initialize(
+                        this@DailyStatisticsFragment,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                    )
+
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.datePickerContainer, dpd)
+                        ?.commit()
+                }
+            } catch (e: Exception) {
+                // Handle exceptions
+                Log.e("DatePickerDialog", "Error showing date picker: ${e.message}")
+            }
+        }
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
