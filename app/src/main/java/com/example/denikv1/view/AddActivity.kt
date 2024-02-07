@@ -59,6 +59,8 @@ class AddActivity : AppCompatActivity() {
     lateinit var locationHelper: LocationHelper
     private val locationListener = MyLocationListener(this)
     private lateinit var btnGetLocation: Button
+    private lateinit var layoutUIAA: LinearLayout
+    private lateinit var layoutFrench: LinearLayout
 
     @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,7 +110,30 @@ class AddActivity : AppCompatActivity() {
             )
         }
         updateEditTextWithLastLocation()
+
+
+        layoutUIAA = findViewById(R.id.topPanel)
+        layoutFrench = findViewById(R.id.topPanelFrench)
+
+        // Inicializace tlačítek
+        val buttonUIAA = findViewById<ImageButton>(R.id.button_UIAA)
+        val buttonFrench = findViewById<ImageButton>(R.id.button_French)
+        buttonUIAA.setOnClickListener {
+            // Nastavit viditelnost layoutu UIAA na VISIBLE
+            layoutUIAA.visibility = View.VISIBLE
+            // Nastavit viditelnost layoutu French na GONE
+            layoutFrench.visibility = View.GONE
+        }
+
+        buttonFrench.setOnClickListener {
+            // Nastavit viditelnost layoutu French na VISIBLE
+            layoutFrench.visibility = View.VISIBLE
+            // Nastavit viditelnost layoutu UIAA na GONE
+            layoutUIAA.visibility = View.GONE
+        }
     }
+
+
 
     @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
     fun updateEditTextWithLastLocation() {

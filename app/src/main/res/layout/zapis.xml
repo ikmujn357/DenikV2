@@ -146,7 +146,48 @@
                 android:layout_height="8dp"
                 android:background="@android:color/transparent" />
 
+
+
+
+
+
             <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/window_shape"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:baselineAligned="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/window_shape"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:baselineAligned="true">
+                    <ImageButton
+                        android:id="@+id/button_UIAA"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/minus"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/minus"/>
+                    <ImageButton
+                        android:id="@+id/button_French"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/minus"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/minus"/>
+
+                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/UIAA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/window_shape"
@@ -218,7 +259,71 @@
                     android:contentDescription="@string/minus"/>
 
             </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/topPanelFrench"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/button_a"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/plus"
+                        android:contentDescription="a"/>
+
+                    <View
+                        android:layout_width="7dp"
+                        android:layout_height="20dp"
+                        android:background="@android:color/transparent" />
+
+                    <ImageButton
+                        android:id="@+id/button_b"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/empty_circle"
+                        android:contentDescription="b"/>
+
+                    <View
+                        android:layout_width="7dp"
+                        android:layout_height="20dp"
+                        android:background="@android:color/transparent" />
+
+                    <ImageButton
+                        android:id="@+id/button_c"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/minus"
+                        android:contentDescription="c"/>
+
+                    <ImageButton
+                        android:id="@+id/button_plusFrench"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/icon_selection_background"
+                        android:src="@drawable/plus"
+                        android:contentDescription="a"/>
+
+                </LinearLayout>
+
+
         </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="8dp"
