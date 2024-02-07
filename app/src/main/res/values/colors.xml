@@ -25,4 +25,16 @@
     <color name="pozadí">#FFFFFF</color>
     <color name="pridat_cestu">#4C8E4E</color>
     -->
+
+    <color name="mdtp_date_picker_text_normal_dark_theme">#FFFFFF</color>
+    <color name="mdtp_date_picker_month_day_dark_theme">#b4b4b4</color>
+    <color name="mdtp_date_picker_text_disabled_dark_theme">#767676</color>
+    <color name="mdtp_date_picker_text_highlighted_dark_theme">#FFFFFF</color>
+
+    <color name="mdtp_date_picker_text_normal">#ff212121</color>
+    <color name="mdtp_date_picker_text_highlighted">#212121</color>
+    <color name="mdtp_date_picker_text_disabled">#ccc</color>
+    <color name="mdtp_date_picker_month_day">#767676</color>
+    <color name="mdtp_date_picker_view_animator_dark_theme">#424242</color>
+    <color name="mdtp_date_picker_view_animator">@android:color/white</color>
 </resources>

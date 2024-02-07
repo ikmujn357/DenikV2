@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Lezecký deník</string>
     <string name="informace">Informace o cestě</string>
     <string name="date">Datum</string>
@@ -61,5 +61,8 @@
     </string-array>
 
 
+    <string name="mdtp_item_is_selected"><xliff:g id="item" example="2013">%1$s</xliff:g> selected</string>
+    <string name="mdtp_day_of_week_label_typeface" translatable="false">sans-serif</string>
+    <string name="mdtp_sans_serif" translatable="false">sans-serif</string>
 
 </resources>
