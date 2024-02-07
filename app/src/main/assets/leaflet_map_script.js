@@ -91,3 +91,17 @@ map.on('click', function(event) {
     addMarker(clickedLatLng.lat, clickedLatLng.lng);
 });
 
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+    // Add event listener for Get Location button click
+    document.getElementById('getLocationButton').addEventListener('click', function () {
+        // Call the function to retrieve the location when the button is clicked
+        getLocation();
+    });
+});
+
+// Function to retrieve the location
+function getLocation() {
+    // Call the function defined in the Android JavaScript interface to request location updates
+    Android.requestLocationUpdates();
+}

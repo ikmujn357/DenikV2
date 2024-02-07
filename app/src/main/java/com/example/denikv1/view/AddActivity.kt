@@ -182,20 +182,24 @@ class AddActivity : AppCompatActivity() {
         )
         webView.webViewClient = WebViewClient()
 
-        btnGetLocation = findViewById(R.id.btnGetLocation)
-        btnGetLocation.setOnClickListener {
-            locationListener.lastLocation?.let { lastLocation ->
-                val latitude = lastLocation.latitude
-                val longitude = lastLocation.longitude
+        webView.addJavascriptInterface(object {
+            @JavascriptInterface
+            fun requestLocationUpdates() {
+                // Call the code to request location updates from the location listener
+                // This code should be similar to what you had in the button click listener
+                locationListener.lastLocation?.let { lastLocation ->
+                    val latitude = lastLocation.latitude
+                    val longitude = lastLocation.longitude
 
-                // Aktualizovat hodnoty v EditText prvcích
-                latitudeEditText.setText(latitude.toString())
-                longitudeEditText.setText(longitude.toString())
+                    // Aktualizovat hodnoty v EditText prvcích
+                    latitudeEditText.setText(latitude.toString())
+                    longitudeEditText.setText(longitude.toString())
 
-                val javascriptCommand = "updateMapToCurrentLocation($latitude, $longitude);"
-                webView.post { webView.loadUrl("javascript:$javascriptCommand") }
+                    // Call the JavaScript function to update the map with the received location
+                    webView.post { webView.loadUrl("javascript:updateMapToCurrentLocation($latitude, $longitude);") }
+                }
             }
-        }
+        }, "Android");
 
         webView.loadUrl("file:///android_asset/leaflet_map.html")
     }
