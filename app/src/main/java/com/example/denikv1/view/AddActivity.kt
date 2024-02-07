@@ -116,8 +116,11 @@ class AddActivity : AppCompatActivity() {
         layoutFrench = findViewById(R.id.topPanelFrench)
 
         // Inicializace tlačítek
-        val buttonUIAA = findViewById<ImageButton>(R.id.button_UIAA)
-        val buttonFrench = findViewById<ImageButton>(R.id.button_French)
+        val buttonUIAA = findViewById<Button>(R.id.button_UIAA)
+        buttonUIAA.text = "UIAA"
+        val buttonFrench = findViewById<Button>(R.id.button_French)
+        buttonFrench.text = "French"
+
         buttonUIAA.setOnClickListener {
             // Nastavit viditelnost layoutu UIAA na VISIBLE
             layoutUIAA.visibility = View.VISIBLE
@@ -388,7 +391,7 @@ class AddActivity : AppCompatActivity() {
             if (descriptionAll.visibility == View.VISIBLE) {
                 // Pokud jsou položky viditelné, skryj je
                 descriptionAll.visibility = View.GONE
-                showHideButtonImg.setImageResource(R.drawable.ic_arrow_right)
+                showHideButtonImg.setImageResource(R.drawable.arrow_right)
             } else {
                 // Pokud jsou položky skryté, zobraz je
                 descriptionAll.visibility = View.VISIBLE

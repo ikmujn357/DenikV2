@@ -75,7 +75,7 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         return view
     }
 
-    // Method to initialize the date picker dialog
+
     private fun initializeDatePicker() {
         val now: Calendar = Calendar.getInstance()
         dpd = DatePickerDialog.newInstance(
@@ -88,27 +88,57 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         dpd.setThemeDark(false)
         dpd.accentColor = Color.parseColor("#9C27B0")
 
-        val days = Array<Calendar>(13) { Calendar.getInstance() }
-        for (i in -6..6) {
-            val day: Calendar = Calendar.getInstance()
-            day.add(Calendar.DAY_OF_MONTH, i * 2)
-            days[i + 6] = day
+        lifecycleScope.launch {
+            try {
+                val daysWithRoutes = cestaModel.getAllDatesWithData()
+                val selectableDays = daysWithRoutes.map { day ->
+                    val calendarDay = Calendar.getInstance()
+                    calendarDay.timeInMillis = day
+                    calendarDay
+                }.toTypedArray()
+
+                dpd.setSelectableDays(selectableDays)
+            } catch (e: Exception) {
+                // Handle exceptions, such as network errors or database errors
+                Log.e("DatePickerDialog", "Error fetching selectable days: ${e.message}")
+                // You can provide feedback to the user or retry the operation
+            }
         }
-        dpd.setSelectableDays(days)
 
         dpd.setOnCancelListener {
             Log.d("DatePickerDialog", "Dialog was cancelled")
         }
-
-        //dpd.onDateSetListener = this
     }
+
+
+
 
     // Method to show the date picker dialog
     private fun showDatePicker() {
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.datePickerContainer, dpd)
-            ?.addToBackStack(null)
-            ?.commit()
+        lifecycleScope.launch {
+            try {
+                val closestDateWithData = cestaModel.getClosestDateWithData()
+                closestDateWithData?.let { closestDate ->
+                    val calendar = Calendar.getInstance()
+                    calendar.timeInMillis = closestDate
+
+                    dpd.initialize(
+                        this@DailyStatisticsFragment,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                    )
+
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.datePickerContainer, dpd)
+                        ?.addToBackStack(null)
+                        ?.commit()
+                }
+            } catch (e: Exception) {
+                // Handle exceptions
+                Log.e("DatePickerDialog", "Error showing date picker: ${e.message}")
+            }
+        }
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {

@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.math.abs
 
 // Rozhraní pro datový model.
 interface CestaModel {
@@ -66,6 +67,11 @@ interface CestaModel {
 
 
     suspend fun hasRouteInDateRange(startDate: Long, endDate: Long): Boolean
+
+    suspend fun getAllDatesWithData(): List<Long>
+
+    suspend fun getClosestDateWithData(): Long?
+
 }
 
 // Implementace rozhraní CestaModel.
@@ -212,5 +218,28 @@ class CestaModelImpl(context: Context) : CestaModel {
         }
     }
 
+    override suspend fun getAllDatesWithData(): List<Long> {
+        return withContext(Dispatchers.IO) {
+            val allCesta = cestaDao.getAllCesta()
+            // Použijte HashSet pro uchování jedinečných dat
+            val datesWithData = HashSet<Long>()
+            allCesta.forEach { cesta ->
+                // Extrahujte datum z cesty a přidejte ho do HashSetu
+                val calendar = Calendar.getInstance()
+                calendar.timeInMillis = cesta.date
+                val dateInMillis = calendar.timeInMillis
+                datesWithData.add(dateInMillis)
+            }
+            // Převeďte HashSet na seznam a vraťte
+            return@withContext datesWithData.toList()
+        }
+    }
 
+    override suspend fun getClosestDateWithData(): Long? {
+        val currentDate = System.currentTimeMillis()
+        val datesWithData = getAllDatesWithData()
+
+        // Najděte nejbližší datum s daty k aktuálnímu datu
+        return datesWithData.minByOrNull { abs(it - currentDate) }
+    }
 }
