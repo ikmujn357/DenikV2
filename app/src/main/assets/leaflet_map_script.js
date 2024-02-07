@@ -84,16 +84,6 @@ document.getElementById('searchInput').addEventListener('keyup', function (event
     }
 });
 
-function updateCoordinates(latitude, longitude) {
-    // Update the coordinates in the Android code
-    if (typeof AndroidBridge !== 'undefined') {
-        AndroidBridge.updateCoordinates(latitude, longitude);
-    }
-
-    // Update the coordinates in the text field or do whatever is needed
-    document.getElementById('coordinates').value = latitude + ', ' + longitude;
-}
-
 // Add event listener for map click event
 map.on('click', function(event) {
     const clickedLatLng = event.latlng;

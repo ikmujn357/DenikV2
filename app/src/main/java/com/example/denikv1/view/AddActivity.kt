@@ -200,6 +200,14 @@ class AddActivity : AppCompatActivity() {
         webView.loadUrl("file:///android_asset/leaflet_map.html")
     }
 
+    private fun loadCestaLocationOnMap(cesta: CestaEntity) {
+        val webView: WebView = findViewById(R.id.webView)
+        val latitude = cesta.latitude
+        val longitude = cesta.longitude
+        val javascriptCommand = "updateMapToCurrentLocation($latitude, $longitude);"
+        webView.post { webView.loadUrl("javascript:$javascriptCommand") }
+    }
+
     private fun isTouchInsideMap(event: MotionEvent): Boolean {
         val webView: WebView = findViewById(R.id.webView)
 
@@ -700,6 +708,7 @@ class AddActivity : AppCompatActivity() {
 
         // Znovu aktualizovat zobrazení vybraného tlačítka
         updateSelectedButtonView()
+        loadCestaLocationOnMap(cesta)
 
         // Nastavení data do DatePickeru
         val calendar = Calendar.getInstance()
