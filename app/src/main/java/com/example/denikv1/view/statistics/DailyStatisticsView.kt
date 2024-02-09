@@ -69,6 +69,7 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         buttonObtiznost = view.findViewById(R.id.button_obtížnost)
         buttonStylPrelzeu = view.findViewById(R.id.button_stylprelezu)
 
+
         return view
     }
 
@@ -145,13 +146,28 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
             startDate.get(Calendar.MONTH),
             startDate.get(Calendar.DAY_OF_MONTH)
         )
+
+        lifecycleScope.launch {
+            try {
+                val cesty = cestaModel.getAllCestaForDateRange(startDate.timeInMillis, endDate.timeInMillis)
+                updateRecyclerViewCesty(cesty)
+            } catch (e: Exception) {
+                Log.e("DailyStatisticsFragment", "Error updating RecyclerView: ${e.message}")
+            }
+        }
     }
 
     override fun updateGraph(barEntries: List<BarEntry>, startDate: Long, endDate: Long) {
         val xLabels = controller.getXLabelsGraph1(requireContext(), startDate, endDate).toList()
         setupBarChart(barChart, barEntries, xLabels)
 
-        buttonObtiznost.setOnClickListener { updateGraph(barEntries, startDate, endDate) }
+        buttonObtiznost.setOnClickListener {
+            // Zde můžete aktualizovat RecyclerView, pokud je to potřeba
+            lifecycleScope.launch {
+                val cesty = cestaModel.getAllCestaForDateRange(startDate, endDate)
+                updateRecyclerViewCesty(cesty)
+            }
+        }
 
         buttonStylPrelzeu.setOnClickListener {
             val barEntries2 = controller.getDataGraph2(requireContext(), startDate, endDate)
@@ -172,9 +188,10 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
     }
 
     private fun updateRecyclerViewCesty(cesty: List<CestaEntity>) {
+        val reversedCesty = cesty.reversed()
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerViewRoutes.layoutManager = layoutManager
-        recyclerViewRoutes.adapter = CestaAdapter(cesty) { cestaId ->
+        recyclerViewRoutes.adapter = CestaAdapter(reversedCesty) { cestaId ->
             val intent = Intent(requireContext(), AddActivity::class.java)
             intent.putExtra("cestaId", cestaId)
             startActivity(intent)
