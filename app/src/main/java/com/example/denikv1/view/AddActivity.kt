@@ -59,12 +59,8 @@ class AddActivity : AppCompatActivity() {
     private var oldCesta: CestaEntity? = null
     lateinit var locationHelper: LocationHelper
     private val locationListener = MyLocationListener(this)
-    private lateinit var btnGetLocation: Button
     private lateinit var layoutUIAA: LinearLayout
     private lateinit var layoutFrench: LinearLayout
-
-    private lateinit var buttonUIAA: Button
-    private lateinit var buttonFrench: Button
 
     @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {

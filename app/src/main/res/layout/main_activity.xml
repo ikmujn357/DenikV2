@@ -23,9 +23,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="10dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
                 android:gravity="center"
                 android:background="@drawable/window_shape"
                 app:layout_collapseMode="pin">

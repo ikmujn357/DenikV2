@@ -45,13 +45,30 @@
                 android:baselineAligned="true"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
-
-                <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/window_shape"
+                    android:baselineAligned="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button_obtížnost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="Obtížnost"
                     android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/button_stylprelezu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Styl přelezu"
+                    android:textSize="18sp" />
+
+                </LinearLayout>
 
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/graph_obtiznost_denni"
@@ -64,41 +81,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/layout_styl_prelezu"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="16dp"
-                android:background="@android:color/transparent" />
-
-            <LinearLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/window_shape"
-                android:baselineAligned="true"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="Styl přelezu"
-                    android:textSize="18sp" />
-
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/graph_styl_prelezu"
-                    android:layout_width="300dp"
-                    android:layout_height="220dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="14dp" />
-            </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

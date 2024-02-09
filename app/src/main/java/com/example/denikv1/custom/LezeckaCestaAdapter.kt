@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.denikv1.model.CestaEntity
@@ -18,7 +19,15 @@ class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickL
         // Reference na textová pole v layoutu item_cesta
         val cestaName: TextView = view.findViewById(R.id.cestaName)
         val cestaGrade: TextView = view.findViewById(R.id.cestaGrade)
+        val imageView: ImageView = view.findViewById(R.id.imageView)
     }
+
+    // Mapa pro uchování mapování routeChar na zdroje obrázků
+    private val routeCharToImageMap = mapOf(
+        "Silová" to R.drawable.sila,
+        "Technická" to R.drawable.technika,
+        "Kombinace" to R.drawable.kombinace
+    )
 
     // Vytvoří nový ViewHolder vytvořením nového view z layoutu item_cesta
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CestaViewHolder {
@@ -29,11 +38,15 @@ class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickL
     // Nastaví obsah ViewHolderu na základě pozice v seznamu
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CestaViewHolder, position: Int) {
-        val cesta = cesta[position]
+        val currentCesta = cesta[position]
 
         // Nastavení textu v textových polích ViewHolderu
-        holder.cestaName.text = cesta.routeName
-        holder.cestaGrade.text = cesta.gradeNum
+        holder.cestaName.text = currentCesta.routeName
+        holder.cestaGrade.text = currentCesta.gradeNum
+
+        // Nastavení obrázku podle hodnoty routeChar
+        val imageResource = routeCharToImageMap[currentCesta.routeChar] ?: R.drawable.ikonaucesty
+        holder.imageView.setImageResource(imageResource)
 
         // Nastavení odstupu mezi položkami v RecyclerView
         val spacingInPixels = holder.itemView.resources.getDimensionPixelSize(R.dimen.spacing_between_items)
@@ -43,7 +56,7 @@ class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickL
 
         holder.itemView.setOnClickListener {
             // Získání ID cesty a volání Listener
-            val cestaId = cesta.id
+            val cestaId = currentCesta.id
             cestaClickListener.invoke(cestaId)
         }
     }
@@ -52,4 +65,3 @@ class CestaAdapter(private var cesta: List<CestaEntity>, private val cestaClickL
     override fun getItemCount() = cesta.size
 
 }
-

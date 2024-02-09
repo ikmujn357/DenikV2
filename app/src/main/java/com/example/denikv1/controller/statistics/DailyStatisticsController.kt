@@ -62,10 +62,8 @@ class DailyStatisticsControllerImpl(
 
     private fun loadAndDisplayStatistics(startDate: Long, endDate: Long) {
         val barEntries1 = model.getDataGraph1(view.requireContext(), startDate, endDate)
-        val barEntries2 = model.getDataGraph2(view.requireContext(), startDate, endDate)
 
-        view.updateGraph1(barEntries1, startDate, endDate)
-        view.updateGraph2(barEntries2, startDate, endDate)
+        view.updateGraph(barEntries1, startDate, endDate)
     }
 
 

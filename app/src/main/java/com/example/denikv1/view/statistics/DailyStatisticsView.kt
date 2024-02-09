@@ -7,10 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,22 +35,18 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 interface DailyStatisticsView {
-    fun updateGraph1(barEntries: List<BarEntry>, startDate: Long, endDate: Long)
-    fun updateGraph2(barEntries: List<BarEntry>, startDate: Long, endDate: Long)
+    fun updateGraph(barEntries: List<BarEntry>, startDate: Long, endDate: Long)
 }
 
 class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialog.OnDateSetListener {
     private lateinit var controller: DailyStatisticsController
     private lateinit var cestaModel: CestaModel
-    private lateinit var barChart1: BarChart
-    private lateinit var barChart2: BarChart
-
+    private lateinit var barChart: BarChart
     private lateinit var layoutObtiznost: LinearLayout
-    private lateinit var layoutStylPrelezu: LinearLayout
-
     private lateinit var recyclerViewRoutes: RecyclerView
-
     private lateinit var dpd: DatePickerDialog
+    private lateinit var buttonObtiznost: Button
+    private lateinit var buttonStylPrelzeu: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,20 +58,19 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         controller = DailyStatisticsControllerImpl(this, statisticsModel)
 
         // Initialize views
-        barChart1 = view.findViewById(R.id.graph_obtiznost_denni)
-        barChart2 = view.findViewById(R.id.graph_styl_prelezu)
+        barChart = view.findViewById(R.id.graph_obtiznost_denni)
         recyclerViewRoutes = view.findViewById(R.id.recyclerViewRoutesDailyStats)
         layoutObtiznost = view.findViewById(R.id.layout_obtiznost)
-        layoutStylPrelezu = view.findViewById(R.id.layout_styl_prelezu)
 
         // Initialize the date picker dialog
         initializeDatePicker()
-
         showDatePicker()
+
+        buttonObtiznost = view.findViewById(R.id.button_obtížnost)
+        buttonStylPrelzeu = view.findViewById(R.id.button_stylprelezu)
 
         return view
     }
-
 
     private fun initializeDatePicker() {
         val now: Calendar = Calendar.getInstance()
@@ -93,29 +88,22 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
             try {
                 val daysWithRoutes = cestaModel.getAllDatesWithData()
                 val selectableDays = daysWithRoutes.map { day ->
-                    val calendarDay = Calendar.getInstance()
-                    calendarDay.timeInMillis = day
-                    calendarDay
+                    Calendar.getInstance().apply { timeInMillis = day }
                 }.toTypedArray()
 
                 dpd.setSelectableDays(selectableDays)
             } catch (e: Exception) {
-                // Handle exceptions, such as network errors or database errors
                 Log.e("DatePickerDialog", "Error fetching selectable days: ${e.message}")
-                // You can provide feedback to the user or retry the operation
             }
         }
     }
 
-
-    // Method to show the date picker dialog
     private fun showDatePicker() {
         lifecycleScope.launch {
             try {
                 val closestDateWithData = cestaModel.getClosestDateWithData()
                 closestDateWithData?.let { closestDate ->
-                    val calendar = Calendar.getInstance()
-                    calendar.timeInMillis = closestDate
+                    val calendar = Calendar.getInstance().apply { timeInMillis = closestDate }
 
                     dpd.initialize(
                         this@DailyStatisticsFragment,
@@ -129,24 +117,25 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
                         ?.commit()
                 }
             } catch (e: Exception) {
-                // Handle exceptions
                 Log.e("DatePickerDialog", "Error showing date picker: ${e.message}")
             }
         }
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        val selectedDate = Calendar.getInstance()
-        selectedDate.set(Calendar.YEAR, year)
-        selectedDate.set(Calendar.MONTH, monthOfYear)
-        selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        val selectedDate = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, monthOfYear)
+            set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        }
 
         val startDate = selectedDate.clone() as Calendar
+        val endDate = selectedDate.clone() as Calendar
+
         startDate.set(Calendar.HOUR_OF_DAY, 0)
         startDate.set(Calendar.MINUTE, 0)
         startDate.set(Calendar.SECOND, 0)
 
-        val endDate = selectedDate.clone() as Calendar
         endDate.set(Calendar.HOUR_OF_DAY, 23)
         endDate.set(Calendar.MINUTE, 59)
         endDate.set(Calendar.SECOND, 59)
@@ -158,35 +147,27 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         )
     }
 
-    override fun updateGraph1(barEntries: List<BarEntry>, startDate: Long, endDate: Long) {
+    override fun updateGraph(barEntries: List<BarEntry>, startDate: Long, endDate: Long) {
         val xLabels = controller.getXLabelsGraph1(requireContext(), startDate, endDate).toList()
-        setupBarChart(barChart1, barEntries, xLabels)
+        setupBarChart(barChart, barEntries, xLabels)
 
-        if (barEntries.isNotEmpty()) {
-            layoutObtiznost.visibility = View.VISIBLE
-            lifecycleScope.launch {
-                val cesty = cestaModel.getAllCestaForDateRange(startDate, endDate)
-                updateRecyclerViewCesty(cesty)
+        buttonObtiznost.setOnClickListener { updateGraph(barEntries, startDate, endDate) }
+
+        buttonStylPrelzeu.setOnClickListener {
+            val barEntries2 = controller.getDataGraph2(requireContext(), startDate, endDate)
+            val xLabels2 = controller.getXLabelsGraph2(requireContext(), startDate, endDate).toList()
+            setupBarChart(barChart, barEntries2, xLabels2)
+
+            if (barEntries2.isNotEmpty()) {
+                layoutObtiznost.visibility = View.VISIBLE
+                lifecycleScope.launch {
+                    val cesty = cestaModel.getAllCestaForDateRange(startDate, endDate)
+                    updateRecyclerViewCesty(cesty)
+                }
+            } else {
+                layoutObtiznost.visibility = View.GONE
+                recyclerViewRoutes.adapter = null
             }
-        } else {
-            layoutObtiznost.visibility = View.GONE
-            recyclerViewRoutes.adapter = null
-        }
-    }
-
-    override fun updateGraph2(barEntries: List<BarEntry>, startDate: Long, endDate: Long) {
-        val xLabels = controller.getXLabelsGraph2(requireContext(), startDate, endDate).toList()
-        setupBarChart(barChart2, barEntries, xLabels)
-
-        if (barEntries.isNotEmpty()) {
-            layoutStylPrelezu.visibility = View.VISIBLE
-            lifecycleScope.launch {
-                val cesty = cestaModel.getAllCestaForDateRange(startDate, endDate)
-                updateRecyclerViewCesty(cesty)
-            }
-        } else {
-            layoutStylPrelezu.visibility = View.GONE
-            recyclerViewRoutes.adapter = null
         }
     }
 
@@ -220,7 +201,6 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         xAxis.granularity = 1f
         xAxis.setDrawGridLines(false)
 
-        // Nastavení popisků osy X pod každým sloupcem
         xAxis.valueFormatter = IndexAxisValueFormatter(xLabels)
         xAxis.labelCount = xLabels.size
 
@@ -230,15 +210,17 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         yAxis.setDrawGridLines(false)
         yAxis.textSize = 12f
 
-        barChart.isHighlightPerDragEnabled = false
-        barChart.isHighlightPerTapEnabled = false
-        barChart.axisRight.isEnabled = false
-        barChart.description.isEnabled = false
-        barChart.isDoubleTapToZoomEnabled = false
-        barChart.isScaleYEnabled = false
-        barChart.isScaleXEnabled = false
-        barChart.isClickable = false
-        barChart.legend.isEnabled = false
-        barChart.invalidate()
+        barChart.apply {
+            isHighlightPerDragEnabled = false
+            isHighlightPerTapEnabled = false
+            axisRight.isEnabled = false
+            description.isEnabled = false
+            isDoubleTapToZoomEnabled = false
+            isScaleYEnabled = false
+            isScaleXEnabled = false
+            isClickable = false
+            legend.isEnabled = false
+            invalidate()
+        }
     }
 }
