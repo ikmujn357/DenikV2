@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:text="Obtížnost"
+                    android:text="@string/difficulty"
                     android:textSize="18sp" />
 
                 <Button
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:text="Styl přelezu"
+                    android:text="@string/climbingStyleClear"
                     android:textSize="18sp" />
 
                 </LinearLayout>

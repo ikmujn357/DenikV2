@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebView
@@ -50,9 +51,11 @@ class AddActivity : AppCompatActivity() {
     private var selectedDate: Long = 0
     private var selectedButton: ImageButton? = null
     private var selectedButton2: ImageButton? = null
+    private var selectedButton3: ImageButton? = null
     private var cestaId: Long = 0
     private var selectedButtonTag: String? = null
     private var selectedButtonTag2: String? = null
+    private var selectedButtonTag3: String? = null
     private var isCestaCreated: Boolean = false
     private var currentCesta: CestaEntity? = null
     private var isCestaDeleted: Boolean = false
@@ -395,7 +398,7 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
-        val gradeUIAAButtons = listOf(
+        val gradeButtons = listOf(
             R.id.button_plus to "+",
             R.id.button_nula to "",
             R.id.button_minus to "-",
@@ -408,40 +411,68 @@ class AddActivity : AppCompatActivity() {
             R.id.button_technika to "Technická",
             R.id.button_kombinace to "Kombinace"
         )
-        gradeUIAAButtons.forEach { (buttonId, actionName) ->
+
+        val frenchPlusButtons = listOf(
+            R.id.button_plusFrench to "plusfrench"
+
+        )
+
+        gradeButtons.forEach { (buttonId, actionName) ->
             setupButtonAction(actionName, findViewById(buttonId))
         }
 
         characterButtons.forEach { (buttonId, actionName) ->
             setupButtonAction(actionName, findViewById(buttonId))
         }
+
+        frenchPlusButtons.forEach { (buttonId, actionName) ->
+            setupButtonAction(actionName, findViewById(buttonId))
+        }
     }
 
     private fun setupButtonAction(actionName: String, button: ImageButton) {
         button.setOnClickListener {
-            val isSelectedButton = when (actionName) {
-                in listOf("+", "", "-", "a", "b", "c") -> selectedButton
-                in listOf("Silová", "Technická", "Kombinace") -> selectedButton2
-                else -> null
-            }
-            // Odmáčkne předchozí tlačítko, pokud existuje
-            isSelectedButton?.isSelected = false
-            button.isSelected = true
-            when (actionName) {
-                in listOf("+", "", "-", "a", "b", "c") -> {
-                    selectedButtonTag = actionName
-                    selectedButton = button
+            // Pokud klikáme na tlačítko plusFrench
+            if (actionName == "plusfrench") {
+                // Pokud je tlačítko již vybráno, odznačíme ho
+                if (button.isSelected) {
+                    button.isSelected = false
+                    selectedButtonTag3 = null
+                    selectedButton3 = null
+                   // Log.d("Moje aplikace", "Odznačeno")
+                } else { // Jinak ho označíme
+                    button.isSelected = true
+                    selectedButtonTag3 = "plusfrench"
+                    selectedButton3 = button
+                  // Log.d("Moje aplikace", "Označeno")
                 }
-                in listOf("Silová", "Technická", "Kombinace") -> {
-                    selectedButtonTag2 = when (actionName) {
-                        "Silová" -> "Síla"
-                        "Technická" -> "Technika"
-                        "Kombinace" -> "Kombinace"
-                        else -> null
+            } else { // Pokud klikáme na jiné tlačítko
+                val isSelectedButton = when (actionName) {
+                    in listOf("+", "", "-", "a", "b", "c") -> selectedButton
+                    in listOf("Silová", "Technická", "Kombinace") -> selectedButton2
+                    else -> null
+                }
+
+                // Odmáčkne předchozí tlačítko, pokud existuje
+                isSelectedButton?.isSelected = false
+                button.isSelected = true
+                when (actionName) {
+                    in listOf("+", "", "-", "a", "b", "c") -> {
+                        selectedButtonTag = actionName
+                        selectedButton = button
                     }
-                    selectedButton2 = button
+                    in listOf("Silová", "Technická", "Kombinace") -> {
+                        selectedButtonTag2 = when (actionName) {
+                            "Silová" -> "Síla"
+                            "Technická" -> "Technika"
+                            "Kombinace" -> "Kombinace"
+                            else -> null
+                        }
+                        selectedButton2 = button
+                    }
                 }
             }
+
             // Aktualizujte barvy tlačítek
             updateSelectedButtonView()
             onButtonClicked(button)
@@ -449,41 +480,58 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+
+
     private fun onButtonClicked(view: View) {
         // Odmáčkne předchozí tlačítko, pokud existuje
         when (view) {
             selectedButton -> selectedButton?.isSelected = false
             selectedButton2 -> selectedButton2?.isSelected = false
+            selectedButton3 -> selectedButton3?.isSelected = false
         }
 
-        view.isSelected = true
-        when (view.id) {
-            R.id.button_plus, R.id.button_nula, R.id.button_minus -> {
-                selectedButtonTag = when (view.id) {
-                    R.id.button_plus -> "plus"
-                    R.id.button_nula -> "nula"
-                    R.id.button_minus -> "minus"
-                    R.id.button_a -> "a"
-                    R.id.button_b -> "b"
-                    R.id.button_c -> "c"
-                    else -> null
-                }
-                selectedButton = view as? ImageButton
+        // Pokud klikáme na tlačítko plusFrench
+        if (view.id == R.id.button_plusFrench) {
+            // Invertovat stav tlačítka (přepnout mezi označením a odznačením)
+            selectedButton3?.isSelected = !(selectedButton3?.isSelected ?: false)
+            if (selectedButton3?.isSelected == true) {
+                selectedButtonTag3 = "plusfrench"
+                selectedButton3 = view as? ImageButton
+            } else {
+                selectedButtonTag3 = null
+                selectedButton3 = null
             }
-            R.id.button_sila, R.id.button_technika, R.id.button_kombinace -> {
-                selectedButtonTag2 = when (view.id) {
-                    R.id.button_sila -> "Síla"
-                    R.id.button_technika -> "Technika"
-                    R.id.button_kombinace -> "Kombinace"
-                    else -> null
+        } else { // Pokud klikáme na jiné tlačítko
+            view.isSelected = true
+            when (view.id) {
+                R.id.button_plus, R.id.button_nula, R.id.button_minus -> {
+                    selectedButtonTag = when (view.id) {
+                        R.id.button_plus -> "plus"
+                        R.id.button_nula -> "nula"
+                        R.id.button_minus -> "minus"
+                        R.id.button_a -> "a"
+                        R.id.button_b -> "b"
+                        R.id.button_c -> "c"
+                        else -> null
+                    }
+                    selectedButton = view as? ImageButton
                 }
-                selectedButton2 = view as? ImageButton
+                R.id.button_sila, R.id.button_technika, R.id.button_kombinace -> {
+                    selectedButtonTag2 = when (view.id) {
+                        R.id.button_sila -> "Síla"
+                        R.id.button_technika -> "Technika"
+                        R.id.button_kombinace -> "Kombinace"
+                        else -> null
+                    }
+                    selectedButton2 = view as? ImageButton
+                }
             }
         }
 
         // Aktualizujte barvy tlačítek
         updateSelectedButtonView()
     }
+
 
     private fun updateSelectedButtonView() {
         val buttonPlus: ImageButton = findViewById(R.id.button_plus)
@@ -493,6 +541,8 @@ class AddActivity : AppCompatActivity() {
         val buttonA: ImageButton = findViewById(R.id.button_a)
         val buttonB: ImageButton = findViewById(R.id.button_b)
         val buttonC: ImageButton = findViewById(R.id.button_c)
+
+        val buttonPlusFrench: ImageButton = findViewById(R.id.button_plusFrench)
 
         val buttonSila: ImageButton = findViewById(R.id.button_sila)
         val buttonTechnika: ImageButton = findViewById(R.id.button_technika)
@@ -522,6 +572,11 @@ class AddActivity : AppCompatActivity() {
         buttonSila.setBackgroundResource(if (selectedButtonTag2 == "Síla") R.drawable.icon_selection_background else R.color.polozka)
         buttonTechnika.setBackgroundResource(if (selectedButtonTag2 == "Technika") R.drawable.icon_selection_background else R.color.polozka)
         buttonKombinace.setBackgroundResource(if (selectedButtonTag2 == "Kombinace") R.drawable.icon_selection_background else R.color.polozka)
+
+        when (selectedButtonTag3) {
+            "plusfrench" -> buttonPlusFrench.isSelected = true
+        }
+        buttonPlusFrench.setBackgroundResource(if (selectedButtonTag3 == "plusfrench") R.drawable.icon_selection_background else R.color.polozka)
     }
 
     private fun setupSpinner() {
@@ -567,11 +622,16 @@ class AddActivity : AppCompatActivity() {
             "Kombinace" -> "Kombinace"
             else -> ""
         }
+        val frenchPlus = when (selectedButtonTag3){
+            "plusfrench" -> "+"
+            else -> ""
+        }
+
 
         val cestaName = routeNameEditText.text.toString()
         val fallCountString = fallEditText.text.toString()
         val styleSpinner = routeStyleSpinner.selectedItem.toString()
-        val gradeSpinner = routeGradeSpinner.selectedItem.toString() + signImage
+        val gradeSpinner = routeGradeSpinner.selectedItem.toString() + signImage + frenchPlus
         val minuteString = minuteEditText.text.toString()
         val secondString = secondEditText.text.toString()
         val descriptionroute = descriptionEditText.text.toString()
@@ -664,50 +724,66 @@ class AddActivity : AppCompatActivity() {
         val styleLevels = resources.getStringArray(R.array.Style)
 
         // Rozdělení hodnoty gradeNUM
-        val gradeNumParts = cesta.gradeNum.split(Regex("(?<=\\d)(?=[\\+\\-abc])"))
+        val gradeNumParts = cesta.gradeNum.split(Regex("(?<=\\d)(?=[+\\-a-zA-Z])|(?<=[+\\-a-zA-Z])"))
+        println("Části: ${gradeNumParts.joinToString(" ")}")
+
 
         // Nastavení hodnoty čísla do spinneru
         routeGradeSpinner.setSelection(gradeLevels.indexOf(gradeNumParts[0]))
-
+        gradeNumParts.forEach { println(it) }
         // Nastavení vybraného tlačítka znaku
-        when (gradeNumParts.getOrNull(1)) {
-            "+" -> {
-                selectedButtonTag = "plus"
+        selectedButtonTag = when (gradeNumParts.getOrNull(1)) {
+            "+", "-" -> {
                 // Show topPanel and hide topPanelFrench
                 layoutUIAA.visibility = View.VISIBLE
                 layoutFrench.visibility = View.GONE
+                if (gradeNumParts.getOrNull(1) == "+") "plus" else "minus"
             }
-            "-" -> {
-                selectedButtonTag = "minus"
-                // Show topPanel and hide topPanelFrench
-                layoutUIAA.visibility = View.VISIBLE
-                layoutFrench.visibility = View.GONE
-            }
-            "a" -> {
-                selectedButtonTag = "a"
+            "a", "b", "c" -> {
                 // Show topPanelFrench and hide topPanel
                 layoutUIAA.visibility = View.GONE
                 layoutFrench.visibility = View.VISIBLE
-            }
-            "b" -> {
-                selectedButtonTag = "b"
-                // Show topPanelFrench and hide topPanel
-                layoutUIAA.visibility = View.GONE
-                layoutFrench.visibility = View.VISIBLE
-            }
-            "c" -> {
-                selectedButtonTag = "c"
-                // Show topPanelFrench and hide topPanel
-                layoutUIAA.visibility = View.GONE
-                layoutFrench.visibility = View.VISIBLE
+                gradeNumParts.getOrNull(1)
             }
             else -> {
-                selectedButtonTag = "nula"
-                // Show topPanel and hide topPanelFrench
+
                 layoutUIAA.visibility = View.VISIBLE
                 layoutFrench.visibility = View.GONE
+                "nula"
             }
         }
+
+        selectedButtonTag = when (gradeNumParts.getOrNull(1)) {
+            "+" -> "plus"
+            "-" -> "minus"
+            "a" -> "a"
+            "b" -> "b"
+            "c" -> "c"
+            else -> "nula"
+        }
+
+
+        selectedButtonTag2 = when (cesta.routeChar) {
+            "Silová" -> "Síla"
+            "Technická" -> "Technika"
+            "Kombinace" -> "Kombinace"
+            else -> null
+        }
+
+        // Aktualizace odkazu na vybrané tlačítko pro informace o stylu
+        selectedButton2 = when (selectedButtonTag2) {
+            "Síla" -> findViewById(R.id.button_sila)
+            "Technika" -> findViewById(R.id.button_technika)
+            "Kombinace" -> findViewById(R.id.button_kombinace)
+            else -> null
+        }
+
+        selectedButtonTag3 = when (gradeNumParts.getOrNull(2)) {
+            "+" -> "plusfrench"
+            else -> null
+        }
+
+
         // Znovu aktualizovat zobrazení vybraného tlačítka
         updateSelectedButtonView()
         // Nastavení data do DatePickeru

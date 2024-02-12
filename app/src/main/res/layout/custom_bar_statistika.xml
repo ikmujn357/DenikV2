@@ -22,7 +22,7 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
         android:layout_marginStart="32dp"
-        android:text="Statistika"
+        android:text="@string/Statistics"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -40,7 +40,7 @@
             android:layout_height="48dp"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/day"
-            android:text="denní"
+            android:text="@string/daily"
             android:textSize="10sp" />
         <Button
             android:id="@+id/button_celkova"
@@ -48,7 +48,7 @@
             android:layout_height="48dp"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/allday"
-            android:text="celková"
+            android:text="@string/full_statistic"
             android:textSize="10sp" />
 
     </LinearLayout>

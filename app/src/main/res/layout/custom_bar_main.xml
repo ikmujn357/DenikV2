@@ -28,7 +28,7 @@
             android:id="@+id/button_statistics"
             android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:text="Statistika"
+            android:text="@string/Statistics"
             android:textSize="10sp"
             android:drawableTop="@drawable/statistics"
             android:background="@android:color/transparent" />
@@ -39,7 +39,7 @@
             android:layout_height="40dp"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/download"
-            android:text="Export"
+            android:text="@string/export"
             android:textSize="10sp" />
 
     </LinearLayout>

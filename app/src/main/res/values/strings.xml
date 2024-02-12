@@ -11,12 +11,13 @@
     <string name="EnterRouteName">Zadejte jméno cesty</string>
     <string name="routeName">Jméno cesty:</string>
     <string name="climbingStyle">Styl přelezu:</string>
+    <string name="climbingStyleClear">Styl přelezu</string>
     <string name="fallCount">Počet pádů:</string>
     <string name="entryFallCount">Zadejte počet pádů</string>
     <string name="grade">Obtížnost:</string>
     <string name="routeCharacter">Charakter cesty:</string>
     <string name="additionalInformation">Doplňující informace</string>
-    <string name="timeToclimb">Čas výlezu:</string>
+    <string name="timeToclimb">Čas přelezu:</string>
     <string name="minutes">Minut</string>
     <string name="colon">:</string>
     <string name="seconds">Sekund</string>
@@ -75,5 +76,12 @@
     <string name="mdtp_item_is_selected"><xliff:g id="item" example="2013">%1$s</xliff:g> selected</string>
     <string name="mdtp_day_of_week_label_typeface" translatable="false">sans-serif</string>
     <string name="mdtp_sans_serif" translatable="false">sans-serif</string>
+    <string name="Delete">Smazat</string>
+    <string name="add_route">Přidat cestu</string>
+    <string name="Statistics">Statistika</string>
+    <string name="export">Export</string>
+    <string name="difficulty">Obtížnost</string>
+    <string name="daily">denní</string>
+    <string name="full_statistic">celková</string>
 
 </resources>

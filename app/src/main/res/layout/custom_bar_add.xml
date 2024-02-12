@@ -22,7 +22,7 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
         android:layout_marginStart="32dp"
-        android:text="Přidat cestu"
+        android:text="@string/add_route"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -40,7 +40,7 @@
             android:layout_height="48dp"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/delete"
-            android:text="Smazat"
+            android:text="@string/Delete"
             android:textSize="10sp" />
 
     </LinearLayout>
