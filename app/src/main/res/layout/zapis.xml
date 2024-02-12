@@ -172,6 +172,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/icon_selection_background"
                         android:layout_weight="1"
+                        android:text="UIAA"
                         android:contentDescription="@string/minus"/>
                     <Button
                         android:id="@+id/button_French"
@@ -180,6 +181,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/icon_selection_background"
                         android:layout_weight="1"
+                        android:text="French"
                         android:contentDescription="@string/minus"/>
 
                 </LinearLayout>

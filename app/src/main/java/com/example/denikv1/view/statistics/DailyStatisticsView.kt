@@ -69,6 +69,8 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         buttonObtiznost = view.findViewById(R.id.button_obtížnost)
         buttonStylPrelzeu = view.findViewById(R.id.button_stylprelezu)
 
+        // Call the method to setup bar chart with empty data initially to set the correct XAxis properties
+        setupBarChart(barChart, emptyList(), emptyList())
 
         return view
     }
@@ -149,7 +151,8 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
 
         lifecycleScope.launch {
             try {
-                val cesty = cestaModel.getAllCestaForDateRange(startDate.timeInMillis, endDate.timeInMillis)
+                val cesty =
+                    cestaModel.getAllCestaForDateRange(startDate.timeInMillis, endDate.timeInMillis)
                 updateRecyclerViewCesty(cesty)
             } catch (e: Exception) {
                 Log.e("DailyStatisticsFragment", "Error updating RecyclerView: ${e.message}")
@@ -162,6 +165,12 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         setupBarChart(barChart, barEntries, xLabels)
 
         buttonObtiznost.setOnClickListener {
+            // Zde aktualizujeme graf pomocí dat pro obtížnost
+            val barEntries1 = controller.getDataGraph1(requireContext(), startDate, endDate)
+            val xLabels1 =
+                controller.getXLabelsGraph1(requireContext(), startDate, endDate).toList()
+            setupBarChart(barChart, barEntries1, xLabels1)
+
             // Zde můžete aktualizovat RecyclerView, pokud je to potřeba
             lifecycleScope.launch {
                 val cesty = cestaModel.getAllCestaForDateRange(startDate, endDate)
@@ -171,7 +180,8 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
 
         buttonStylPrelzeu.setOnClickListener {
             val barEntries2 = controller.getDataGraph2(requireContext(), startDate, endDate)
-            val xLabels2 = controller.getXLabelsGraph2(requireContext(), startDate, endDate).toList()
+            val xLabels2 =
+                controller.getXLabelsGraph2(requireContext(), startDate, endDate).toList()
             setupBarChart(barChart, barEntries2, xLabels2)
 
             if (barEntries2.isNotEmpty()) {
@@ -198,7 +208,11 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         }
     }
 
-    private fun setupBarChart(barChart: BarChart, barEntries: List<BarEntry>, xLabels: List<String>) {
+    private fun setupBarChart(
+        barChart: BarChart,
+        barEntries: List<BarEntry>,
+        xLabels: List<String>
+    ) {
         val barDataSet = BarDataSet(barEntries, null)
 
         barDataSet.color = ContextCompat.getColor(requireContext(), R.color.purple_700)
@@ -219,7 +233,7 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         xAxis.setDrawGridLines(false)
 
         xAxis.valueFormatter = IndexAxisValueFormatter(xLabels)
-        xAxis.labelCount = xLabels.size
+        xAxis.labelCount = xLabels.size  // Nastavte počet zobrazených značek na ose x
 
         val yAxis = barChart.axisLeft
         yAxis.axisMinimum = 0f
@@ -240,4 +254,5 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
             invalidate()
         }
     }
+
 }

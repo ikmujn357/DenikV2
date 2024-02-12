@@ -66,21 +66,18 @@ class AddActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.zapis)
-
         cestaId = calculateNextCestaId()
-
         setupCustomActionBar()
         setupUIComponents()
         toggleVisibility()
         setupButtons()
+        showGradeSystem()
         setupSpinner()
-
         revertChangesButton()
         saveAndBack()
 
         val receivedIntent = intent
         cestaId = receivedIntent.getLongExtra("cestaId", 0)
-
         if (cestaId != 0L) {
             lifecycleScope.launch {
                 val cesta = cestaModel.getCestaById(cestaId)
@@ -89,10 +86,8 @@ class AddActivity : AppCompatActivity() {
                 oldCesta = cesta
             }
         }
-
         // Inicializace LocationHelper
         locationHelper = LocationHelper(this)
-
         // Kontrola oprávnění
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -110,44 +105,14 @@ class AddActivity : AppCompatActivity() {
             )
         }
         updateEditTextWithLastLocation()
-
-
-        layoutUIAA = findViewById(R.id.topPanel)
-        layoutFrench = findViewById(R.id.topPanelFrench)
-
-        // Inicializace tlačítek
-        val buttonUIAA = findViewById<Button>(R.id.button_UIAA)
-        buttonUIAA.text = "UIAA"
-        val buttonFrench = findViewById<Button>(R.id.button_French)
-        buttonFrench.text = "French"
-        layoutUIAA.visibility = View.VISIBLE
-        layoutFrench.visibility = View.GONE
-
-        buttonUIAA.setOnClickListener {
-            // Nastavit viditelnost layoutu UIAA na VISIBLE
-            layoutUIAA.visibility = View.VISIBLE
-            // Nastavit viditelnost layoutu French na GONE
-            layoutFrench.visibility = View.GONE
-            setupGradeSpinner(R.array.GradeUIAA)
-        }
-
-        buttonFrench.setOnClickListener {
-            // Nastavit viditelnost layoutu French na VISIBLE
-            layoutFrench.visibility = View.VISIBLE
-            // Nastavit viditelnost layoutu UIAA na GONE
-            layoutUIAA.visibility = View.GONE
-            setupGradeSpinner(R.array.GradeFrench)
-        }
     }
 
     private fun setupGradeSpinner(stringArrayId: Int) {
         val resources: Resources = resources
         val gradeLevels = resources.getStringArray(stringArrayId)
         val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
-
         val adapter = CustomArrayAdapter(this, R.layout.item_spinner, gradeLevels.toList())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
         routeGradeSpinner.adapter = adapter
     }
 
@@ -157,7 +122,6 @@ class AddActivity : AppCompatActivity() {
         val longitudeEditText = findViewById<EditText>(R.id.longitudeEditText)
         val webView: WebView = findViewById(R.id.webView)
         val scrollView: ScrollView = findViewById(R.id.scrollViewZapis)
-
         webView.setOnTouchListener { _, event ->
             // Zabránit posunu ScrollView, pokud se dotyky nacházejí v mapě
             if (isTouchInsideMap(event)) {
@@ -169,7 +133,6 @@ class AddActivity : AppCompatActivity() {
             }
             false // Vrátit false, aby se prováděly další dotyky
         }
-
         // Nastavení cesty k HTML souboru s mapou
         webView.settings.javaScriptEnabled = true
         // Přidáme rozhraní pro žádost o aktualizace polohy
@@ -199,9 +162,7 @@ class AddActivity : AppCompatActivity() {
             WebAppInterface(latitudeEditText, longitudeEditText),
             "Android"
         )
-
         webView.webViewClient = WebViewClient()
-
         webView.loadUrl("file:///android_asset/leaflet_map.html")
     }
 
@@ -209,18 +170,15 @@ class AddActivity : AppCompatActivity() {
         val webView: WebView = findViewById(R.id.webView)
         val latitude = cesta.latitude
         val longitude = cesta.longitude
-
         val javascriptCommand = "updateMapToCurrentLocation($latitude, $longitude);"
         webView.post { webView.loadUrl("javascript:$javascriptCommand") }
     }
 
     private fun isTouchInsideMap(event: MotionEvent): Boolean {
         val webView: WebView = findViewById(R.id.webView)
-
         // Zjistěte souřadnice dotyku
         val x = event.x.toInt()
         val y = event.y.toInt()
-
         // Zjistěte souřadnice oblasti mapy ve webView
         val webViewLocation = IntArray(2)
         webView.getLocationOnScreen(webViewLocation)
@@ -254,7 +212,6 @@ class AddActivity : AppCompatActivity() {
     private fun revertChangesButton() {
         val buttonShowAdd: Button = findViewById(R.id.button_vratit_zmeny)
         buttonShowAdd.setOnClickListener {
-
             if (cestaId.toInt() == 0) {
                 lifecycleScope.launch {
                     val intent = Intent(this@AddActivity, CestaViewImp::class.java)
@@ -280,16 +237,36 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+    private fun showGradeSystem() {
+        val buttonUIAA = findViewById<Button>(R.id.button_UIAA)
+        val buttonFrench = findViewById<Button>(R.id.button_French)
+        layoutUIAA = findViewById(R.id.topPanel)
+        layoutFrench = findViewById(R.id.topPanelFrench)
+
+        layoutUIAA.visibility = View.VISIBLE
+        layoutFrench.visibility = View.GONE
+        buttonUIAA.setOnClickListener {
+            layoutUIAA.visibility = View.VISIBLE
+            layoutFrench.visibility = View.GONE
+            setupGradeSpinner(R.array.GradeUIAA)
+        }
+        buttonFrench.setOnClickListener {
+            // Nastavit viditelnost layoutu French na VISIBLE
+            layoutFrench.visibility = View.VISIBLE
+            // Nastavit viditelnost layoutu UIAA na GONE
+            layoutUIAA.visibility = View.GONE
+            setupGradeSpinner(R.array.GradeFrench)
+        }
+    }
+
     private fun setupCustomActionBar() {
         val customBarAdd = layoutInflater.inflate(R.layout.custom_bar_add, FrameLayout(this))
         supportActionBar?.customView = customBarAdd
         supportActionBar?.setDisplayShowCustomEnabled(true)
         supportActionBar?.elevation = 0f
-
         customBarAdd.findViewById<Button>(R.id.action_back).setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
         customBarAdd.findViewById<Button>(R.id.deleteButton).setOnClickListener {
             lifecycleScope.launch {
                 currentCesta?.let { deleteCesta(it) }
@@ -325,10 +302,8 @@ class AddActivity : AppCompatActivity() {
         val datePicker: DatePicker = findViewById(R.id.datePicker)
         val latitudeEditText: EditText = findViewById(R.id.latitudeEditText)
         val longitudeEditText: EditText = findViewById(R.id.longitudeEditText)
-
         val textWatcher = createTextWatcher()
         val itemSelectedListener = createItemSelectedListener()
-
         routeNameEditText.addTextChangedListener(textWatcher)
         fallEditText.addTextChangedListener(textWatcher)
         routeStyleSpinner.onItemSelectedListener = itemSelectedListener
@@ -338,10 +313,8 @@ class AddActivity : AppCompatActivity() {
         secondEditText.addTextChangedListener(textWatcher)
         latitudeEditText.addTextChangedListener(textWatcher)
         longitudeEditText.addTextChangedListener(textWatcher)
-
         opinionRatingBar.setOnRatingBarChangeListener { _, _, _ -> saveCesta() }
         setupDatePickerListener(datePicker)
-
         val linearLayoutFalls: LinearLayout = findViewById(R.id.falls)
         routeStyleSpinner.onItemSelectedListener = createClimbStyleItemSelectedListener(linearLayoutFalls)
     }
@@ -362,7 +335,6 @@ class AddActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 saveCesta()
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         return itemSelectedListener
@@ -389,7 +361,6 @@ class AddActivity : AppCompatActivity() {
             ) {
                 // Získání vybrané položky ze Spinneru
                 val selectedStyle = parentView?.getItemAtPosition(position).toString()
-
                 // Nastavení viditelnosti pole pro počet pádů podle vybraného stylu
                 linearLayoutFalls.visibility = if (selectedStyle.equals("On sight", ignoreCase = true) ||
                     selectedStyle.equals("Flash", ignoreCase = true)
@@ -399,7 +370,6 @@ class AddActivity : AppCompatActivity() {
                     View.VISIBLE
                 }
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
@@ -408,13 +378,8 @@ class AddActivity : AppCompatActivity() {
     private fun toggleVisibility() {
         val showHideButton: LinearLayout = findViewById(R.id.showHideButton)
         val showHideButtonImg: ImageView = findViewById(R.id.showHideButtonImg)
-
         val descriptionAll: LinearLayout = findViewById(R.id.Description_hide)
-
-
         descriptionAll.visibility = View.GONE
-
-
         showHideButton.setOnClickListener {
             if (descriptionAll.visibility == View.VISIBLE) {
                 // Pokud jsou položky viditelné, skryj je
@@ -430,19 +395,20 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
-        val gradeButtons = listOf(
+        val gradeUIAAButtons = listOf(
             R.id.button_plus to "+",
             R.id.button_nula to "",
-            R.id.button_minus to "-"
+            R.id.button_minus to "-",
+            R.id.button_a to "a",
+            R.id.button_b to "b",
+            R.id.button_c to "c"
         )
-
         val characterButtons = listOf(
             R.id.button_sila to "Silová",
             R.id.button_technika to "Technická",
             R.id.button_kombinace to "Kombinace"
         )
-
-        gradeButtons.forEach { (buttonId, actionName) ->
+        gradeUIAAButtons.forEach { (buttonId, actionName) ->
             setupButtonAction(actionName, findViewById(buttonId))
         }
 
@@ -454,24 +420,16 @@ class AddActivity : AppCompatActivity() {
     private fun setupButtonAction(actionName: String, button: ImageButton) {
         button.setOnClickListener {
             val isSelectedButton = when (actionName) {
-                in listOf("+", "", "-") -> selectedButton
+                in listOf("+", "", "-", "a", "b", "c") -> selectedButton
                 in listOf("Silová", "Technická", "Kombinace") -> selectedButton2
                 else -> null
             }
-
             // Odmáčkne předchozí tlačítko, pokud existuje
             isSelectedButton?.isSelected = false
-
             button.isSelected = true
-
             when (actionName) {
-                in listOf("+", "", "-") -> {
-                    selectedButtonTag = when (actionName) {
-                        "+" -> "plus"
-                        "" -> "nula"
-                        "-" -> "minus"
-                        else -> null
-                    }
+                in listOf("+", "", "-", "a", "b", "c") -> {
+                    selectedButtonTag = actionName
                     selectedButton = button
                 }
                 in listOf("Silová", "Technická", "Kombinace") -> {
@@ -484,10 +442,8 @@ class AddActivity : AppCompatActivity() {
                     selectedButton2 = button
                 }
             }
-
             // Aktualizujte barvy tlačítek
             updateSelectedButtonView()
-
             onButtonClicked(button)
             saveCesta()
         }
@@ -501,13 +457,15 @@ class AddActivity : AppCompatActivity() {
         }
 
         view.isSelected = true
-
         when (view.id) {
             R.id.button_plus, R.id.button_nula, R.id.button_minus -> {
                 selectedButtonTag = when (view.id) {
                     R.id.button_plus -> "plus"
                     R.id.button_nula -> "nula"
                     R.id.button_minus -> "minus"
+                    R.id.button_a -> "a"
+                    R.id.button_b -> "b"
+                    R.id.button_c -> "c"
                     else -> null
                 }
                 selectedButton = view as? ImageButton
@@ -532,6 +490,10 @@ class AddActivity : AppCompatActivity() {
         val buttonNula: ImageButton = findViewById(R.id.button_nula)
         val buttonMinus: ImageButton = findViewById(R.id.button_minus)
 
+        val buttonA: ImageButton = findViewById(R.id.button_a)
+        val buttonB: ImageButton = findViewById(R.id.button_b)
+        val buttonC: ImageButton = findViewById(R.id.button_c)
+
         val buttonSila: ImageButton = findViewById(R.id.button_sila)
         val buttonTechnika: ImageButton = findViewById(R.id.button_technika)
         val buttonKombinace: ImageButton = findViewById(R.id.button_kombinace)
@@ -540,18 +502,23 @@ class AddActivity : AppCompatActivity() {
             "plus" -> buttonPlus.isSelected = true
             "nula" -> buttonNula.isSelected = true
             "minus" -> buttonMinus.isSelected = true
+            "a" -> buttonA.isSelected = true
+            "b" -> buttonB.isSelected = true
+            "c" -> buttonC.isSelected = true
         }
 
         buttonPlus.setBackgroundResource(if (selectedButtonTag == "plus") R.drawable.icon_selection_background else R.color.polozka)
         buttonNula.setBackgroundResource(if (selectedButtonTag == "nula") R.drawable.icon_selection_background else R.color.polozka)
         buttonMinus.setBackgroundResource(if (selectedButtonTag == "minus") R.drawable.icon_selection_background else R.color.polozka)
+        buttonA.setBackgroundResource(if (selectedButtonTag == "a") R.drawable.icon_selection_background else R.color.polozka)
+        buttonB.setBackgroundResource(if (selectedButtonTag == "b") R.drawable.icon_selection_background else R.color.polozka)
+        buttonC.setBackgroundResource(if (selectedButtonTag == "c") R.drawable.icon_selection_background else R.color.polozka)
 
         when (selectedButtonTag2) {
             "Síla" -> buttonSila.isSelected = true
             "Technika" -> buttonTechnika.isSelected = true
             "Kombinace" -> buttonKombinace.isSelected = true
         }
-
         buttonSila.setBackgroundResource(if (selectedButtonTag2 == "Síla") R.drawable.icon_selection_background else R.color.polozka)
         buttonTechnika.setBackgroundResource(if (selectedButtonTag2 == "Technika") R.drawable.icon_selection_background else R.color.polozka)
         buttonKombinace.setBackgroundResource(if (selectedButtonTag2 == "Kombinace") R.drawable.icon_selection_background else R.color.polozka)
@@ -562,12 +529,10 @@ class AddActivity : AppCompatActivity() {
         val styleLevels = resources.getStringArray(R.array.Style)
         val routeGradeSpinner: Spinner = findViewById(R.id.difficultySpinner)
         val routeStyleSpinner: Spinner = findViewById(R.id.styleSpinner)
-
         val adapterDif = CustomArrayAdapter(this, R.layout.item_spinner, difficultyLevels.toList())
         val adapterStyle = CustomArrayAdapter(this, R.layout.item_spinner, styleLevels.toList())
         adapterDif.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         adapterStyle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
         routeGradeSpinner.adapter = adapterDif
         routeStyleSpinner.adapter = adapterStyle
     }
@@ -590,6 +555,9 @@ class AddActivity : AppCompatActivity() {
                 "plus" -> "+"
                 "nula" -> ""
                 "minus" -> "-"
+                "a" -> "a"
+                "b" -> "b"
+                "c" -> "c"
                 else -> ""
             }
         }
@@ -609,7 +577,6 @@ class AddActivity : AppCompatActivity() {
         val descriptionroute = descriptionEditText.text.toString()
         val latitude = latitudeEditText.text.toString()
         val longitude = longitudeEditText.text.toString()
-
         val currentDate = if (selectedDate == 0L) System.currentTimeMillis() else selectedDate
 
         if (cestaName.isNotBlank()) {
@@ -618,7 +585,6 @@ class AddActivity : AppCompatActivity() {
             } else {
                 0
             }
-
             val timeSecond = if (secondString.isNotBlank()) {
                 secondString.toInt()
             } else {
@@ -630,7 +596,6 @@ class AddActivity : AppCompatActivity() {
                 val existingCesta = currentCesta?.let {
                     cestaController.getCestaById(it.id)
                 }
-
 
                 if (existingCesta==null) {
                     val newCesta = CestaEntity(
@@ -667,7 +632,6 @@ class AddActivity : AppCompatActivity() {
                     existingCesta.date = currentDate
                     existingCesta.latitude = latitude.toDoubleOrNull() ?: 0.0
                     existingCesta.longitude = longitude.toDoubleOrNull() ?: 0.0
-
                     cestaModel.updateCesta(existingCesta)
                 }
             }
@@ -700,35 +664,62 @@ class AddActivity : AppCompatActivity() {
         val styleLevels = resources.getStringArray(R.array.Style)
 
         // Rozdělení hodnoty gradeNUM
-        val gradeNumParts = cesta.gradeNum.split(Regex("(?<=\\d)(?=\\+|\\-)"))
+        val gradeNumParts = cesta.gradeNum.split(Regex("(?<=\\d)(?=[\\+\\-abc])"))
 
         // Nastavení hodnoty čísla do spinneru
         routeGradeSpinner.setSelection(gradeLevels.indexOf(gradeNumParts[0]))
 
         // Nastavení vybraného tlačítka znaku
         when (gradeNumParts.getOrNull(1)) {
-            "+" -> selectedButtonTag = "plus"
-            "-" -> selectedButtonTag = "minus"
-            else -> selectedButtonTag = "nula"
+            "+" -> {
+                selectedButtonTag = "plus"
+                // Show topPanel and hide topPanelFrench
+                layoutUIAA.visibility = View.VISIBLE
+                layoutFrench.visibility = View.GONE
+            }
+            "-" -> {
+                selectedButtonTag = "minus"
+                // Show topPanel and hide topPanelFrench
+                layoutUIAA.visibility = View.VISIBLE
+                layoutFrench.visibility = View.GONE
+            }
+            "a" -> {
+                selectedButtonTag = "a"
+                // Show topPanelFrench and hide topPanel
+                layoutUIAA.visibility = View.GONE
+                layoutFrench.visibility = View.VISIBLE
+            }
+            "b" -> {
+                selectedButtonTag = "b"
+                // Show topPanelFrench and hide topPanel
+                layoutUIAA.visibility = View.GONE
+                layoutFrench.visibility = View.VISIBLE
+            }
+            "c" -> {
+                selectedButtonTag = "c"
+                // Show topPanelFrench and hide topPanel
+                layoutUIAA.visibility = View.GONE
+                layoutFrench.visibility = View.VISIBLE
+            }
+            else -> {
+                selectedButtonTag = "nula"
+                // Show topPanel and hide topPanelFrench
+                layoutUIAA.visibility = View.VISIBLE
+                layoutFrench.visibility = View.GONE
+            }
         }
-
         // Znovu aktualizovat zobrazení vybraného tlačítka
         updateSelectedButtonView()
-
         // Nastavení data do DatePickeru
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = cesta.date
-
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-
         datePicker.updateDate(year, month, dayOfMonth)
-
         // Nastavení pozice v Spinnerch
         routeStyleSpinner.setSelection(styleLevels.indexOf(cesta.climbStyle))
     }
-
 
     private fun deleteCesta(cesta: CestaEntity) {
         lifecycleScope.launch {
@@ -746,7 +737,6 @@ class AddActivity : AppCompatActivity() {
         onBackPressedDispatcher.onBackPressed()
         return true
     }
-
 }
 
 class WebAppInterface(private val latitudeEditText: EditText, private val longitudeEditText: EditText) {
