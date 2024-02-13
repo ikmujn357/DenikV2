@@ -28,7 +28,6 @@ public class TextViewWithCircularIndicator extends androidx.appcompat.widget.App
 
     public TextViewWithCircularIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mCircleColor = ContextCompat.getColor(context, R.color.zkouska);
         mItemIsSelectedText = context.getResources().getString(R.string.mdtp_item_is_selected);
 
         init();

@@ -15,16 +15,22 @@
     <color name="bar">#303F9F</color>
     <color name="mark_button">#28BDB0</color>
 
-
-    <color name="polozka">#EDF2F4</color>
-    <color name="pozadí">#8D99AE</color>
-    <color name="pridat_cestu">#28BDB0</color>
-
     <!---
-    <color name="polozka">#DCF0F3</color>
-    <color name="pozadí">#FFFFFF</color>
-    <color name="pridat_cestu">#4C8E4E</color>
-    -->
+        <color name="polozka">#EDF2F4</color>
+        <color name="pozadí">#8D99AE</color>
+        <color name="pridat_cestu">#28BDB0</color>
+         -->
+
+    <color name="polozka">#E0E2D2</color>
+    <color name="pozadí">#575A6C</color>
+    <color name="pridat_cestu">#B4C540</color>
+    <color name="vybrane_tlacitko">#3686C9</color>
+    <color name="action_bar">#38BFA7</color>
+    <color name="kalendar">#3686C9</color>
+    <color name="grafy">#3686C9</color>
+    <color name="rating">#3686C9</color>
+    <color name="rating_empty">#FFFFFF</color>
+
 
     <color name="mdtp_date_picker_text_normal_dark_theme">#FFFFFF</color>
     <color name="mdtp_date_picker_month_day_dark_theme">#b4b4b4</color>

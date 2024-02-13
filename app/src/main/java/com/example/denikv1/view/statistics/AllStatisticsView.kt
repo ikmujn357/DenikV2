@@ -48,7 +48,7 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
 
         val barDataSet = BarDataSet(barEntries, null)
 
-        barDataSet.color = ContextCompat.getColor(requireContext(), R.color.purple_700)
+        barDataSet.color = ContextCompat.getColor(requireContext(), R.color.grafy)
 
         val barData = BarData(barDataSet)
 

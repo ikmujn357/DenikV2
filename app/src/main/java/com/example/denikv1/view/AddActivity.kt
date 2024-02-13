@@ -125,40 +125,53 @@ class AddActivity : AppCompatActivity() {
         val longitudeEditText = findViewById<EditText>(R.id.longitudeEditText)
         val webView: WebView = findViewById(R.id.webView)
         val scrollView: ScrollView = findViewById(R.id.scrollViewZapis)
+
         webView.setOnTouchListener { _, event ->
-            // Zabránit posunu ScrollView, pokud se dotyky nacházejí v mapě
+            // Prevent ScrollView from scrolling if touches are inside the map
             if (isTouchInsideMap(event)) {
-                // Dotyk je uvnitř mapy, vrátit true pro zabránění posunu ScrollView
                 scrollView.requestDisallowInterceptTouchEvent(true)
             } else {
-                // Dotyk není uvnitř mapy, povolit posun ScrollView
                 scrollView.requestDisallowInterceptTouchEvent(false)
             }
-            false // Vrátit false, aby se prováděly další dotyky
+            false // Allow further touches
         }
-        // Nastavení cesty k HTML souboru s mapou
+
+        // Configure WebView settings
         webView.settings.javaScriptEnabled = true
-        // Přidáme rozhraní pro žádost o aktualizace polohy
+
+        // Add JavaScript interface for requesting location updates
         webView.addJavascriptInterface(
             object {
                 @JavascriptInterface
                 fun requestLocationUpdates() {
-                    // Zde můžete volat kód pro žádost o aktualizace polohy ze záznamníku polohy
-                    // Tento kód by měl být podobný tomu, co jste měli v posluchači kliknutí na tlačítko
-                    locationListener.lastLocation?.let { lastLocation ->
-                        val latitude = lastLocation.latitude
-                        val longitude = lastLocation.longitude
+                    // Ensure locationListener and lastLocation are not null
+                    if (locationListener != null && locationListener.lastLocation != null) {
+                        val lastLocation = locationListener.lastLocation
+                        val latitude = lastLocation?.latitude
+                        val longitude = lastLocation?.longitude
 
-                        // Aktualizovat hodnoty v EditText prvcích
-                        latitudeEditText.setText(latitude.toString())
-                        longitudeEditText.setText(longitude.toString())
+                        // Update EditText fields with latitude and longitude
+                        runOnUiThread {
+                            latitudeEditText.setText(latitude.toString())
+                            longitudeEditText.setText(longitude.toString())
+                        }
 
-                        // Zavoláme JavaScriptovou funkci k aktualizaci mapy s přijatou polohou
-                        webView.post { webView.loadUrl("javascript:updateMapToCurrentLocation($latitude, $longitude);") }
+                        // Call JavaScript function to update map with the received location
+                        webView.post {
+                            webView.evaluateJavascript("javascript:updateMapToCurrentLocation($latitude, $longitude);") {
+                                // Check for errors in JavaScript evaluation, if any
+                                if (it != null) {
+                                    Log.e("WebView", "JavaScript evaluation error: $it")
+                                }
+                            }
+                        }
+                    } else {
+                        Log.e("LocationUpdate", "Location or LocationListener is null")
                     }
                 }
             }, "LocationRequestInterface"
         )
+
 
         // Přidáme rozhraní WebAppInterface pro manipulaci s políčky pro zeměpisnou šířku a délku
         webView.addJavascriptInterface(
@@ -243,6 +256,7 @@ class AddActivity : AppCompatActivity() {
     private fun showGradeSystem() {
         val buttonUIAA = findViewById<Button>(R.id.button_UIAA)
         val buttonFrench = findViewById<Button>(R.id.button_French)
+
         layoutUIAA = findViewById(R.id.topPanel)
         layoutFrench = findViewById(R.id.topPanelFrench)
 
@@ -252,6 +266,8 @@ class AddActivity : AppCompatActivity() {
             layoutUIAA.visibility = View.VISIBLE
             layoutFrench.visibility = View.GONE
             setupGradeSpinner(R.array.GradeUIAA)
+            selectedButtonTag3 = null
+            selectedButton3 = null
         }
         buttonFrench.setOnClickListener {
             // Nastavit viditelnost layoutu French na VISIBLE

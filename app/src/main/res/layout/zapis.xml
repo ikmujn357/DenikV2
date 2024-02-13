@@ -5,7 +5,8 @@
     android:id="@+id/scrollViewZapis"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pozadí">
+    android:background="@color/pozadí"
+    android:theme="@style/TextInputLayoutAppearance">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -67,7 +68,9 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="16dp"
-                    android:hint="@string/EnterRouteName" />
+                    android:hint="@string/EnterRouteName"
+                    android:backgroundTint="@color/rating"
+                    android:textCursorDrawable="@drawable/cursor"/>
             </LinearLayout>
 
             <View
@@ -137,7 +140,9 @@
                         android:layout_marginBottom="10dp"
                         android:layout_gravity="center"
                         android:hint="@string/entryFallCount"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:backgroundTint="@color/rating"
+                        android:textCursorDrawable="@drawable/cursor"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -170,16 +175,19 @@
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/icon_selection_background"
+                        android:background="@drawable/rectangle_button"
                         android:layout_weight="1"
                         android:text="UIAA"
                         android:contentDescription="@string/minus"/>
+                    <View
+                        android:layout_width="8dp"
+                    android:layout_height="match_parent" />
                     <Button
                         android:id="@+id/button_French"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/icon_selection_background"
+                        android:background="@drawable/rectangle_button"
                         android:layout_weight="1"
                         android:text="French"
                         android:contentDescription="@string/minus"/>
@@ -535,7 +543,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:hint="@string/minutes"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:backgroundTint="@color/rating"
+                    android:textCursorDrawable="@drawable/cursor"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -551,7 +561,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:hint="@string/seconds"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:backgroundTint="@color/rating"
+                    android:textCursorDrawable="@drawable/cursor"/>
 
 
             </LinearLayout>
@@ -599,7 +611,8 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:gravity="top"
-                android:importantForAutofill="no"/>
+                android:importantForAutofill="no"
+                android:textCursorDrawable="@drawable/cursor"/>
         </LinearLayout>
 
             <View
@@ -633,7 +646,9 @@
                 android:layout_marginTop="16dp"
                 android:numStars="5"
                 android:rating="0"
-                android:stepSize="0.5"/>
+                android:stepSize="0.5"
+                android:progressTint="@color/rating"
+                android:progressBackgroundTint="@color/rating_empty"/>
 
         </LinearLayout>
 

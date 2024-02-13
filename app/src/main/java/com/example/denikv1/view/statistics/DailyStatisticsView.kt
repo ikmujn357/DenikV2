@@ -85,7 +85,8 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         )
 
         dpd.setThemeDark(false)
-        dpd.accentColor = Color.parseColor("#9C27B0")
+        val accentColor = ContextCompat.getColor(requireContext(), R.color.grafy)
+        dpd.accentColor = accentColor
 
         lifecycleScope.launch {
             try {
@@ -215,7 +216,7 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
     ) {
         val barDataSet = BarDataSet(barEntries, null)
 
-        barDataSet.color = ContextCompat.getColor(requireContext(), R.color.purple_700)
+        barDataSet.color = ContextCompat.getColor(requireContext(), R.color.grafy)
 
         barChart.data = BarData(barDataSet)
 

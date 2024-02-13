@@ -67,11 +67,9 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
         recyclerView = findViewById(R.id.recyclerView)
         nameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Nepotřebujeme tuto metodu
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Nepotřebujeme tuto metodu
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -137,7 +135,8 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
             startActivity(intent)
 
 
-        }}
+        }
+    }
 
 
     
@@ -154,7 +153,7 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
     // Metoda volaná při obnovení aktivity
     override fun onResume() {
         super.onResume()
-
+        nameEditText.text.clear()
         // Spuštění metody pro zobrazení seznamu cest v rámci aktivity
         launch {
             displayCesty()

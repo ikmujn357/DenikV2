@@ -3,8 +3,14 @@
 
     <style name="Theme.DenikV1" parent="Theme.AppCompat.Light">
         <!-- Your custom theme attributes for both light and dark modes -->
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/action_bar</item>
         <item name="colorAccent">@color/purple_200</item>
         <!-- Add other attributes as needed -->
+    </style>
+
+    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+        <item name="colorControlNormal">@color/rating</item>
+        <item name="colorControlActivated">@color/rating</item>
+        <item name="colorControlHighlight">@color/rating</item>
     </style>
 </resources>
