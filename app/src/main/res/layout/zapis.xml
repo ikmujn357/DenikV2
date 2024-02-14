@@ -666,7 +666,6 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/window_shape"
                     android:gravity="center"
-                    android:paddingTop="4dp"
                     android:orientation="vertical"
                     android:baselineAligned="true">
 
@@ -684,6 +683,7 @@
                         android:layout_alignParentBottom="true"
                         android:enabled="false"
                         android:hint="Latitude"
+                        android:visibility="gone"
                         android:inputType="none"/>
 
                     <EditText
@@ -693,6 +693,7 @@
                         android:layout_above="@+id/latitudeEditText"
                         android:enabled="false"
                         android:hint="Longitude"
+                        android:visibility="gone"
                         android:inputType="none"/>
 
                 </LinearLayout>
