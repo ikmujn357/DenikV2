@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/action_back"
-        android:layout_width="24dp"
+        android:layout_width="40dp"
         android:layout_height="24dp"
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:text="@string/Statistics"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp"
@@ -37,7 +37,7 @@
 
         <Button
             android:id="@+id/button_denni"
-            android:layout_width="48dp"
+            android:layout_width="65dp"
             android:layout_height="48dp"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/day"
@@ -45,7 +45,7 @@
             android:textSize="10sp" />
         <Button
             android:id="@+id/button_celkova"
-            android:layout_width="48dp"
+            android:layout_width="65dp"
             android:layout_height="48dp"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/allday"

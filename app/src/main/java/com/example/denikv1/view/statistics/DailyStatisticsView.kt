@@ -164,8 +164,12 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
     override fun updateGraph(barEntries: List<BarEntry>, startDate: Long, endDate: Long) {
         val xLabels = controller.getXLabelsGraph1(requireContext(), startDate, endDate).toList()
         setupBarChart(barChart, barEntries, xLabels)
+        buttonObtiznost.setBackgroundResource(R.drawable.rectangle_grade_button)
+        buttonStylPrelzeu.setBackgroundResource(android.R.color.transparent)
 
         buttonObtiznost.setOnClickListener {
+            buttonObtiznost.setBackgroundResource(R.drawable.rectangle_grade_button)
+            buttonStylPrelzeu.setBackgroundResource(android.R.color.transparent)
             // Zde aktualizujeme graf pomocí dat pro obtížnost
             val barEntries1 = controller.getDataGraph1(requireContext(), startDate, endDate)
             val xLabels1 =
@@ -180,6 +184,8 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         }
 
         buttonStylPrelzeu.setOnClickListener {
+            buttonStylPrelzeu.setBackgroundResource(R.drawable.rectangle_grade_button)
+            buttonObtiznost.setBackgroundResource(android.R.color.transparent)
             val barEntries2 = controller.getDataGraph2(requireContext(), startDate, endDate)
             val xLabels2 =
                 controller.getXLabelsGraph2(requireContext(), startDate, endDate).toList()

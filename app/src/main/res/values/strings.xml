@@ -1,36 +1,48 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">Lezecký deník</string>
-    <string name="informace">Informace o cestě</string>
-    <string name="date">Datum</string>
-    <string name="minus">Mínus</string>
-    <string name="combination">Kombinace síly a techniky</string>
+    <string name="app_name">Climbing Journal</string>
+    <string name="informace">Route Information</string>
+    <string name="date">Date</string>
+    <string name="minus">Minus</string>
+    <string name="combination">Combination of Strength and Technique</string>
     <string name="plus">Plus</string>
-    <string name="technique">Technická</string>
-    <string name="Empty">Prázdná hodnota</string>
-    <string name="Strenght">Silová</string>
-    <string name="EnterRouteName">Zadejte jméno cesty</string>
-    <string name="routeName">Jméno cesty:</string>
-    <string name="climbingStyle">Styl přelezu:</string>
-    <string name="climbingStyleClear">Styl přelezu</string>
-    <string name="fallCount">Počet pádů:</string>
-    <string name="entryFallCount">Zadejte počet pádů</string>
-    <string name="grade">Obtížnost:</string>
-    <string name="routeCharacter">Charakter cesty:</string>
-    <string name="additionalInformation">Doplňující informace</string>
-    <string name="timeToclimb">Čas přelezu:</string>
-    <string name="minutes">Minut</string>
+    <string name="technique">Technical</string>
+    <string name="Empty">Empty Value</string>
+    <string name="Strenght">Strength</string>
+    <string name="EnterRouteName">Enter Route Name</string>
+    <string name="routeName">Route Name:</string>
+    <string name="climbingStyle">Climbing Style:</string>
+    <string name="climbingStyleClear">Climbing Style</string>
+    <string name="fallCount">Fall Count:</string>
+    <string name="entryFallCount">Enter Fall Count</string>
+    <string name="grade">Difficulty:</string>
+    <string name="routeCharacter">Route Character:</string>
+    <string name="additionalInformation">Additional Information</string>
+    <string name="timeToclimb">Time to Climb:</string>
+    <string name="minutes">Minutes</string>
     <string name="colon">:</string>
-    <string name="seconds">Sekund</string>
-    <string name="routeDescription">Popis cesty:</string>
-    <string name="entryRouteDescription">Napište popis cesty</string>
-    <string name="assessment">Hodnocení:</string>
-    <string name="revert">Vrátit zpět změny</string>
-    <string name="combinationShow">Kombinace</string>
-    <string name="listOfroute">seznamCesty</string>
-    <string name="save">Uložit</string>
-    <string name="routeNameOnly">Jméno cesty</string>
-    <string name="search">Vyhledávání</string>
+    <string name="seconds">Seconds</string>
+    <string name="routeDescription">Route Description:</string>
+    <string name="entryRouteDescription">Write Route Description</string>
+    <string name="assessment">Assessment:</string>
+    <string name="revert">Revert Changes</string>
+    <string name="combinationShow">Combination</string>
+    <string name="listOfroute">Route List</string>
+    <string name="save">Save</string>
+    <string name="routeNameOnly">Route Name</string>
+    <string name="search">Search</string>
+    <string name="Delete">Delete</string>
+    <string name="add_route">Add Route</string>
+    <string name="Statistics">Statistics</string>
+    <string name="export">Export</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="daily">Daily</string>
+    <string name="full_statistic">Overall</string>
 
+    <string-array name="Character">
+        <item>Technical</item>
+        <item>Strength</item>
+        <item>Combination</item>
+    </string-array>
 
     <string-array name="GradeUIAA">
         <item>x</item>
@@ -66,22 +78,11 @@
         <item>All free</item>
     </string-array>
 
-    <string-array name="Character">
-        <item>Technická</item>
-        <item>Silová</item>
-        <item>Kombinace</item>
-    </string-array>
 
-
-    <string name="mdtp_item_is_selected"><xliff:g id="item" example="2013">%1$s</xliff:g> selected</string>
+    <string name="mdtp_item_is_selected" translatable="false"><xliff:g id="item" example="2013">%1$s</xliff:g> selected</string>
     <string name="mdtp_day_of_week_label_typeface" translatable="false">sans-serif</string>
     <string name="mdtp_sans_serif" translatable="false">sans-serif</string>
-    <string name="Delete">Smazat</string>
-    <string name="add_route">Přidat cestu</string>
-    <string name="Statistics">Statistika</string>
-    <string name="export">Export</string>
-    <string name="difficulty">Obtížnost</string>
-    <string name="daily">denní</string>
-    <string name="full_statistic">celková</string>
+    <string name="climbingDiary">Climbing diary</string>
+
 
 </resources>

@@ -1,0 +1,16 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Tvar tlačítka -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="40dp" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+    <!-- Barva tlačítka -->
+    <item android:top="5dp" android:left="5dp" android:right="5dp" android:bottom="5dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="40dp" />
+            <solid android:color="@color/kalendar" />
+        </shape>
+    </item>
+</layer-list>

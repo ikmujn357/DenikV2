@@ -5,10 +5,34 @@ import com.example.denikv1.model.CestaModel
 import com.github.mikephil.charting.data.BarEntry
 import kotlinx.coroutines.runBlocking
 
-// Rozhraní pro model statistik se sloupcovým grafem
+/**
+ * Rozhraní definující metody pro získání statistických dat v rámci celkové statistiky.
+ * Implementace tohoto rozhraní by měla poskytovat funkce pro získání dat pro graf, popisky osy X
+ * a seznam jedinečných obtížností.
+ */
 interface AllStatisticsModel {
+    /**
+     * Získá seznam dat pro graf.
+     *
+     * @param context Kontext aplikace.
+     * @return Seznam BarEntry objektů reprezentujících data pro graf.
+     */
     fun getDataGraph(context: Context): List<BarEntry>
+
+    /**
+     * Získá pole popisek pro osu X grafu.
+     *
+     * @param context Kontext aplikace.
+     * @return Pole řetězců obsahujících popisky pro osu X.
+     */
     fun getXLabelsGraph(context: Context): Array<String>
+
+    /**
+     * Získá seznam jedinečných obtížností.
+     *
+     * @param context Kontext aplikace.
+     * @return Seznam řetězců obsahujících jedinečné obtížnosti.
+     */
     fun getUniqueDifficulties(context: Context): List<String>
 }
 

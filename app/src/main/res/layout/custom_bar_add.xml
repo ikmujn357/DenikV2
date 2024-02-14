@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/action_back"
-        android:layout_width="24dp"
+        android:layout_width="40dp"
         android:layout_height="24dp"
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/action_back"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:text="@string/add_route"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp"

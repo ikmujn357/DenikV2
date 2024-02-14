@@ -169,13 +169,15 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:baselineAligned="true">
+                    android:baselineAligned="true"
+                    >
+
                     <Button
                         android:id="@+id/button_UIAA"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/rectangle_button"
+                        android:background="@drawable/rectangle_grade_button"
                         android:layout_weight="1"
                         android:text="UIAA"
                         android:contentDescription="@string/minus"/>
@@ -187,7 +189,7 @@
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/rectangle_button"
+                        android:background="@drawable/rectangle_grade_button"
                         android:layout_weight="1"
                         android:text="French"
                         android:contentDescription="@string/minus"/>

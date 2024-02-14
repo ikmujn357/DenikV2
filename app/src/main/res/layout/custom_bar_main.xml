@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/action_bar"> <!-- Zde nastavte barvu pozadí pro celý ActionBar -->
+    android:background="@color/action_bar">
 
     <TextView
         android:id="@+id/activityTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="Lezecký deník"
+        android:text="@string/climbingDiary"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -27,7 +27,7 @@
 
         <Button
             android:id="@+id/button_statistics"
-            android:layout_width="55dp"
+            android:layout_width="65dp"
             android:layout_height="match_parent"
             android:text="@string/Statistics"
             android:textSize="10sp"
@@ -36,7 +36,7 @@
 
         <Button
             android:id="@+id/exportButton"
-            android:layout_width="48dp"
+            android:layout_width="60dp"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/download"
