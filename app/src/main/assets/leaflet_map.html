@@ -97,5 +97,12 @@
 <script src="leaflet_map_script.js"></script>
 <!-- Android JS Bridge -->
 <script src="android_js_bridge.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('getLocationButton').addEventListener('click', function () {
+            getLocation();
+        });
+    });
+</script>
 </body>
 </html>

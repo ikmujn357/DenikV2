@@ -31,15 +31,6 @@ function updateMapToCurrentLocation(latitude, longitude) {
     addMarker(latitude, longitude);
 }
 
-// Check for Geolocation API support and attempt to get current location on page load
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        updateMapToCurrentLocation(latitude, longitude); // Update map to current location
-    });
-}
-
 // Function to perform search based on input text
 function performSearch(locationQuery) {
     // AJAX request for geocoding location
