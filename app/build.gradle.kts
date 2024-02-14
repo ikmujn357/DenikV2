@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.usbapps.climbingdiary"
+    namespace = "com.example.denikv1"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.usbapps.climbingdiary"
+        applicationId = "com.example.denikv1"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
