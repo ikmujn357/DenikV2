@@ -13,7 +13,7 @@
         android:theme="@style/Theme.DenikV1"
         tools:targetApi="31">
         <activity
-            android:name=".view.CestaViewImp"
+            android:name="com.usbapps.climbingdiary.denikv1.view.CestaViewImp"
             android:exported="true"
             android:theme="@style/Theme.DenikV1">
             <intent-filter>
@@ -24,14 +24,14 @@
         </activity>
 
         <activity
-            android:name=".view.AddActivity"
+            android:name="com.usbapps.climbingdiary.denikv1.view.AddActivity"
             android:exported="true"
             android:label="Přidat/upravit cestu"
             android:theme="@style/Theme.DenikV1">
         </activity>
 
         <activity
-            android:name=".view.ShowStatistics"
+            android:name="com.usbapps.climbingdiary.denikv1.view.ShowStatistics"
             android:exported="true"
             android:label="Statistika"
             android:theme="@style/Theme.DenikV1">
