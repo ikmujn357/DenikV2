@@ -32,10 +32,6 @@ import com.usbapps.climbingdiary.custom.CustomArrayAdapter
 import com.usbapps.climbingdiary.model.CestaEntity
 import com.usbapps.climbingdiary.model.CestaModel
 import com.usbapps.climbingdiary.model.CestaModelImpl
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 import android.webkit.JavascriptInterface
 import android.widget.ScrollView
@@ -43,6 +39,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.usbapps.climbingdiary.custom.LocationHelper
 import com.usbapps.climbingdiary.custom.MyLocationListener
+import kotlinx.coroutines.*
 
 class AddActivity : AppCompatActivity() {
     private val cestaModel: CestaModel = CestaModelImpl(this)
@@ -134,7 +131,6 @@ class AddActivity : AppCompatActivity() {
                 scrollView.requestDisallowInterceptTouchEvent(false)
             }
             false // Vrátit false, aby se prováděly další dotyky
-
         }
         // Nastavení cesty k HTML souboru s mapou
         webView.settings.javaScriptEnabled = true
@@ -156,14 +152,22 @@ class AddActivity : AppCompatActivity() {
                         // Zavoláme JavaScriptovou funkci k aktualizaci mapy s přijatou polohou
                         webView.post { webView.loadUrl("javascript:updateMapToCurrentLocation($latitude, $longitude);") }
                     }
-
                 }
             }, "LocationRequestInterface"
         )
-
         // Přidáme rozhraní WebAppInterface pro manipulaci s políčky pro zeměpisnou šířku a délku
         webView.addJavascriptInterface(
-            WebAppInterface(latitudeEditText, longitudeEditText),
+            object {
+                @JavascriptInterface
+                fun updateCoordinates(latitude: Double, longitude: Double) {
+                    // Spustíme novou coroutine
+                    CoroutineScope(Dispatchers.Main).launch {
+                        // Aktualizujeme hodnoty v EditText
+                        latitudeEditText.setText(latitude.toString())
+                        longitudeEditText.setText(longitude.toString())
+                    }
+                }
+            },
             "Android"
         )
         webView.webViewClient = WebViewClient()
@@ -306,7 +310,6 @@ class AddActivity : AppCompatActivity() {
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
         val opinionRatingBar: RatingBar = findViewById(R.id.opinionRatingBar)
         val datePicker: DatePicker = findViewById(R.id.datePicker)
-        val latitudeEditText: EditText = findViewById(R.id.latitudeEditText)
         val longitudeEditText: EditText = findViewById(R.id.longitudeEditText)
         val textWatcher = createTextWatcher()
         val itemSelectedListener = createItemSelectedListener()
@@ -317,7 +320,6 @@ class AddActivity : AppCompatActivity() {
         minuteEditText.addTextChangedListener(textWatcher)
         descriptionEditText.addTextChangedListener(textWatcher)
         secondEditText.addTextChangedListener(textWatcher)
-        latitudeEditText.addTextChangedListener(textWatcher)
         longitudeEditText.addTextChangedListener(textWatcher)
         opinionRatingBar.setOnRatingBarChangeListener { _, _, _ -> saveCesta() }
         setupDatePickerListener(datePicker)
@@ -625,8 +627,6 @@ class AddActivity : AppCompatActivity() {
             "Kombinace" -> "Kombinace"
             else -> ""
         }
-
-
         val frenchPlus = if (routeGradeSpinner.selectedItem.toString() == "x") {
             ""
         } else {
@@ -635,8 +635,6 @@ class AddActivity : AppCompatActivity() {
                 else -> ""
             }
         }
-
-
         val cestaName = routeNameEditText.text.toString()
         val fallCountString = fallEditText.text.toString()
         val styleSpinner = routeStyleSpinner.selectedItem.toString()
@@ -666,9 +664,9 @@ class AddActivity : AppCompatActivity() {
                     cestaController.getCestaById(it.id)
                 }
 
-                if (existingCesta==null) {
+                if (existingCesta == null) {
                     val newCesta = CestaEntity(
-                        lastCestaId+1,  // Auto-generate ID
+                        lastCestaId + 1,  // Auto-generate ID
                         cestaName,
                         fallCountString.toIntOrNull() ?: 0,
                         styleSpinner,
@@ -687,7 +685,7 @@ class AddActivity : AppCompatActivity() {
                     isCestaCreated = true
                 }
 
-                if (existingCesta!=null) {
+                if (existingCesta != null) {
                     // Update existing Cesta
                     existingCesta.routeName = cestaName
                     existingCesta.fallCount = fallCountString.toIntOrNull() ?: 0
@@ -706,6 +704,7 @@ class AddActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun fillUI(cesta: CestaEntity) {
         val buttonUIAA = findViewById<Button>(R.id.button_UIAA)
@@ -776,7 +775,6 @@ class AddActivity : AppCompatActivity() {
             else -> "nula"
         }
 
-
         selectedButtonTag2 = when (cesta.routeChar) {
             "Silová" -> "Síla"
             "Technická" -> "Technika"
@@ -828,13 +826,3 @@ class AddActivity : AppCompatActivity() {
         return true
     }
 }
-
-class WebAppInterface(private val latitudeEditText: EditText, private val longitudeEditText: EditText) {
-    @JavascriptInterface
-    fun updateCoordinates(latitude: String, longitude: String) {
-        // Aktualizovat hodnoty v EditText
-        latitudeEditText.setText(latitude)
-        longitudeEditText.setText(longitude)
-    }
-}
-

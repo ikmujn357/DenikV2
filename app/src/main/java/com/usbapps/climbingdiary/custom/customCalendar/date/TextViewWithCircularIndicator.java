@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 
 import com.usbapps.climbingdiary.R;
