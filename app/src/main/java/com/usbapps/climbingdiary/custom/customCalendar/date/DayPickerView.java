@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom.customCalendar.date;
+package com.usbapps.climbingdiary.custom.customCalendar.date;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -12,8 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.usbapps.climbingdiary.denikv1.custom.customCalendar.GravitySnapHelper;
-import com.usbapps.climbingdiary.denikv1.custom.customCalendar.Utils;
+import com.usbapps.climbingdiary.custom.customCalendar.GravitySnapHelper;
+import com.usbapps.climbingdiary.custom.customCalendar.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

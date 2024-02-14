@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom.customCalendar.date;
+package com.usbapps.climbingdiary.custom.customCalendar.date;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.denikv1.R;
+import com.usbapps.climbingdiary.R;
 
 @SuppressLint("ViewConstructor")
 public class YearPickerView extends ListView implements OnItemClickListener, DatePickerDialog.OnDateChangedListener {

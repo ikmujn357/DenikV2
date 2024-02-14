@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.model
+package com.usbapps.climbingdiary.model
 
 import android.annotation.SuppressLint
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom
+package com.usbapps.climbingdiary.custom
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.example.denikv1.R
+import com.usbapps.climbingdiary.R
 
 /**
  * Třída pro vlastní adaptér ArrayAdapter pro zpracování seznamu řetězců.

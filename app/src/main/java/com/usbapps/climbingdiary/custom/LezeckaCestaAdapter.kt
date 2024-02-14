@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom
+package com.usbapps.climbingdiary.custom
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.usbapps.climbingdiary.denikv1.model.CestaEntity
-import com.example.denikv1.R
+import com.usbapps.climbingdiary.model.CestaEntity
+import com.usbapps.climbingdiary.R
 
 /**
  * Adaptér pro propojení dat cest s RecyclerView.

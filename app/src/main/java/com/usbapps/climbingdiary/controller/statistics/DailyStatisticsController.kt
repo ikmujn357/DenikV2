@@ -1,8 +1,8 @@
-package com.usbapps.climbingdiary.denikv1.controller.statistics
+package com.usbapps.climbingdiary.controller.statistics
 
 import android.content.Context
-import com.usbapps.climbingdiary.denikv1.model.statistics.DailyStatisticsModel
-import com.usbapps.climbingdiary.denikv1.view.statistics.DailyStatisticsFragment
+import com.usbapps.climbingdiary.model.statistics.DailyStatisticsModel
+import com.usbapps.climbingdiary.view.statistics.DailyStatisticsFragment
 import com.github.mikephil.charting.data.BarEntry
 import java.util.Calendar
 

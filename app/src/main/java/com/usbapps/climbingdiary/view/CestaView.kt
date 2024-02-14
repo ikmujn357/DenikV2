@@ -1,6 +1,5 @@
-package com.usbapps.climbingdiary.denikv1.view
+package com.usbapps.climbingdiary.view
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -13,13 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.denikv1.R
-import com.usbapps.climbingdiary.denikv1.controller.CestaController
-import com.usbapps.climbingdiary.denikv1.controller.CestaControllerImpl
-import com.usbapps.climbingdiary.denikv1.custom.CestaAdapter
-import com.usbapps.climbingdiary.denikv1.model.CestaEntity
-import com.usbapps.climbingdiary.denikv1.model.CestaModel
-import com.usbapps.climbingdiary.denikv1.model.CestaModelImpl
+import com.usbapps.climbingdiary.R
+import com.usbapps.climbingdiary.controller.CestaController
+import com.usbapps.climbingdiary.controller.CestaControllerImpl
+import com.usbapps.climbingdiary.custom.CestaAdapter
+import com.usbapps.climbingdiary.model.CestaEntity
+import com.usbapps.climbingdiary.model.CestaModel
+import com.usbapps.climbingdiary.model.CestaModelImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope

@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom.customCalendar;
+package com.usbapps.climbingdiary.custom.customCalendar;
 
 import android.view.Gravity;
 import android.view.View;

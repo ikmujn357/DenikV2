@@ -1,7 +1,7 @@
-package com.usbapps.climbingdiary.denikv1.controller.statistics
+package com.usbapps.climbingdiary.controller.statistics
 
 import android.content.Context
-import com.usbapps.climbingdiary.denikv1.model.statistics.AllStatisticsModel
+import com.usbapps.climbingdiary.model.statistics.AllStatisticsModel
 import com.github.mikephil.charting.data.BarEntry
 
 /**

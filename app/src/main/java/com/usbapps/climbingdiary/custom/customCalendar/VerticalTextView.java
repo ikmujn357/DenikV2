@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom.customCalendar;
+package com.usbapps.climbingdiary.custom.customCalendar;
 
 import android.content.Context;
 import android.graphics.Canvas;

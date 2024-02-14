@@ -1,10 +1,10 @@
-package com.usbapps.climbingdiary.denikv1.custom.customCalendar.date;
+package com.usbapps.climbingdiary.custom.customCalendar.date;
 
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 
-import com.usbapps.climbingdiary.denikv1.custom.customCalendar.Utils;
+import com.usbapps.climbingdiary.custom.customCalendar.Utils;
 
 import java.util.Calendar;
 import java.util.HashSet;

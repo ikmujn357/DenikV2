@@ -1,12 +1,12 @@
-package com.usbapps.climbingdiary.denikv1.view
+package com.usbapps.climbingdiary.view
 
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.denikv1.R
-import com.usbapps.climbingdiary.denikv1.view.statistics.AllStatisticsFragment
-import com.usbapps.climbingdiary.denikv1.view.statistics.DailyStatisticsFragment
+import com.usbapps.climbingdiary.R
+import com.usbapps.climbingdiary.view.statistics.AllStatisticsFragment
+import com.usbapps.climbingdiary.view.statistics.DailyStatisticsFragment
 
 // Zobrazení statistiky
 class ShowStatistics : AppCompatActivity() {

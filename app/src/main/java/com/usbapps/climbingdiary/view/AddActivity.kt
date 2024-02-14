@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.view
+package com.usbapps.climbingdiary.view
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebView
@@ -26,13 +25,13 @@ import android.widget.RatingBar
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.denikv1.R
-import com.usbapps.climbingdiary.denikv1.controller.CestaController
-import com.usbapps.climbingdiary.denikv1.controller.CestaControllerImpl
-import com.usbapps.climbingdiary.denikv1.custom.CustomArrayAdapter
-import com.usbapps.climbingdiary.denikv1.model.CestaEntity
-import com.usbapps.climbingdiary.denikv1.model.CestaModel
-import com.usbapps.climbingdiary.denikv1.model.CestaModelImpl
+import com.usbapps.climbingdiary.R
+import com.usbapps.climbingdiary.controller.CestaController
+import com.usbapps.climbingdiary.controller.CestaControllerImpl
+import com.usbapps.climbingdiary.custom.CustomArrayAdapter
+import com.usbapps.climbingdiary.model.CestaEntity
+import com.usbapps.climbingdiary.model.CestaModel
+import com.usbapps.climbingdiary.model.CestaModelImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -42,8 +41,8 @@ import android.webkit.JavascriptInterface
 import android.widget.ScrollView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.usbapps.climbingdiary.denikv1.custom.LocationHelper
-import com.usbapps.climbingdiary.denikv1.custom.MyLocationListener
+import com.usbapps.climbingdiary.custom.LocationHelper
+import com.usbapps.climbingdiary.custom.MyLocationListener
 
 class AddActivity : AppCompatActivity() {
     private val cestaModel: CestaModel = CestaModelImpl(this)

@@ -1,8 +1,8 @@
-package com.usbapps.climbingdiary.denikv1.controller
+package com.usbapps.climbingdiary.controller
 
 import android.content.Context
-import com.usbapps.climbingdiary.denikv1.model.CestaEntity
-import com.usbapps.climbingdiary.denikv1.model.CestaModel
+import com.usbapps.climbingdiary.model.CestaEntity
+import com.usbapps.climbingdiary.model.CestaModel
 
 /**
  * Rozhraní pro kontrolér cest.

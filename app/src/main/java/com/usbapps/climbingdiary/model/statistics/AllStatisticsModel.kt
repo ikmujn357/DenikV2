@@ -1,7 +1,7 @@
-package com.usbapps.climbingdiary.denikv1.model.statistics
+package com.usbapps.climbingdiary.model.statistics
 
 import android.content.Context
-import com.usbapps.climbingdiary.denikv1.model.CestaModel
+import com.usbapps.climbingdiary.model.CestaModel
 import com.github.mikephil.charting.data.BarEntry
 import kotlinx.coroutines.runBlocking
 

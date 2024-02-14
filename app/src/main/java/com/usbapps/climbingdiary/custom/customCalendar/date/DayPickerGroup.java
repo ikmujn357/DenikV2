@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom.customCalendar.date;
+package com.usbapps.climbingdiary.custom.customCalendar.date;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.example.denikv1.R;
-import com.usbapps.climbingdiary.denikv1.custom.customCalendar.Utils;
+import com.usbapps.climbingdiary.R;
+import com.usbapps.climbingdiary.custom.customCalendar.Utils;
 
 public class DayPickerGroup extends ViewGroup
         implements View.OnClickListener, DayPickerView.OnPageListener {

@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom.customCalendar.date;
+package com.usbapps.climbingdiary.custom.customCalendar.date;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -20,8 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.content.ContextCompat;
 
-import com.example.denikv1.R;
-import com.usbapps.climbingdiary.denikv1.custom.customCalendar.Utils;
+import com.usbapps.climbingdiary.R;
+import com.usbapps.climbingdiary.custom.customCalendar.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

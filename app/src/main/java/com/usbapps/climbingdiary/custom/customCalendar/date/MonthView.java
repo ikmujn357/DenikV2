@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom.customCalendar.date;
+package com.usbapps.climbingdiary.custom.customCalendar.date;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -22,7 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.customview.widget.ExploreByTouchHelper;
 
-import com.example.denikv1.R;
+import com.usbapps.climbingdiary.R;
 
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;

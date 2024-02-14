@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.view.statistics
+package com.usbapps.climbingdiary.view.statistics
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,16 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.denikv1.R
-import com.usbapps.climbingdiary.denikv1.controller.statistics.DailyStatisticsController
-import com.usbapps.climbingdiary.denikv1.controller.statistics.DailyStatisticsControllerImpl
-import com.usbapps.climbingdiary.denikv1.custom.CestaAdapter
-import com.usbapps.climbingdiary.denikv1.custom.customCalendar.date.DatePickerDialog
-import com.usbapps.climbingdiary.denikv1.model.CestaEntity
-import com.usbapps.climbingdiary.denikv1.model.CestaModel
-import com.usbapps.climbingdiary.denikv1.model.CestaModelImpl
-import com.usbapps.climbingdiary.denikv1.model.statistics.DailyStatisticsModelImpl
-import com.usbapps.climbingdiary.denikv1.view.AddActivity
+import com.usbapps.climbingdiary.R
+import com.usbapps.climbingdiary.controller.statistics.DailyStatisticsController
+import com.usbapps.climbingdiary.controller.statistics.DailyStatisticsControllerImpl
+import com.usbapps.climbingdiary.custom.CestaAdapter
+import com.usbapps.climbingdiary.custom.customCalendar.date.DatePickerDialog
+import com.usbapps.climbingdiary.model.CestaEntity
+import com.usbapps.climbingdiary.model.CestaModel
+import com.usbapps.climbingdiary.model.CestaModelImpl
+import com.usbapps.climbingdiary.model.statistics.DailyStatisticsModelImpl
+import com.usbapps.climbingdiary.view.AddActivity
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData

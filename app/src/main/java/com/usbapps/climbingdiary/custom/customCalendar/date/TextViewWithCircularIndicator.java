@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom.customCalendar.date;
+package com.usbapps.climbingdiary.custom.customCalendar.date;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 
-import com.example.denikv1.R;
+import com.usbapps.climbingdiary.R;
 
 
 public class TextViewWithCircularIndicator extends androidx.appcompat.widget.AppCompatTextView {

@@ -1,4 +1,4 @@
-package com.usbapps.climbingdiary.denikv1.custom
+package com.usbapps.climbingdiary.custom
 
 import android.content.Context
 import android.location.Location
@@ -6,7 +6,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import com.usbapps.climbingdiary.denikv1.view.AddActivity
+import com.usbapps.climbingdiary.view.AddActivity
 
 /**
  * Pomocní třída pro správu polohy.
