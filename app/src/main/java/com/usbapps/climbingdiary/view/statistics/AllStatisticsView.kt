@@ -1,11 +1,14 @@
 package com.usbapps.climbingdiary.view.statistics
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.usbapps.climbingdiary.R
 import com.usbapps.climbingdiary.controller.statistics.AllStatisticsController
 import com.usbapps.climbingdiary.controller.statistics.AllStatisticsControllerImpl
@@ -19,6 +22,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import kotlinx.coroutines.launch
 
 interface AllStatisticsView {
     fun displayGraph(view: View)
@@ -27,6 +31,7 @@ interface AllStatisticsView {
 class AllStatisticsFragment : Fragment(), AllStatisticsView {
     private lateinit var controller: AllStatisticsController
     private lateinit var cestaModel: CestaModel
+    private lateinit var layoutCelkova: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +41,23 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
         cestaModel = CestaModelImpl(requireContext())
         val statisticsModel = AllStatisticsModelImpl(cestaModel)
         controller = AllStatisticsControllerImpl(statisticsModel)
+        layoutCelkova = view.findViewById(R.id.layout_celkova)
+        graphVisibility ()
         displayGraph(view)
         return view
+    }
+
+    private fun graphVisibility () {
+        lifecycleScope.launch {
+            Log.d("data", cestaModel.getAllCesta().size.toString())
+            if (cestaModel.getAllCesta().isNotEmpty()) {
+                // Pokud jsou k dispozici data, zobrazíme layout grafu
+                layoutCelkova.visibility = View.VISIBLE
+            } else {
+                // Pokud nejsou k dispozici žádná data, skryjeme layout grafu
+                layoutCelkova.visibility = View.GONE
+            }
+        }
     }
 
     override fun displayGraph(view: View) {
@@ -97,4 +117,6 @@ class AllStatisticsFragment : Fragment(), AllStatisticsView {
             barChart.invalidate()
         }
     }
+
+
 }

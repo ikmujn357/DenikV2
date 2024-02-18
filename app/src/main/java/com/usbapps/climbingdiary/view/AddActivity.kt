@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebView
@@ -125,17 +126,33 @@ class AddActivity : AppCompatActivity() {
         val longitudeEditText = findViewById<EditText>(R.id.longitudeEditText)
         val webView: WebView = findViewById(R.id.webView)
         val scrollView: ScrollView = findViewById(R.id.scrollViewZapis)
+        val bottomDistanceThreshold = 1050 // Vzdálenost odspodu v px, po kterou se ScrollView nebude scrollovat
+
         webView.setOnTouchListener { _, event ->
-            // Zabránit posunu ScrollView, pokud se dotyky nacházejí v mapě
-            if (isTouchInsideMap(event)) {
-                // Dotyk je uvnitř mapy, vrátit true pro zabránění posunu ScrollView
+            val webViewLocation = IntArray(2)
+            webView.getLocationOnScreen(webViewLocation)
+
+            val webViewTop = webViewLocation[1]
+            val webViewBottom = webViewTop + webView.height
+
+            // Zjistíme, zda se dotyk nachází v WebView
+            val isTouchInWebView = event.rawY >= webViewTop && event.rawY <= webViewBottom
+
+            // Zjistíme, zda se dotyk nachází dostatečně daleko odspodu
+            val isTouchFarEnoughFromBottom = event.rawY >= webViewBottom - bottomDistanceThreshold
+
+            // Zabránění posunu ScrollView, pokud je dotyk uvnitř WebView a zároveň dostatečně daleko odspodu
+            if (isTouchInWebView && isTouchFarEnoughFromBottom) {
                 scrollView.requestDisallowInterceptTouchEvent(true)
+                Log.d("mapa", "je v WebView a je dostatečně daleko odspodu")
             } else {
-                // Dotyk není uvnitř mapy, povolit posun ScrollView
                 scrollView.requestDisallowInterceptTouchEvent(false)
+                Log.d("mapa", "není v WebView nebo není dostatečně daleko odspodu")
             }
-            false // Vrátit false, aby se prováděly další dotyky
+
+            false // Vrátíme false, aby se prováděly další dotyky
         }
+
         // Nastavení cesty k HTML souboru s mapou
         webView.settings.javaScriptEnabled = true
         // Přidáme rozhraní pro žádost o aktualizace polohy
@@ -176,6 +193,8 @@ class AddActivity : AppCompatActivity() {
         )
         webView.webViewClient = WebViewClient()
         webView.loadUrl("file:///android_asset/leaflet_map.html")
+
+
     }
 
     private fun loadCestaLocationOnMap(cesta: CestaEntity) {
@@ -209,16 +228,14 @@ class AddActivity : AppCompatActivity() {
         buttonShowAdd.setOnClickListener {
             if (cestaId.toInt() == 0) {
                 lifecycleScope.launch {
-                    val intent = Intent(this@AddActivity, CestaViewImp::class.java)
-                    startActivity(intent)
+                    onBackPressedDispatcher.onBackPressed()
                     currentCesta?.let { deleteCesta(it) }
                 }
             }
             else {
                 lifecycleScope.launch {
                     oldCesta?.let { it1 -> cestaModel.updateCesta(it1) }
-                    val intent = Intent(this@AddActivity, CestaViewImp::class.java)
-                    startActivity(intent)
+                    onBackPressedDispatcher.onBackPressed()
                 }
             }
         }
@@ -251,8 +268,8 @@ class AddActivity : AppCompatActivity() {
             setupGradeSpinner(R.array.GradeUIAA)
             selectedButtonTag3 = null
             selectedButton3 = null
-            selectedButtonTag2 = null
-            selectedButton2 = null
+            selectedButtonTag = null
+            selectedButton = null
 
             buttonUIAA.setBackgroundResource(R.drawable.rectangle_grade_button)
             buttonFrench.setBackgroundResource(android.R.color.transparent)
@@ -448,12 +465,10 @@ class AddActivity : AppCompatActivity() {
                     button.isSelected = false
                     selectedButtonTag3 = null
                     selectedButton3 = null
-                   // Log.d("Moje aplikace", "Odznačeno")
                 } else { // Jinak ho označíme
                     button.isSelected = true
                     selectedButtonTag3 = "plusfrench"
                     selectedButton3 = button
-                  // Log.d("Moje aplikace", "Označeno")
                 }
             } else { // Pokud klikáme na jiné tlačítko
                 val isSelectedButton = when (actionName) {

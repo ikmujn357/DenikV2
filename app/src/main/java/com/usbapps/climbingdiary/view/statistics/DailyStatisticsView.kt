@@ -46,6 +46,7 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
     private lateinit var dpd: DatePickerDialog
     private lateinit var buttonObtiznost: Button
     private lateinit var buttonStylPrelzeu: Button
+    private lateinit var layoutGraph: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,8 +69,12 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
         buttonObtiznost = view.findViewById(R.id.button_obtížnost)
         buttonStylPrelzeu = view.findViewById(R.id.button_stylprelezu)
 
+        layoutGraph = view.findViewById(R.id.graphLayout)
+
         // Call the method to setup bar chart with empty data initially to set the correct XAxis properties
         setupBarChart(barChart, emptyList(), emptyList())
+
+        graphVisibility ()
 
         return view
     }
@@ -198,6 +203,20 @@ class DailyStatisticsFragment : Fragment(), DailyStatisticsView, DatePickerDialo
                 }
             } else {
                 layoutObtiznost.visibility = View.GONE
+                recyclerViewRoutes.adapter = null
+            }
+        }
+    }
+
+    private fun graphVisibility () {
+        lifecycleScope.launch {
+            Log.d("data", cestaModel.getAllCesta().size.toString())
+            if (cestaModel.getAllCesta().isNotEmpty()) {
+                // Pokud jsou k dispozici data, zobrazíme layout grafu
+                layoutGraph.visibility = View.VISIBLE
+            } else {
+                // Pokud nejsou k dispozici žádná data, skryjeme layout grafu
+                layoutGraph.visibility = View.GONE
                 recyclerViewRoutes.adapter = null
             }
         }
