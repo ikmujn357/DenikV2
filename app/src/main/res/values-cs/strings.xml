@@ -38,6 +38,8 @@
     <string name="daily">Denní</string>
     <string name="full_statistic">Celková</string>
     <string name="climbingDiary">Lezecký deník</string>
+    <string name="data_export_message">Data exportována</string>
+    <string name="export_path">Umístění:\n%1$s</string>
 
     <string-array name="Character">
         <item>Technická</item>

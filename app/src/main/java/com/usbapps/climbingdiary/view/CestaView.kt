@@ -1,7 +1,11 @@
 package com.usbapps.climbingdiary.view
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -104,7 +108,6 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
     }
 
 
-
     // Metoda pro zobrazení seznamu cest
     override fun displayCesty() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
@@ -115,12 +118,13 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
             layoutManager.stackFromEnd = true
             recyclerView.layoutManager = layoutManager
 
-            val adapter = CestaAdapter(controller.getAllCesta().filter { it.routeName != "" }) { cestaId ->
-                // Přesměrování na AddActivity s předáním ID cesty
-                val intent = Intent(this@CestaViewImp, AddActivity::class.java)
-                intent.putExtra("cestaId", cestaId)
-                startActivity(intent)
-            }
+            val adapter =
+                CestaAdapter(controller.getAllCesta().filter { it.routeName != "" }) { cestaId ->
+                    // Přesměrování na AddActivity s předáním ID cesty
+                    val intent = Intent(this@CestaViewImp, AddActivity::class.java)
+                    intent.putExtra("cestaId", cestaId)
+                    startActivity(intent)
+                }
 
             recyclerView.adapter = adapter
         }
@@ -138,11 +142,10 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
     }
 
 
-    
-
     // Metoda pro přidání tlačítka pro zobrazení statistik
     override fun statisticsButton() {
-        val buttonShowStatistics: Button = customActionBarButton.findViewById(R.id.button_statistics)
+        val buttonShowStatistics: Button =
+            customActionBarButton.findViewById(R.id.button_statistics)
         buttonShowStatistics.setOnClickListener {
             val intent = Intent(this, ShowStatistics::class.java)
             startActivity(intent)
@@ -160,19 +163,44 @@ class CestaViewImp : AppCompatActivity(), CestaView, CoroutineScope by MainScope
     }
 
 
-
     // Metoda pro přidání tlačítka pro export dat
+// Metoda pro přidání tlačítka pro export dat
     override fun exportButton() {
         val exportButton = customActionBarButton.findViewById<Button>(R.id.exportButton)
         exportButton.setOnClickListener {
+            val context = applicationContext
+            val exportPath = getExportPath(context)
+
+            // Vytvoření instance AlertDialogu
+            val alertDialog = AlertDialog.Builder(this).apply {
+                setTitle(getString(R.string.data_export_message))
+                setMessage(getString(R.string.export_path, exportPath))
+                setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            }.create()
+
+            // Zobrazení AlertDialogu
+            alertDialog.show()
+
+            // Provedení exportu
             lifecycleScope.launch {
                 val fileName = "exported_data.csv"
                 try {
-                    controller.exportDataToFile(applicationContext, fileName)
+                    controller.exportDataToFile(context, fileName)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
     }
+
+
+    private fun getExportPath(context: Context): String {
+        val documentsDir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+        val androidIndex = documentsDir?.absolutePath?.indexOf("/Android")
+        return documentsDir?.absolutePath?.substring(androidIndex ?: 0) ?: "Cestu nelze exportovat"
+    }
+
+
 }

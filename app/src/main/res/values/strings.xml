@@ -17,7 +17,7 @@
     <string name="grade">Difficulty:</string>
     <string name="routeCharacter">Route Character:</string>
     <string name="additionalInformation">Additional Information</string>
-    <string name="timeToclimb">Time to Climb:</string>
+    <string name="timeToclimb">Time of Climb:</string>
     <string name="minutes">Minutes</string>
     <string name="colon">:</string>
     <string name="seconds">Seconds</string>
@@ -37,6 +37,8 @@
     <string name="difficulty">Difficulty</string>
     <string name="daily">Daily</string>
     <string name="full_statistic">Overall</string>
+    <string name="data_export_message">Data exported</string>
+    <string name="export_path">Location:\n%1$s</string>
 
     <string-array name="Character">
         <item>Technical</item>
@@ -83,6 +85,7 @@
     <string name="mdtp_day_of_week_label_typeface" translatable="false">sans-serif</string>
     <string name="mdtp_sans_serif" translatable="false">sans-serif</string>
     <string name="climbingDiary">Climbing diary</string>
+
 
 
 </resources>
